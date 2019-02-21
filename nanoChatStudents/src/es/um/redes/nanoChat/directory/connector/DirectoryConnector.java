@@ -11,27 +11,42 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 /**
- * Cliente con mÃ©todos de consulta y actualizaciÃ³n especÃ­ficos del directorio
+ * Cliente con métodos de consulta y actualización específicos del directorio
  */
 public class DirectoryConnector {
-	//TamaÃ±o mÃ¡ximo del paquete UDP (los mensajes intercambiados son muy cortos)
+	//Tamaño máximo del paquete UDP (los mensajes intercambiados son muy cortos)
 	private static final int PACKET_MAX_SIZE = 128;
 	//Puerto en el que atienden los servidores de directorio
 	private static final int DEFAULT_PORT = 6868;
 	//Valor del TIMEOUT
 	private static final int TIMEOUT = 1000;
+	
+	
+	//CODIGOS 
+		private static final byte COD_OK = 1;
+		private static final byte COD_EMPTY = 2;
+		private static final byte COD_NO_OK = 3;
+		private static final byte COD_REGISTRO = 4;
+		private static final byte COD_CONSULTA = 5;
+		private static final byte COD_RESPUESTA_CONSULTA = 6;
+		//TODO  resto de codigos
+		
 
 	private DatagramSocket socket; // socket UDP
-	private InetSocketAddress directoryAddress; // direcciÃ³n del servidor de directorio
+	private InetSocketAddress directoryAddress; // dirección del servidor de directorio
 
 	public DirectoryConnector(String agentAddress) throws IOException {
-		//TODO A partir de la direcciÃ³n y del puerto generar la direcciÃ³n de conexiÃ³n para el Socket
+		//TODO A partir de la dirección y del puerto generar la dirección de conexión para el Socket
 
 		//TODO Crear el socket UDP
+		
+		socket  = new DatagramSocket();
+		// allocate buffer and prepare message to be sent
+		byte[] req = new byte [PACKET_MAX_SIZE]; 
 	}
 
 	/**
-	 * EnvÃ­a una solicitud para obtener el servidor de chat asociado a un determinado protocolo
+	 * Envía una solicitud para obtener el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public InetSocketAddress getServerForProtocol(int protocol) throws IOException {
@@ -42,27 +57,30 @@ public class DirectoryConnector {
 		//TODO preparar el buffer para la respuesta
 		//TODO Establecer el temporizador para el caso en que no haya respuesta
 		//TODO Recibir la respuesta
-		//TODO Procesamos la respuesta para devolver la direcciÃ³n que hay en ella
+		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		
 		return null;
 	}
 
 
-	//MÃ©todo para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
+	//Método para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
 	private byte[] buildQuery(int protocol) {
-		//TODO Devolvemos el mensaje codificado en binario segÃºn el formato acordado
+		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
+		
+		//formato : cod(1) + protocolo(4)
+		
 		return null;
 	}
 
-	//MÃ©todo para obtener la direcciÃ³n de internet a partir del mensaje UDP de respuesta
+	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
-		//TODO Analizar si la respuesta no contiene direcciÃ³n (devolver null)
-		//TODO Si la respuesta no estÃ¡ vacÃ­a, devolver la direcciÃ³n (extraerla del mensaje)
+		//TODO Analizar si la respuesta no contiene dirección (devolver null)
+		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
 		return null;
 	}
 	
 	/**
-	 * EnvÃ­a una solicitud para registrar el servidor de chat asociado a un determinado protocolo
+	 * Envía una solicitud para registrar el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public boolean registerServerForProtocol(int protocol, int port) throws IOException {
@@ -71,14 +89,17 @@ public class DirectoryConnector {
 		//TODO Enviar solicitud
 		//TODO Recibe respuesta
 		//TODO Procesamos la respuesta para ver si se ha podido registrar correctamente
+		
+		
+		//formato: cod(1) + protocolo(4) + ip(4) + puerto(4)
 		return false;
 	}
 
 
-	//MÃ©todo para construir una solicitud de registro de servidor
-	//OJO: No hace falta proporcionar la direcciÃ³n porque se toma la misma desde la que se enviÃ³ el mensaje
+	//Método para construir una solicitud de registro de servidor
+	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se envió el mensaje
 	private byte[] buildRegistration(int protocol, int port) {
-		//TODO Devolvemos el mensaje codificado en binario segÃºn el formato acordado
+		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
 		return null;
 	}
 

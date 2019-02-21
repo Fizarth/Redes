@@ -8,11 +8,21 @@ import java.util.HashMap;
 
 public class DirectoryThread extends Thread {
 
-	int a;
-	private static final int PACKET_MAX_SIZE = 128; //Tama帽o m谩ximo del paquete UDP
-	protected HashMap<Integer,InetSocketAddress> servers; //Estructura para guardar las asociaciones ID_PROTOCOLO -> Direcci贸n del servidor
+	private static final int PACKET_MAX_SIZE = 128; //Tama駉 m醲imo del paquete UDP
+	
+	//CODIGOS 
+	private static final byte COD_OK = 1;
+	private static final byte COD_EMPTY = 2;
+	private static final byte COD_NO_OK = 3;
+	private static final byte COD_REGISTRO = 4;
+	private static final byte COD_CONSULTA = 5;
+	private static final byte COD_RESPUESTA_CONSULTA = 6;
+	//TODO  resto de codigos
+	
+	
+	protected HashMap<Integer,InetSocketAddress> servers; //Estructura para guardar las asociaciones ID_PROTOCOLO -> Direcci髇 del servidor
 
-	protected DatagramSocket socket = null; //Socket de comunicaci贸n UDP
+	protected DatagramSocket socket = null; //Socket de comunicaci髇 UDP
 	protected double messageDiscardProbability; //Probabilidad de descarte del mensaje
 
 	public DirectoryThread(String name, int directoryPort,double corruptionProbability) throws SocketException {
@@ -35,51 +45,61 @@ public class DirectoryThread extends Thread {
 		boolean running = true;
 		while (running) {
 
+			try {	
+				DatagramPacket pckt = new DatagramPacket(buf, buf.length);
+				socket.receive(pckt);
 				
-			DatagramPacket pckt = new DatagramPacket(buf, buf.length);
-			// Receive request message
-			try {
-				this.socket.receive(pckt);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("error al recibir");
-			} 
+				//extraer direccion del paquete
+				InetSocketAddress ca= (InetSocketAddress) pckt.getSocketAddress();
+				// Receive request message
+				try {
+					this.socket.receive(pckt);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("error al recibir");
+				} 
+					
 				
-			
-			InetAddress clienteAddr=pckt.getAddress();
-				// 3) Vemos si el mensaje debe ser descartado por la probabilidad de descarte
-
-			double rand = Math.random();
-			if (rand < messageDiscardProbability) {
-				System.err.println("Directory DISCARDED corrupt request from... ");
-				continue;
-			}
+				InetAddress clienteAddr=pckt.getAddress();
+					// 3) Vemos si el mensaje debe ser descartado por la probabilidad de descarte
+	
+				double rand = Math.random();
+				if (rand < messageDiscardProbability) {
+					System.err.println("Directory DISCARDED corrupt request from... ");
+					continue;
+				}
+				processRequestFromClient(pckt.getData(), ca);
+					
+					//TODO (Solo Bolet韓 2) Devolver una respuesta id閚tica en contenido a la solicitud
+					
+					// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				
-				//TODO (Solo Bolet铆n 2) Devolver una respuesta id茅ntica en contenido a la solicitud
 				
-				// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
-			InetSocketAddress ca= (InetSocketAddress) pckt.getSocketAddress();
-			try {
-				processRequestFromClient(buf, ca);
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
+			}catch(IOException e) {}
 				
 		}
 		socket.close();
 	}
 
-	//M茅todo para procesar la solicitud enviada por clientAddr
+	//M閠odo para procesar la solicitud enviada por clientAddr
 	public void processRequestFromClient(byte[] data, InetSocketAddress clientAddr) throws IOException {
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		int codigo=bb.get();
+		
+		switch(codigo) { //TODO lo que tiene que hacer en cada caso
+		case COD_CONSULTA:
+			break;
+		case COD_REGISTRO: //馻dirlo al hash
+			break;
+		}
 		//TODO 1) Extraemos el tipo de mensaje recibido
 		DatagramPacket pckt = new DatagramPacket(data, data.length, clientAddr);
 		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK
 		sendOK(clientAddr);
 		//TODO 3) Procesar el caso de que sea una consulta
-		//TODO 3.1) Devolver una direcci贸n si existe un servidor (sendServerInfo)
-		//TODO 3.2) Devolver una notificaci贸n si no existe un servidor (sendEmpty)
+		//TODO 3.1) Devolver una direcci髇 si existe un servidor (sendServerInfo)
+		//TODO 3.2) Devolver una notificaci髇 si no existe un servidor (sendEmpty)
 		
 		
 		
@@ -90,7 +110,7 @@ public class DirectoryThread extends Thread {
 		
 	}
 
-	//M茅todo para enviar una respuesta vac铆a (no hay servidor)
+	//M閠odo para enviar una respuesta vac韆 (no hay servidor)
 	private void sendEmpty(InetSocketAddress clientAddr) throws IOException {
 		//TODO Construir respuesta
 		//TODO Enviar respuesta
@@ -101,21 +121,27 @@ public class DirectoryThread extends Thread {
 		socket.send(pckt);
 	}
 
-	//M茅todo para enviar la direcci贸n del servidor al cliente
+	//M閠odo para enviar la direcci髇 del servidor al cliente
 	private void sendServerInfo(InetSocketAddress serverAddress, InetSocketAddress clientAddr) throws IOException {
-		//TODO Obtener la representaci贸n binaria de la direcci贸n
-		//TODO Construir respuesta
-		//TODO Enviar respuesta
+		
+		//formato : cod(1)+ ip(4) + puerto(4)
+		byte[] iparr= serverAddress.getAddress().getAddress(); // primer get addr se obtiene el inetAdrres y con el segundo el array 
+		ByteBuffer bb = ByteBuffer.allocate(9); 
+		bb.put(COD_RESPUESTA_CONSULTA); 
+		bb.put(iparr);
+		bb.putInt(serverAddress.getPort()); 
+		
+		byte[] mensaje = bb.array();
+		DatagramPacket pckt = new DatagramPacket(mensaje, mensaje.length, clientAddr);
+		socket.send(pckt);
+		
 	}
 
-	//M茅todo para enviar la confirmaci贸n del registro
+	//M閠odo para enviar la confirmaci髇 del registro
 	private void sendOK(InetSocketAddress clientAddr) throws IOException {
-		//TODO Construir respuesta
-		//TODO Enviar respuesta
-		
-		byte[] buf = new byte[PACKET_MAX_SIZE]; // Prepare response message
-		// Send response message back to client at address
-		DatagramPacket pckt = new DatagramPacket(buf, buf.length, clientAddr);
+		byte[] mensaje = new byte[1]; 
+		mensaje[0]= COD_OK;
+		DatagramPacket pckt = new DatagramPacket(mensaje, mensaje.length, clientAddr);
 		socket.send(pckt);
 	}
 }
