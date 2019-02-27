@@ -47,7 +47,9 @@ public class DirectoryThread extends Thread {
 			try {	
 				DatagramPacket pckt = new DatagramPacket(buf, buf.length);
 				socket.receive(pckt);
-				
+				byte [] b = pckt.getData();
+				String s = new String(b);
+				System.out.println(s);
 				//extraer direccion del paquete
 				InetSocketAddress ca= (InetSocketAddress) pckt.getSocketAddress();
 				// Receive request message
@@ -72,6 +74,8 @@ public class DirectoryThread extends Thread {
 				processRequestFromClient(pckt.getData(), ca);
 					
 					//TODO (Solo Boletín 2) Devolver una respuesta idéntica en contenido a la solicitud
+				System.out.println("Envio algo");
+				socket.send(pckt);
 					
 					// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				
