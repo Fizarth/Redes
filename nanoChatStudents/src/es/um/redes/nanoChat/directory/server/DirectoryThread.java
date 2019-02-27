@@ -86,15 +86,22 @@ public class DirectoryThread extends Thread {
 		socket.close();
 	}
 
-	//M�todo para procesar la solicitud enviada por clientAddr
+	//Metodo para procesar la solicitud enviada por clientAddr
 	public void processRequestFromClient(byte[] data, InetSocketAddress clientAddr) throws IOException {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		int codigo=bb.get();
+		int protocolo;
 		
 		switch(codigo) { //TODO lo que tiene que hacer en cada caso
 		case COD_CONSULTA:
+			protocolo = bb.getInt();
+			servers.get(protocolo);
+			//crear un mensaje con los servidores 
+			
 			break;
-		case COD_REGISTRO: //añadirlo al hash
+		case COD_REGISTRO: //añadirlo al hash			
+			protocolo = bb.getInt();
+			servers.put(protocolo, clientAddr);
 			break;
 		}
 		//TODO 1) Extraemos el tipo de mensaje recibido
@@ -114,7 +121,7 @@ public class DirectoryThread extends Thread {
 		
 	}
 
-	//Método para enviar una respuesta vacía (no hay servidor)
+	//Metodo para enviar una respuesta vacía (no hay servidor)
 	private void sendEmpty(InetSocketAddress clientAddr) throws IOException {
 		//TODO Construir respuesta
 		//TODO Enviar respuesta
