@@ -57,30 +57,29 @@ public class DirectoryConnector {
 	 */
 	public InetSocketAddress getServerForProtocol(int protocol) throws IOException {
 
-//		//TODO Generar el mensaje de consulta llamando a buildQuery()
-//		byte[] req = new byte [PACKET_MAX_SIZE]; 
-//		//req= buildQuery(protocol);
-//		//TODO Construir el datagrama con la consulta
-//		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
-//		
-//		//TODO Enviar datagrama por el socket
-//		socket.send(packet);
-//		
-//		//TODO preparar el buffer para la respuesta
-//		byte[] response = new byte [PACKET_MAX_SIZE];
-//		packet = new DatagramPacket(response, response.length);
-//		
-//		
-//		//TODO Establecer el temporizador para el caso en que no haya respuesta
-//		socket.setSoTimeout(TIMEOUT);
-//		//TODO Recibir la respuesta
-//		socket.receive(packet);
-//		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
-//		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
-////		response = packet.getAddress().getAddress();
-////		ByteBuffer.wrap(response);
+		//TODO Generar el mensaje de consulta llamando a buildQuery()
+		byte[] req = new byte [PACKET_MAX_SIZE]; 
+		//req= buildQuery(protocol);
+		//TODO Construir el datagrama con la consulta
+		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
 		
-		enviarPrueba("holi");
+		//TODO Enviar datagrama por el socket
+		socket.send(packet);
+		
+		//TODO preparar el buffer para la respuesta
+		byte[] response = new byte [PACKET_MAX_SIZE];
+		packet = new DatagramPacket(response, response.length);
+		
+		
+		//TODO Establecer el temporizador para el caso en que no haya respuesta
+		socket.setSoTimeout(TIMEOUT);
+		//TODO Recibir la respuesta
+		socket.receive(packet);
+		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
+		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
+
+		
+//		enviarPrueba("holi");
 
 		
 		return null;
