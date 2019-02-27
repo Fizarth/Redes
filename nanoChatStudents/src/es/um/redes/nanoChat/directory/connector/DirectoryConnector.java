@@ -12,10 +12,10 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 /**
- * Cliente con m�todos de consulta y actualizaci�n espec�ficos del directorio
+ * Cliente con métodos de consulta y actualización específicos del directorio
  */
 public class DirectoryConnector {
-	//Tama�o m�ximo del paquete UDP (los mensajes intercambiados son muy cortos)
+	//Tamaño máximo del paquete UDP (los mensajes intercambiados son muy cortos)
 	private static final int PACKET_MAX_SIZE = 128;
 	//Puerto en el que atienden los servidores de directorio
 	private static final int DEFAULT_PORT = 6868;
@@ -34,10 +34,10 @@ public class DirectoryConnector {
 		
 
 	private DatagramSocket socket; // socket UDP
-	private InetSocketAddress directoryAddress; // direcci�n del servidor de directorio
+	private InetSocketAddress directoryAddress; // direcciï¿½n del servidor de directorio
 
 	public DirectoryConnector(String agentAddress) throws IOException {
-		//TODO A partir de la direcci�n y del puerto generar la direcci�n de conexi�n para el Socket
+		//TODO A partir de la dirección y del puerto generar la dirección de conexión para el Socket
 		directoryAddress = new InetSocketAddress(InetAddress.getByName(agentAddress), DEFAULT_PORT);
 		//TODO Crear el socket UDP
 		socket  = new DatagramSocket();
@@ -47,7 +47,7 @@ public class DirectoryConnector {
 	}
 
 	/**
-	 * Env�a una solicitud para obtener el servidor de chat asociado a un determinado protocolo
+	 * Envï¿½a una solicitud para obtener el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public InetSocketAddress getServerForProtocol(int protocol) throws IOException {
@@ -70,7 +70,7 @@ public class DirectoryConnector {
 		socket.setSoTimeout(TIMEOUT);
 		//TODO Recibir la respuesta
 		socket.receive(packet);
-		//TODO Procesamos la respuesta para devolver la direcci�n que hay en ella
+		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
 //		response = packet.getAddress().getAddress();
 //		ByteBuffer.wrap(response);
@@ -81,24 +81,24 @@ public class DirectoryConnector {
 	}
 
 
-	//M�todo para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
+	//Método para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
 	private byte[] buildQuery(int protocol) {
-		//TODO Devolvemos el mensaje codificado en binario seg�n el formato acordado
+		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
 		
 		//formato : cod(1) + protocolo(4)
 		
 		return null;
 	}
 
-	//M�todo para obtener la direcci�n de internet a partir del mensaje UDP de respuesta
+	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
-		//TODO Analizar si la respuesta no contiene direcci�n (devolver null)
-		//TODO Si la respuesta no est� vac�a, devolver la direcci�n (extraerla del mensaje)
+		//TODO Analizar si la respuesta no contiene direcciï¿½n (devolver null)
+		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
 		return null;
 	}
 	
 	/**
-	 * Env�a una solicitud para registrar el servidor de chat asociado a un determinado protocolo
+	 * Envï¿½a una solicitud para registrar el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public boolean registerServerForProtocol(int protocol, int port) throws IOException {
@@ -114,10 +114,10 @@ public class DirectoryConnector {
 	}
 
 
-	//M�todo para construir una solicitud de registro de servidor
-	//OJO: No hace falta proporcionar la direcci�n porque se toma la misma desde la que se envi� el mensaje
+	//Método para construir una solicitud de registro de servidor
+	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se enviï¿½ el mensaje
 	private byte[] buildRegistration(int protocol, int port) {
-		//TODO Devolvemos el mensaje codificado en binario seg�n el formato acordado
+		//TODO Devolvemos el mensaje codificado en binario segï¿½n el formato acordado
 		return null;
 	}
 

@@ -7,8 +7,7 @@ import java.util.HashMap;
 
 
 public class DirectoryThread extends Thread {
-	int a;
-	private static final int PACKET_MAX_SIZE = 128; //Tamaño máximo del paquete UDP
+	private static final int PACKET_MAX_SIZE = 128; //Tamaï¿½o mï¿½ximo del paquete UDP
 	
 	//CODIGOS 
 	private static final byte COD_OK = 1;
@@ -20,9 +19,9 @@ public class DirectoryThread extends Thread {
 	//TODO  resto de codigos
 	
 	
-	protected HashMap<Integer,InetSocketAddress> servers; //Estructura para guardar las asociaciones ID_PROTOCOLO -> Dirección del servidor
+	protected HashMap<Integer,InetSocketAddress> servers; //Estructura para guardar las asociaciones ID_PROTOCOLO -> DirecciÃ³n del servidor
 
-	protected DatagramSocket socket = null; //Socket de comunicación UDP
+	protected DatagramSocket socket = null; //Socket de comunicaciÃ³n UDP
 	protected double messageDiscardProbability; //Probabilidad de descarte del mensaje
 
 	public DirectoryThread(String name, int directoryPort,double corruptionProbability) throws SocketException {
@@ -72,7 +71,7 @@ public class DirectoryThread extends Thread {
 				}
 				processRequestFromClient(pckt.getData(), ca);
 					
-					//TODO (Solo Boletín 2) Devolver una respuesta idéntica en contenido a la solicitud
+					//TODO (Solo BoletÃ­n 2) Devolver una respuesta idÃ©ntica en contenido a la solicitud
 					
 					// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				
@@ -83,7 +82,7 @@ public class DirectoryThread extends Thread {
 		socket.close();
 	}
 
-	//Método para procesar la solicitud enviada por clientAddr
+	//Mï¿½todo para procesar la solicitud enviada por clientAddr
 	public void processRequestFromClient(byte[] data, InetSocketAddress clientAddr) throws IOException {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		int codigo=bb.get();
@@ -91,7 +90,7 @@ public class DirectoryThread extends Thread {
 		switch(codigo) { //TODO lo que tiene que hacer en cada caso
 		case COD_CONSULTA:
 			break;
-		case COD_REGISTRO: //ñadirlo al hash
+		case COD_REGISTRO: //aÃ±adirlo al hash
 			break;
 		}
 		//TODO 1) Extraemos el tipo de mensaje recibido
@@ -99,8 +98,8 @@ public class DirectoryThread extends Thread {
 		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK
 		sendOK(clientAddr);
 		//TODO 3) Procesar el caso de que sea una consulta
-		//TODO 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
-		//TODO 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
+		//TODO 3.1) Devolver una direcciÃ³n si existe un servidor (sendServerInfo)
+		//TODO 3.2) Devolver una notificaciÃ³n si no existe un servidor (sendEmpty)
 		
 		
 		
@@ -111,7 +110,7 @@ public class DirectoryThread extends Thread {
 		
 	}
 
-	//Método para enviar una respuesta vacía (no hay servidor)
+	//MÃ©todo para enviar una respuesta vacÃ­a (no hay servidor)
 	private void sendEmpty(InetSocketAddress clientAddr) throws IOException {
 		//TODO Construir respuesta
 		//TODO Enviar respuesta
@@ -122,7 +121,7 @@ public class DirectoryThread extends Thread {
 		socket.send(pckt);
 	}
 
-	//Método para enviar la dirección del servidor al cliente
+	//MÃ©todo para enviar la direcciÃ³n del servidor al cliente
 	private void sendServerInfo(InetSocketAddress serverAddress, InetSocketAddress clientAddr) throws IOException {
 		
 		//formato : cod(1)+ ip(4) + puerto(4)
@@ -138,7 +137,7 @@ public class DirectoryThread extends Thread {
 		
 	}
 
-	//Método para enviar la confirmación del registro
+	//MÃ©todo para enviar la confirmaciÃ³n del registro
 	private void sendOK(InetSocketAddress clientAddr) throws IOException {
 		byte[] mensaje = new byte[1]; 
 		mensaje[0]= COD_OK;
