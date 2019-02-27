@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 
 public class DirectoryThread extends Thread {
-
+	int a;
 	private static final int PACKET_MAX_SIZE = 128; //Tamaño máximo del paquete UDP
 	
 	//CODIGOS 
@@ -52,6 +52,7 @@ public class DirectoryThread extends Thread {
 				//extraer direccion del paquete
 				InetSocketAddress ca= (InetSocketAddress) pckt.getSocketAddress();
 				// Receive request message
+				
 				try {
 					this.socket.receive(pckt);
 				} catch (IOException e) {
