@@ -103,7 +103,7 @@ public class DirectoryConnector {
 	}
 	
 	/**
-	 * Envï¿½a una solicitud para registrar el servidor de chat asociado a un determinado protocolo
+	 * Envía una solicitud para registrar el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public boolean registerServerForProtocol(int protocol, int port) throws IOException {
