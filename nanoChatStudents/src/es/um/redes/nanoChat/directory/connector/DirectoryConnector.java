@@ -37,10 +37,10 @@ public class DirectoryConnector {
 
 	public DirectoryConnector(String agentAddress) throws IOException {
 		//TODO A partir de la dirección y del puerto generar la dirección de conexión para el Socket
-
+		directoryAddress = new InetSocketAddress(InetAddress.getByName(agentAddress), DEFAULT_PORT);
 		//TODO Crear el socket UDP
-		
 		socket  = new DatagramSocket();
+		
 		// allocate buffer and prepare message to be sent
 		byte[] req = new byte [PACKET_MAX_SIZE]; 
 	}
@@ -52,13 +52,25 @@ public class DirectoryConnector {
 	public InetSocketAddress getServerForProtocol(int protocol) throws IOException {
 
 		//TODO Generar el mensaje de consulta llamando a buildQuery()
+		byte[] req = new byte [PACKET_MAX_SIZE]; 
+		req= buildQuery(protocol);
 		//TODO Construir el datagrama con la consulta
-		//TODO Enviar datagrama por el socket
-		//TODO preparar el buffer para la respuesta
-		//TODO Establecer el temporizador para el caso en que no haya respuesta
-		//TODO Recibir la respuesta
-		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
+		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
 		
+		//TODO Enviar datagrama por el socket
+		socket.send(packet);
+		
+		//TODO preparar el buffer para la respuesta
+		byte[] response = new byte [PACKET_MAX_SIZE];
+		packet = new DatagramPacket(response, response.length);
+		
+		
+		//TODO Establecer el temporizador para el caso en que no haya respuesta
+		socket.setSoTimeout(TIMEOUT);
+		//TODO Recibir la respuesta
+		socket.receive(packet);
+		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
+		//packet.getSocketAddress(); tiene que ser algo asi
 		return null;
 	}
 
