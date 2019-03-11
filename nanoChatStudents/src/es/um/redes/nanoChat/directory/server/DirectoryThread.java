@@ -23,13 +23,13 @@ public class DirectoryThread extends Thread {
 
 	protected DatagramSocket socket = null; //Socket de comunicación UDP
 	protected double messageDiscardProbability; //Probabilidad de descarte del mensaje
-	private InetSocketAddress serverAddress;
+	 
 
 	public DirectoryThread(String name, int directoryPort,double corruptionProbability) throws SocketException {
 		
 		super(name);
 		
-		serverAddress = new InetSocketAddress(directoryPort);
+		InetSocketAddress serverAddress = new InetSocketAddress(directoryPort);
 		socket = new DatagramSocket(serverAddress);
 		
 		messageDiscardProbability = corruptionProbability;
@@ -96,9 +96,8 @@ public class DirectoryThread extends Thread {
 		switch(codigo) { //TODO lo que tiene que hacer en cada caso
 		case COD_CONSULTA:
 			protocolo = bb.getInt();
-			servers.get(protocolo);
 			//crear un mensaje con los servidores 
-			sendServerInfo(serverAddress,clientAddr);
+			sendServerInfo(servers.get(protocolo),clientAddr);
 			
 			break;
 		case COD_REGISTRO: //añadirlo al hash			

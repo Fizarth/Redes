@@ -78,7 +78,9 @@ public class DirectoryConnector {
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
 
-		
+		byte[] respuesta = buildQuery(protocol);
+		DatagramPacket packetRespuesta = new DatagramPacket(respuesta, respuesta.length, directoryAddress);
+		socket.send(packetRespuesta);
 //		enviarPrueba("holi");
 
 		
