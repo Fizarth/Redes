@@ -91,8 +91,10 @@ public class DirectoryConnector {
 		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
 		
 		//formato : cod(1) + protocolo(4)
-		
-		return null;
+		ByteBuffer bb = ByteBuffer.allocate(5);
+		bb.put(COD_CONSULTA);
+		bb.putInt(protocol);	
+		return  bb.array();
 	}
 
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
