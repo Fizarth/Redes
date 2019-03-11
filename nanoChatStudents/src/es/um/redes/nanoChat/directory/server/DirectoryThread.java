@@ -89,37 +89,34 @@ public class DirectoryThread extends Thread {
 
 	//Metodo para procesar la solicitud enviada por clientAddr
 	public void processRequestFromClient(byte[] data, InetSocketAddress clientAddr) throws IOException {
+		// Extraemos el tipo de mensaje recibido
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		int codigo=bb.get();
 		int protocolo;
 		
-		switch(codigo) { //TODO lo que tiene que hacer en cada caso
+		switch(codigo) { 
 		case COD_CONSULTA:
+			// Procesar el caso de que sea una consulta
 			protocolo = bb.getInt();
-			//crear un mensaje con los servidores 
-			sendServerInfo(servers.get(protocolo),clientAddr);
-			
+			// Devolver una dirección si existe un servidor (sendServerInfo)
+			if (servers.containsKey(protocolo))
+				sendServerInfo(servers.get(protocolo),clientAddr);
+			else 
+				//Devolver una notificación si no existe un servidor (sendEmpty)
+				sendEmpty(clientAddr);
 			break;
-		case COD_REGISTRO: //añadirlo al hash			
+		case COD_REGISTRO: //añadirlo al hash		
+			
+			System.out.println("Mensaje: REGISTRO");
+			
 			protocolo = bb.getInt();
 			servers.put(protocolo, clientAddr);
+			//Procesar el caso de que sea un registro y enviar mediante sendOK
+			sendOK(clientAddr);
 			break;
 		}
-		//TODO 1) Extraemos el tipo de mensaje recibido
-		DatagramPacket pckt = new DatagramPacket(data, data.length, clientAddr);
-		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK
-		sendOK(clientAddr);
-		//TODO 3) Procesar el caso de que sea una consulta
-		//TODO 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
-		//TODO 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
-		
-		
-		
 		// Send response message back to client at address
-		
-		
-		
-		
+
 	}
 
 	//Metodo para enviar una respuesta vacía (no hay servidor)
@@ -127,8 +124,11 @@ public class DirectoryThread extends Thread {
 		//TODO Construir respuesta
 		//TODO Enviar respuesta
 		
-		byte[] buf = new byte[PACKET_MAX_SIZE]; // Prepare response message
+		// Prepare response message
 		// Send response message back to client at address
+		ByteBuffer bb = ByteBuffer.allocate(9); 
+		bb.put(COD_EMPTY); 
+		byte[] buf  = bb.array();
 		DatagramPacket pckt = new DatagramPacket(buf, buf.length, clientAddr);
 		socket.send(pckt);
 	}
@@ -151,9 +151,13 @@ public class DirectoryThread extends Thread {
 
 	//Método para enviar la confirmación del registro
 	private void sendOK(InetSocketAddress clientAddr) throws IOException {
-		byte[] mensaje = new byte[1]; 
-		mensaje[0]= COD_OK;
-		DatagramPacket pckt = new DatagramPacket(mensaje, mensaje.length, clientAddr);
-		socket.send(pckt);
+		//ByteBuffer bb =  ByteBuffer.allocate(1);
+		//bb.put(COD_OK);
+		//DatagramPacket pckt = new DatagramPacket(bb.array(), bb.array().length, clientAddr);
+		
+		byte[] mensaje = new byte[1];
+		mensaje[0] = COD_OK;
+		DatagramPacket dp = new DatagramPacket(mensaje, 1,clientAddr);
+		socket.send(dp);
 	}
 }
