@@ -51,7 +51,7 @@ class NCServerManager {
 			return true;
 		}
 		//TODO Devuelve false si ya hay un usuario con su nombre
-		else return false;
+		 return false;
 	}
 	
 	//Elimina al usuario del servidor
