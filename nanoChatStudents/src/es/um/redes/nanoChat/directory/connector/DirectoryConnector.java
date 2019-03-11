@@ -90,7 +90,7 @@ public class DirectoryConnector {
 
 	//Método para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
 	private byte[] buildQuery(int protocol) {
-		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
+		// Devolvemos el mensaje codificado en binario según el formato acordado
 		
 		//formato : cod(1) + protocolo(4)
 		ByteBuffer bb = ByteBuffer.allocate(5);
@@ -101,9 +101,12 @@ public class DirectoryConnector {
 
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
-		//TODO Analizar si la respuesta no contiene direcciï¿½n (devolver null)
-		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
-		return null;
+		//Analizar si la respuesta no contiene direccion (devolver null)
+		if(packet.getAddress() == null)
+			return null ;
+		//Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
+		InetSocketAddress inet = new InetSocketAddress(packet.getAddress(), packet.getPort());
+		return inet;
 	}
 	
 	/**
@@ -112,22 +115,40 @@ public class DirectoryConnector {
 	 */
 	public boolean registerServerForProtocol(int protocol, int port) throws IOException {
 
-		//TODO Construir solicitud de registro (buildRegistration)
-		//TODO Enviar solicitud
-		//TODO Recibe respuesta
-		//TODO Procesamos la respuesta para ver si se ha podido registrar correctamente
-		
-		
 		//formato: cod(1) + protocolo(4) + ip(4) + puerto(4)
+		// Construir solicitud de registro (buildRegistration)
+		byte [] solicitud = buildRegistration(protocol, port);		
+		//Enviar solicitud
+		DatagramPacket packet = new DatagramPacket(solicitud, solicitud.length, directoryAddress);
+		socket.send(packet);
+		//Recibe respuesta
+		byte[] response = new byte[PACKET_MAX_SIZE];
+		packet = new DatagramPacket(response, response.length);;
+		socket.receive(packet);
+		//TODO Procesamos la respuesta para ver si se ha podido registrar correctamente
+		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
+		int codigo = bb.get();
+		switch (codigo){
+			case COD_OK:
+				return true;
+			case COD_NO_OK: 
+				return false;
+		}	
 		return false;
 	}
 
 
 	//Método para construir una solicitud de registro de servidor
-	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se enviï¿½ el mensaje
+	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se envia el mensaje
 	private byte[] buildRegistration(int protocol, int port) {
-		//TODO Devolvemos el mensaje codificado en binario segï¿½n el formato acordado
-		return null;
+		//formato: cod(1) + protocolo(4) + ip(4) + puerto(4)
+		//Devolvemos el mensaje codificado en binario segï¿½n el formato acordado
+		ByteBuffer bb = ByteBuffer.allocate(13);
+		bb.put(COD_REGISTRO);
+		bb.putInt(protocol);
+		bb.put(directoryAddress.getAddress().getAddress());
+		bb.putInt(port);
+		return bb.array();
 	}
 
 	public void close() {
