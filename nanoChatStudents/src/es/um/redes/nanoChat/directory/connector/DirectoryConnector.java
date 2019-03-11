@@ -59,7 +59,7 @@ public class DirectoryConnector {
 
 		//TODO Generar el mensaje de consulta llamando a buildQuery()
 		byte[] req = new byte [PACKET_MAX_SIZE]; 
-		//req= buildQuery(protocol);
+		req= buildQuery(protocol);
 		//TODO Construir el datagrama con la consulta
 		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
 		
@@ -78,8 +78,7 @@ public class DirectoryConnector {
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
 		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
 
-		byte[] respuesta = buildQuery(protocol);
-		DatagramPacket packetRespuesta = new DatagramPacket(respuesta, respuesta.length, directoryAddress);
+		DatagramPacket packetRespuesta = new DatagramPacket(packet.getData(), packet.getData().length, directoryAddress);
 		socket.send(packetRespuesta);
 //		enviarPrueba("holi");
 
@@ -121,17 +120,27 @@ public class DirectoryConnector {
 		//Enviar solicitud
 		DatagramPacket packet = new DatagramPacket(solicitud, solicitud.length, directoryAddress);
 		socket.send(packet);
+		
+		System.out.println("Envio Solicitud de Registro");
+		
 		//Recibe respuesta
+		
 		byte[] response = new byte[PACKET_MAX_SIZE];
-		packet = new DatagramPacket(response, response.length);;
-		socket.receive(packet);
-		//TODO Procesamos la respuesta para ver si se ha podido registrar correctamente
-		ByteBuffer bb = ByteBuffer.wrap(packet.getData());
+		DatagramPacket packet2 = new DatagramPacket(response, response.length);;
+		socket.receive(packet2);
+				
+		//Procesamos la respuesta para ver si se ha podido registrar correctamente
+		ByteBuffer bb = ByteBuffer.wrap(packet2.getData());
 		int codigo = bb.get();
+		
+		System.out.println("\tRespuesta: "+codigo);
+		
 		switch (codigo){
 			case COD_OK:
+				System.out.println("TODO OK");
 				return true;
 			case COD_NO_OK: 
+				System.out.println("FALLO Registro");
 				return false;
 		}	
 		return false;
