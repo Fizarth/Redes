@@ -13,7 +13,7 @@ public class boletin2 {
 		
 		try {
 			DirectoryConnector dc = new DirectoryConnector("localhost");
-			dc.registerServerForProtocol(1, 2);
+//			dc.registerServerForProtocol(1, 2);
 			dc.getServerForProtocol(1);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -73,7 +73,7 @@ public class NCServerThread extends Thread {
 		//La lógica de nuestro programa nos obliga a que haya un nick registrado antes de proseguir
 		String nick = dis.readUTF();
 		if(serverManager.addUser(nick))
-			dos.writeUTF("OK	");
+			dos.writeUTF("OK");
 		else  dos.writeUTF("DUPLICATED");
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
 		//TODO Extraer el nick del mensaje

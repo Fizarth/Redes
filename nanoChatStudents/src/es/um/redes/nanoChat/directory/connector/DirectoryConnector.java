@@ -1,13 +1,11 @@
 package es.um.redes.nanoChat.directory.connector;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
@@ -22,74 +20,61 @@ public class DirectoryConnector {
 	//Valor del TIMEOUT
 	private static final int TIMEOUT = 1000;
 	
-	
 	//CODIGOS 
-		private static final byte COD_OK = 1;
-		private static final byte COD_EMPTY = 2;
-		private static final byte COD_NO_OK = 3;
-		private static final byte COD_REGISTRO = 4;
-		private static final byte COD_CONSULTA = 5;
-		private static final byte COD_RESPUESTA_CONSULTA = 6;
-		//TODO  resto de codigos
-		
+			private static final byte COD_OK = 1;
+			private static final byte COD_EMPTY = 2;
+			private static final byte COD_NO_OK = 3;
+			private static final byte COD_REGISTRO = 4;
+			private static final byte COD_CONSULTA = 5;
+			private static final byte COD_RESPUESTA_CONSULTA = 6;
+			//TODO  resto de codigos
 
 	private DatagramSocket socket; // socket UDP
-	private InetSocketAddress directoryAddress; // direcciï¿½n del servidor de directorio
+	private InetSocketAddress directoryAddress; // dirección del servidor de directorio
 
 	public DirectoryConnector(String agentAddress) throws IOException {
 		//TODO A partir de la dirección y del puerto generar la dirección de conexión para el Socket
-		directoryAddress = new InetSocketAddress(InetAddress.getByName(agentAddress), DEFAULT_PORT);
+		directoryAddress=new InetSocketAddress(InetAddress.getByName(agentAddress),DEFAULT_PORT);
 		//TODO Crear el socket UDP
-		socket  = new DatagramSocket();
-		
-
+		socket= new DatagramSocket();
 	}
 	
-	public void enviarPrueba(String s) throws IOException {
-		byte[] req = s.getBytes();
-		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
-		socket.send(packet);
-	}
-
 	/**
-	 * Envï¿½a una solicitud para obtener el servidor de chat asociado a un determinado protocolo
+	 * Envía una solicitud para obtener el servidor de chat asociado a un determinado protocolo
 	 * 
 	 */
 	public InetSocketAddress getServerForProtocol(int protocol) throws IOException {
 
 		//TODO Generar el mensaje de consulta llamando a buildQuery()
-		byte[] req = new byte [PACKET_MAX_SIZE]; 
-		req= buildQuery(protocol);
+		byte[] req= buildQuery(protocol);
+		
 		//TODO Construir el datagrama con la consulta
-		DatagramPacket packet = new DatagramPacket(req, req.length, directoryAddress);
+		DatagramPacket pckt = new DatagramPacket(req, req.length, directoryAddress);
 		
 		//TODO Enviar datagrama por el socket
-		socket.send(packet);
+		socket.send(pckt);
 		
 		//TODO preparar el buffer para la respuesta
 		byte[] response = new byte [PACKET_MAX_SIZE];
-		packet = new DatagramPacket(response, response.length);
-		
+		pckt = new DatagramPacket(response, response.length);
 		
 		//TODO Establecer el temporizador para el caso en que no haya respuesta
 		socket.setSoTimeout(TIMEOUT);
 		//TODO Recibir la respuesta
-		socket.receive(packet);
+		socket.receive(pckt);
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
-		ByteArrayInputStream response2 = new ByteArrayInputStream(packet.getData());
-
-		DatagramPacket packetRespuesta = new DatagramPacket(packet.getData(), packet.getData().length, directoryAddress);
-		socket.send(packetRespuesta);
-//		enviarPrueba("holi");
+		 response =pckt.getData();
+		 InetSocketAddress respuesta = getAddressFromResponse(pckt);
+		
 
 		
-		return null;
+		return respuesta;
 	}
 
 
 	//Método para generar el mensaje de consulta (para obtener el servidor asociado a un protocolo)
 	private byte[] buildQuery(int protocol) {
-		// Devolvemos el mensaje codificado en binario según el formato acordado
+		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
 		
 		//formato : cod(1) + protocolo(4)
 		ByteBuffer bb = ByteBuffer.allocate(5);
@@ -100,12 +85,16 @@ public class DirectoryConnector {
 
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
-		//Analizar si la respuesta no contiene direccion (devolver null)
+		//TODO Analizar si la respuesta no contiene dirección (devolver null)
 		if(packet.getAddress() == null)
 			return null ;
-		//Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
-		InetSocketAddress inet = new InetSocketAddress(packet.getAddress(), packet.getPort());
-		return inet;
+		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
+		else{
+			InetSocketAddress inet = new InetSocketAddress(packet.getAddress(), packet.getPort());
+			return inet;
+		}
+		
+		
 	}
 	
 	/**
@@ -114,50 +103,43 @@ public class DirectoryConnector {
 	 */
 	public boolean registerServerForProtocol(int protocol, int port) throws IOException {
 
-		//formato: cod(1) + protocolo(4) + ip(4) + puerto(4)
-		// Construir solicitud de registro (buildRegistration)
-		byte [] solicitud = buildRegistration(protocol, port);		
-		//Enviar solicitud
-		DatagramPacket packet = new DatagramPacket(solicitud, solicitud.length, directoryAddress);
-		socket.send(packet);
-		
-		System.out.println("Envio Solicitud de Registro");
-		
-		//Recibe respuesta
-		
-		byte[] response = new byte[PACKET_MAX_SIZE];
-		DatagramPacket packet2 = new DatagramPacket(response, response.length);;
-		socket.receive(packet2);
-				
-		//Procesamos la respuesta para ver si se ha podido registrar correctamente
-		ByteBuffer bb = ByteBuffer.wrap(packet2.getData());
-		int codigo = bb.get();
-		
-		System.out.println("\tRespuesta: "+codigo);
-		
-		switch (codigo){
-			case COD_OK:
-				System.out.println("TODO OK");
-				return true;
-			case COD_NO_OK: 
-				System.out.println("FALLO Registro");
-				return false;
-		}	
-		return false;
+		//TODO Construir solicitud de registro (buildRegistration)
+		byte[] solicitud=buildRegistration(protocol, port);
+		//TODO Enviar solicitud
+		DatagramPacket pckt= new DatagramPacket(solicitud, solicitud.length, directoryAddress);
+		socket.send(pckt);
+		//TODO Recibe respuesta
+		socket.receive(pckt);
+		//TODO Procesamos la respuesta para ver si se ha podido registrar correctamente
+		ByteBuffer bb = ByteBuffer.wrap(pckt.getData());
+		int codigo=bb.get();
+		System.out.println(codigo);
+		if(codigo==COD_OK) {
+			System.out.println("Registrado con éxito");
+			return true;
+		}
+		else {
+			System.out.println("No se ha podido registrar");
+			return false;
+		}
 	}
 
 
 	//Método para construir una solicitud de registro de servidor
-	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se envia el mensaje
+	//OJO: No hace falta proporcionar la dirección porque se toma la misma desde la que se envió el mensaje
 	private byte[] buildRegistration(int protocol, int port) {
+		
+		//TODO Devolvemos el mensaje codificado en binario según el formato acordado
+		
 		//formato: cod(1) + protocolo(4) + ip(4) + puerto(4)
-		//Devolvemos el mensaje codificado en binario segï¿½n el formato acordado
 		ByteBuffer bb = ByteBuffer.allocate(13);
 		bb.put(COD_REGISTRO);
 		bb.putInt(protocol);
-		bb.put(directoryAddress.getAddress().getAddress());
+		byte[] iparr=directoryAddress.getAddress().getAddress();
+		bb.put(iparr);
 		bb.putInt(port);
 		return bb.array();
+		
 	}
 
 	public void close() {
