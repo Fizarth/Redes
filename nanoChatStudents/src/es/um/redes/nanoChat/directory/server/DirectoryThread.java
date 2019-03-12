@@ -92,7 +92,11 @@ public class DirectoryThread extends Thread {
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		int codigo=bb.get();
 		int protocolo= bb.getInt();
+		
+		
 		System.out.println(codigo);
+		
+		
 		switch(codigo) { 
 		
 		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK

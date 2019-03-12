@@ -63,7 +63,10 @@ public class DirectoryConnector {
 		//TODO Recibir la respuesta
 		socket.receive(pckt);
 		//TODO Procesamos la respuesta para devolver la dirección que hay en ella
+		
 		 response =pckt.getData();
+		 
+		 
 		 InetSocketAddress respuesta = getAddressFromResponse(pckt);
 		
 
