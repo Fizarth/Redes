@@ -107,14 +107,18 @@ public class DirectoryThread extends Thread {
 			}
 			else sendNO_OK(clientAddr);
 			
+			System.out.println("Registrado: "+ clientAddr.getHostName()+":" +clientAddr.getPort()+ "\tProtocolo: "+ protocolo );
+			
 			break;
 		
 			//TODO 3) Procesar el caso de que sea una consulta
 		case COD_CONSULTA:
 			//TODO 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
 			if(servers.containsKey(protocolo)){
-				InetSocketAddress serverAddress = new InetSocketAddress(servers.get(protocolo).getAddress(), servers.get(protocolo).getPort());
-				sendServerInfo(serverAddress, clientAddr);
+				InetSocketAddress consultaAddr = new InetSocketAddress(servers.get(protocolo).getAddress(), servers.get(protocolo).getPort());
+				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
+
+				sendServerInfo(consultaAddr, clientAddr);
 			}
 			//TODO 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
 			else sendEmpty(clientAddr);
@@ -146,7 +150,9 @@ public class DirectoryThread extends Thread {
 		ByteBuffer bb = ByteBuffer.allocate(9); 
 		bb.put(COD_RESPUESTA_CONSULTA); 
 		bb.put(iparr);
-		bb.putInt(clientAddr.getPort());
+		bb.putInt(serverAddress.getPort());
+		
+		System.out.println(serverAddress.getPort()+"\tSA");
 				
 		//TODO Enviar respuesta
 		byte[] mensaje = bb.array();

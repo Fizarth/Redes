@@ -31,8 +31,11 @@ public class DirectoryConnector {
 
 	private DatagramSocket socket; // socket UDP
 	private InetSocketAddress directoryAddress; // dirección del servidor de directorio
+	private String  myAddress;
 
 	public DirectoryConnector(String agentAddress) throws IOException {
+		
+		myAddress = agentAddress;
 		//TODO A partir de la dirección y del puerto generar la dirección de conexión para el Socket
 		directoryAddress=new InetSocketAddress(InetAddress.getByName(agentAddress),DEFAULT_PORT);
 		//TODO Crear el socket UDP
@@ -57,6 +60,9 @@ public class DirectoryConnector {
 		//TODO preparar el buffer para la respuesta
 		byte[] response = new byte [PACKET_MAX_SIZE];
 		pckt = new DatagramPacket(response, response.length);
+		
+		//formato : cod(1)+ ip(4) + puerto(4)
+
 		
 		//TODO Establecer el temporizador para el caso en que no haya respuesta
 		socket.setSoTimeout(TIMEOUT);
@@ -88,15 +94,23 @@ public class DirectoryConnector {
 
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
-		//TODO Analizar si la respuesta no contiene dirección (devolver null)
-		if(packet.getAddress() == null)
-			return null ;
-		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
-		else{
-			InetSocketAddress inet = new InetSocketAddress(packet.getAddress(), packet.getPort());
-			return inet;
-		}
+		//formato : cod(1)+ ip(4) + puerto(4)
+		ByteBuffer ret = ByteBuffer.wrap(packet.getData());
+		int opCode = ret.get();
+		int IP = ret.get();
+		int port = ret.getInt();
 		
+		System.out.println("RespuestaConsulta: "+String.valueOf(IP)+" puerto: "+port);
+		InetSocketAddress inet = new InetSocketAddress(String.valueOf(IP), port);
+		
+		//TODO Analizar si la respuesta no contiene dirección (devolver null)
+		
+		if (inet.getAddress() == null)
+			return null;
+		 
+		//TODO Si la respuesta no está vacía, devolver la dirección (extraerla del mensaje)
+			
+		return inet;
 		
 	}
 	
@@ -138,7 +152,11 @@ public class DirectoryConnector {
 		ByteBuffer bb = ByteBuffer.allocate(13);
 		bb.put(COD_REGISTRO);
 		bb.putInt(protocol);
-		byte[] iparr=directoryAddress.getAddress().getAddress();
+		
+		//---- TODO poner la direccion nuestra (cliente)
+		InetSocketAddress as = new InetSocketAddress(myAddress, port);
+		byte[] iparr= as.getAddress().getAddress();
+				//directoryAddress.getAddress().getAddress();
 		bb.put(iparr);
 		bb.putInt(port);
 		return bb.array();
