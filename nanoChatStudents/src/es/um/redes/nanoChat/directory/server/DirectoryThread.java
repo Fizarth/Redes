@@ -143,6 +143,7 @@ public class DirectoryThread extends Thread {
 	//Método para enviar la dirección del servidor al cliente
 	private void sendServerInfo(InetSocketAddress serverAddress, InetSocketAddress clientAddr) throws IOException {
 		//TODO Obtener la representación binaria de la dirección
+		
 		byte[] iparr= serverAddress.getAddress().getAddress(); // primer get addr se obtiene el inetAdrres y con el segundo el array 
 
 		//TODO Construir respuesta
@@ -151,8 +152,12 @@ public class DirectoryThread extends Thread {
 		bb.put(COD_RESPUESTA_CONSULTA); 
 		bb.put(iparr);
 		bb.putInt(serverAddress.getPort());
+		String cadena="";
 		
-		System.out.println(serverAddress.getPort()+"\tSA");
+		for (int i = 0; i<iparr.length;i++) {
+			cadena+=iparr[i];
+		}
+		System.out.println("ENVIO CONSULTA: "+COD_RESPUESTA_CONSULTA+"\t"+cadena+":"+serverAddress.getPort());
 				
 		//TODO Enviar respuesta
 		byte[] mensaje = bb.array();

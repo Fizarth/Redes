@@ -94,13 +94,17 @@ public class DirectoryConnector {
 
 	//Método para obtener la dirección de internet a partir del mensaje UDP de respuesta
 	private InetSocketAddress getAddressFromResponse(DatagramPacket packet) throws UnknownHostException {
+		
 		//formato : cod(1)+ ip(4) + puerto(4)
+		
 		ByteBuffer ret = ByteBuffer.wrap(packet.getData());
 		int opCode = ret.get();
 		int IP = ret.get();
 		int port = ret.getInt();
 		
-		System.out.println("RespuestaConsulta: "+String.valueOf(IP)+" puerto: "+port);
+		System.out.println("RESPUESTA CONSULTA: "+ opCode+"\t"+String.valueOf(IP)+" puerto: "+port);
+		
+		
 		InetSocketAddress inet = new InetSocketAddress(String.valueOf(IP), port);
 		
 		//TODO Analizar si la respuesta no contiene dirección (devolver null)
