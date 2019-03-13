@@ -102,7 +102,11 @@ public class DirectoryThread extends Thread {
 		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK
 		case COD_REGISTRO:
 			if(!servers.containsValue(clientAddr)){
-				servers.put(protocolo, clientAddr);
+				byte[] iparr= new byte[4];
+				bb.get(iparr);
+				int puertoNuevo = bb.getInt();
+				InetSocketAddress addr = new InetSocketAddress(clientAddr.getAddress().getHostAddress(),puertoNuevo);	
+				servers.put(protocolo, addr);
 				sendOK(clientAddr);
 			}
 			else sendNO_OK(clientAddr);

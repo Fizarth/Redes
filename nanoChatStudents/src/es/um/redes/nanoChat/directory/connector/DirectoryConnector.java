@@ -99,13 +99,14 @@ public class DirectoryConnector {
 		
 		ByteBuffer ret = ByteBuffer.wrap(packet.getData());
 		int opCode = ret.get();
-		int IP = ret.get();
+		byte[] array = new byte[4];
+		ret.get(array);
 		int port = ret.getInt();
 		
-		System.out.println("RESPUESTA CONSULTA: "+ opCode+"\t"+String.valueOf(IP)+" puerto: "+port);
+		System.out.println("RESPUESTA CONSULTA: "+ opCode+"\t"+InetAddress.getByAddress(array)+" puerto: "+port);
 		
 		
-		InetSocketAddress inet = new InetSocketAddress(String.valueOf(IP), port);
+		InetSocketAddress inet = new InetSocketAddress(InetAddress.getByAddress(array), port);
 		
 		//TODO Analizar si la respuesta no contiene dirección (devolver null)
 		
