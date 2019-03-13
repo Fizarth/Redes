@@ -146,7 +146,7 @@ public class DirectoryThread extends Thread {
 		ByteBuffer bb = ByteBuffer.allocate(9); 
 		bb.put(COD_RESPUESTA_CONSULTA); 
 		bb.put(iparr);
-		bb.putInt(serverAddress.getPort());
+		bb.putInt(clientAddr.getPort());
 				
 		//TODO Enviar respuesta
 		byte[] mensaje = bb.array();

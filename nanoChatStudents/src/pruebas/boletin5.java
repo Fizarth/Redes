@@ -6,7 +6,7 @@ public class boletin5 {
 
 	public static void main(String[] args) {
 		
-		NCServerThread server = new NCServerThread();
+//		NCServerThread server = new NCServerThread();
 	}
 
 }
