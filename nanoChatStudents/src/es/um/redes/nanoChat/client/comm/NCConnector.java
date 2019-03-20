@@ -20,14 +20,8 @@ public class NCConnector {
 	
 	public NCConnector(InetSocketAddress serverAddress) throws UnknownHostException, IOException {
 		//TODO Se crea el socket a partir de la dirección proporcionada 
-		socket = new Socket();  //si en vez de crearlo vacio le pasamos serverAddress no hace falta poner el bind despues
-		socket.bind(serverAddress);
-		//TODO Se extraen los streams de entrada y salida
-		dis = new DataInputStream(socket.getInputStream());
-		dos = new DataOutputStream(socket.getOutputStream());
-	}
-
-
+		socket = new Socket(serverAddress.getAddress(), serverAddress.getPort());  //si en vez de crearlo vacio le pasamos serverAddress no hace falta poner el bind despues
+		//socket.bind(serverAddress);
 	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
 	public boolean registerNickname_UnformattedMessage(String nick) throws IOException {
 		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
