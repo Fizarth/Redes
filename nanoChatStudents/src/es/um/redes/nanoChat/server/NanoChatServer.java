@@ -11,9 +11,9 @@ import es.um.redes.nanoChat.directory.connector.DirectoryConnector;
 public class NanoChatServer implements Runnable {
 
 	public static final int PORT = 6969;
+	// 48848082 +49196746
+	private static final int MYPROTOCOL = 98044828;
 
-	private static final int MYPROTOCOL = 0;
-	
     private InetSocketAddress socketAddress;
     private ServerSocket serverSocket = null;
     private NCServerManager manager;
@@ -44,6 +44,7 @@ public class NanoChatServer implements Runnable {
     //Código principal del servidor
 	public void run()
 	{
+		
    		try {
    			//El servidor realiza continuamente estas tareas en bucle
    			while (true)
