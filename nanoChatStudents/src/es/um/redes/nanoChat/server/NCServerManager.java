@@ -73,4 +73,5 @@ class NCServerManager {
 		//TODO Si la sala existe sacamos al usuario de la sala
 		//TODO Decidir qué hacer si la sala se queda vacía
 	}
+	
 }

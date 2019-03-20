@@ -50,6 +50,8 @@ public class NCServerThread extends Thread {
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
+				
+				//una vez que entro en la sala: llamo a -> processRoomMenssage()
 				}
 			}
 		} catch (Exception e) {
@@ -75,6 +77,7 @@ public class NCServerThread extends Thread {
 		if(serverManager.addUser(nick))
 			dos.writeUTF("OK");
 		else  dos.writeUTF("DUPLICATED");
+		
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
 		//TODO Extraer el nick del mensaje
 		//TODO Validar el nick utilizando el ServerManager - addUser()
@@ -94,4 +97,5 @@ public class NCServerThread extends Thread {
 			//TODO Se analiza el código de operación del mensaje y se trata en consecuencia
 		}
 	}
+	
 }

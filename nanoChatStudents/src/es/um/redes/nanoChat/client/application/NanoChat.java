@@ -15,6 +15,8 @@ public class NanoChat {
 		// Creamos el controlador que aceptará y procesará los comandos
 		NCController controller;
 		controller = new NCController();
+		
+		
 
 		// Comenzamos la conversación con el servidor de Chats si hemos podido contactar con él
 		if (controller.getServerFromDirectory(args[0])) {
