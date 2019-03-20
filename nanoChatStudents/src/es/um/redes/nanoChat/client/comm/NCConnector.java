@@ -31,11 +31,12 @@ public class NCConnector {
 	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
 	public boolean registerNickname_UnformattedMessage(String nick) throws IOException {
 		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
+		
 		dos.writeUTF(nick);
 		String respuesta = dis.readUTF();
-		if(respuesta == "OK") return true;
+		if(respuesta.compareTo("OK")==0)return true;
 		else return false;
-		//TODO Enviamos una cadena con el nick por el flujo de salida
+		//TODO Enviamos una cadena con el nick por el flujo de salidays
 		//TODO Leemos la cadena recibida como respuesta por el flujo de entrada 
 		//TODO Si la cadena recibida es NICK_OK entonces no está duplicado (en función de ello modificar el return)
 		
