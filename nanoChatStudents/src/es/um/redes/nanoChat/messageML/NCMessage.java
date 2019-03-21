@@ -12,7 +12,21 @@ public abstract class NCMessage {
 	// TODO IMPLEMENTAR TODAS LAS CONSTANTES RELACIONADAS CON LOS CODIGOS DE OPERACION
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
+	public static final byte OP_NICK_OK = 2;
+	public static final byte OP_NICK_DUPLICATED = 3;
+	
+	public static final byte OP_QUERY_ROOM = 4;
+	public static final byte OP_LIST_ROOM = 5;
+	public static final byte OP_INFO_ROOM = 6;
+	public static final byte OP_INFO_ROOM_REQUEST = 7;
+	
+	public static final byte OP_ENTER_ROOM = 8;
+	public static final byte OP_EXIR_ROOM= 9;
+	public static final byte OP_MESSAGE = 10;
 
+	
+	
+	
 	public static final char DELIMITER = ':';    //Define el delimitador
 	public static final char END_LINE = '\n';    //Define el carácter de fin de línea
 	
@@ -25,14 +39,16 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK,
+		OP_NICK,OP_NICK_OK,OP_NICK_DUPLICATED,OP_QUERY_ROOM,OP_LIST_ROOM,OP_INFO_ROOM,
+		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIR_ROOM,OP_MESSAGE		
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_opcodes_str = {
-		"Nick"
+		"Nick","NickOK","NickDuplicated","QueryRoom","ListRoom","InfoRoom","InfoRoomRequest",
+		"EnterRoom","ExitRoom","Message"
 	};
 
 	/**
@@ -102,8 +118,7 @@ public abstract class NCMessage {
 		
 		switch (code) {
 		//TODO Parsear el resto de mensajes 
-		case OP_NICK:
-		{
+		case OP_NICK:{
 			return NCRoomMessage.readFromString(code, message);
 		}
 		default:
