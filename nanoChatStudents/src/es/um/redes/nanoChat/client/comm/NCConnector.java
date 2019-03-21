@@ -49,7 +49,8 @@ public class NCConnector {
 	public boolean registerNickname(String nick) throws IOException {
 		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
 		//Creamos un mensaje de tipo RoomMessage con opcode OP_NICK en el que se inserte el nick
-		NCMessageNick message = (NCMessageNick) NCMessage.makeRoomMessage(NCMessage.OP_NICK, nick);
+		
+		NCMessageNick message = (NCMessageNick) NCMessage.makeNickMessage(NCMessage.OP_NICK, nick);
 		//Obtenemos el mensaje de texto listo para enviar
 		String rawMessage = message.toEncodedString();
 		//Escribimos el mensaje en el flujo de salida, es decir, provocamos que se envíe por la conexión TCP
@@ -58,8 +59,7 @@ public class NCConnector {
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 		//TODO Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
 		
-		System.out.println("NCConnector: "+msg.getOpcode());
-		System.out.println(msg.getOpcode()== NCMessage.OP_NICK_OK);
+		
 		if(msg.getOpcode()== NCMessage.OP_NICK_OK)return true;
 		else return false;
 	}

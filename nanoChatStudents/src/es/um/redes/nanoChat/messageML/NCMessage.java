@@ -140,7 +140,9 @@ public abstract class NCMessage {
 	public static NCMessage makeControlMessage(byte code) {
 		return (new NCMessageControl(code));
 	}
-	
+	public static NCMessage makeNickMessage(byte code, String nick) {
+		return (new NCMessageNick(code, nick));
+	}
 	public static NCMessage makeRoomMessage(byte code, String room) {
 		return (new NCRoomMessage(code, room));
 	}
