@@ -136,6 +136,11 @@ public abstract class NCMessage {
 
 	//TODO Programar el resto de métodos para crear otros tipos de mensajes
 	
+	
+	public static NCMessage makeControlMessage(byte code) {
+		return (new NCMessageControl(code));
+	}
+	
 	public static NCMessage makeRoomMessage(byte code, String room) {
 		return (new NCRoomMessage(code, room));
 	}
