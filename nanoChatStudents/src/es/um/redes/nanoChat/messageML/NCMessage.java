@@ -12,8 +12,8 @@ public abstract class NCMessage {
 	// TODO IMPLEMENTAR TODAS LAS CONSTANTES RELACIONADAS CON LOS CODIGOS DE OPERACION
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
-	public static final byte OP_NICK_OK = 2;
-	public static final byte OP_NICK_DUPLICATED = 3;
+	public static final byte OP_OK = 2;
+	public static final byte OP_NO_OK = 3;
 	
 	public static final byte OP_QUERY_ROOM = 4;
 	public static final byte OP_LIST_ROOM = 5;
@@ -21,7 +21,7 @@ public abstract class NCMessage {
 	public static final byte OP_INFO_ROOM_REQUEST = 7;
 	
 	public static final byte OP_ENTER_ROOM = 8;
-	public static final byte OP_EXIR_ROOM= 9;
+	public static final byte OP_EXIT_ROOM= 9;
 	public static final byte OP_MESSAGE = 10;
 
 	
@@ -39,15 +39,15 @@ public abstract class NCMessage {
 	 * que aparece en los mensajes
 	 */
 	private static final Byte[] _valid_opcodes = { 
-		OP_NICK,OP_NICK_OK,OP_NICK_DUPLICATED,OP_QUERY_ROOM,OP_LIST_ROOM,OP_INFO_ROOM,
-		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIR_ROOM,OP_MESSAGE		
+		OP_NICK,OP_OK,OP_NO_OK,OP_QUERY_ROOM,OP_LIST_ROOM,OP_INFO_ROOM,
+		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIT_ROOM,OP_MESSAGE		
 		};
 
 	/**
 	 * cadena exacta de cada orden
 	 */
 	private static final String[] _valid_opcodes_str = {
-		"Nick","NickOK","NickDuplicated","QueryRoom","ListRoom","InfoRoom","InfoRoomRequest",
+		"Nick","OK","NoOk","QueryRoom","ListRoom","InfoRoom","InfoRoomRequest",
 		"EnterRoom","ExitRoom","Message"
 	};
 
@@ -121,11 +121,17 @@ public abstract class NCMessage {
 		case OP_NICK:{
 			return NCMessageNick.readFromString(code, message);
 		}
-		case OP_NICK_OK:{
+		case OP_OK:{
 			return NCMessageControl.readFromString(code);
 		}
-		case OP_NICK_DUPLICATED:{
+		case OP_NO_OK:{
 			return NCMessageControl.readFromString(code);
+		}
+		case OP_EXIT_ROOM:{
+			return NCMessageControl.readFromString(code);
+		}
+		case OP_ENTER_ROOM:{
+			return NCMessageRoomIn.readFromString(code,message);
 		}
 		default:
 			System.err.println("Unknown message type received:" + code);
@@ -144,6 +150,9 @@ public abstract class NCMessage {
 		return (new NCMessageNick(code, nick));
 	}
 	public static NCMessage makeRoomMessage(byte code, String room) {
-		return (new NCRoomMessage(code, room));
+		return (new NCMessageRoomIn(code, room));
 	}
+	
+	
 }
+

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class NanoChat {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		//Comprobamos que nos pasan el parámetro relativo al directorio al que conectar
 		if (args.length != 1) {

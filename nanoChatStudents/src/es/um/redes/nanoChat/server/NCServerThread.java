@@ -86,12 +86,12 @@ public class NCServerThread extends Thread {
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 		NCMessageNick nick = (NCMessageNick) msg;
 		if(serverManager.addUser(nick.getName())){
-			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NICK_OK);
+			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
 			dos.writeUTF(msgreq.toEncodedString());
 		}
 			
 		else  {
-			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NICK_DUPLICATED);
+			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
 			dos.writeUTF(msgreq.toEncodedString());
 			}
 		

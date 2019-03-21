@@ -70,7 +70,7 @@ public class NCController {
 	}
 
 	//Procesa los comandos introducidos por un usuario que aún no está dentro de una sala
-	public void processCommand() {
+	public void processCommand() throws IOException {
 		switch (currentCommand) {
 		case NCCommands.COM_NICK:
 			if (clientStatus == PRE_REGISTRATION)
@@ -83,7 +83,10 @@ public class NCController {
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_ENTER:
+			System.out.println("* You are in " + room + " now" );
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
+			enterChat();
+			
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_QUIT:
@@ -121,12 +124,15 @@ public class NCController {
 	}
 
 	//Método para tramitar la solicitud de acceso del usuario a una sala concreta
-	private void enterChat() {
+	private void enterChat() throws IOException {
 		//TODO Se solicita al servidor la entrada en la sala correspondiente ncConnector.enterRoom()
+		ncConnector.enterRoom(room);
+		System.out.println("ENTROOOOOOOO");
 		//TODO Si la respuesta es un rechazo entonces informamos al usuario y salimos
 		//TODO En caso contrario informamos que estamos dentro y seguimos
 		//TODO Cambiamos el estado del autómata para aceptar nuevos comandos
 		do {
+			
 			//Pasamos a aceptar sólo los comandos que son válidos dentro de una sala
 			readRoomCommandFromShell();
 			processRoomCommand();

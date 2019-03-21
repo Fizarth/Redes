@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
+import es.um.redes.nanoChat.messageML.NCMessageRoomIn;
 import es.um.redes.nanoChat.messageML.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -60,7 +61,7 @@ public class NCConnector {
 		//TODO Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
 		
 		
-		if(msg.getOpcode()== NCMessage.OP_NICK_OK)return true;
+		if(msg.getOpcode()== NCMessage.OP_OK)return true;
 		else return false;
 	}
 	
@@ -74,8 +75,15 @@ public class NCConnector {
 	//Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
 		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
+		NCMessageRoomIn msgSend = (NCMessageRoomIn) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
+		dos.writeUTF(msgSend.toEncodedString());
+		
+		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
+		if (msgRev.getOpcode()== NCMessage.OP_OK) {
+			return true;
+		}
 		//TODO completar el método
-		return true;
+		else return false;
 	}
 	
 	//Método para salir de una sala

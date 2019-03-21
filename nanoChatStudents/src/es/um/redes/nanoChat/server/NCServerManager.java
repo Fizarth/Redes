@@ -62,6 +62,14 @@ class NCServerManager {
 	//Un usuario solicita acceso para entrar a una sala y registrar su conexión en ella
 	public synchronized NCRoomManager enterRoom(String u, String room, Socket s) {
 		//TODO Verificamos si la sala existe
+		if (rooms.containsKey(room)) {
+			NCRoomManager manager = rooms.get(room);
+			//---TODO suponemos ahora mismo que entra siempre.
+			manager.registerUser(u,s);
+			System.out.println("NC SERVER MANAGER añade usuario" + u+ " a sala "+room);
+			return manager;
+		}
+		
 		//TODO Decidimos qué hacer si la sala no existe (devolver error O crear la sala)
 		//TODO Si la sala existe y si es aceptado en la sala entonces devolvemos el RoomManager de la sala
 		return null;
