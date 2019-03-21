@@ -5,7 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
@@ -84,12 +86,13 @@ public class NCServerThread extends Thread {
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 		NCMessageNick nick = (NCMessageNick) msg;
 		if(serverManager.addUser(nick.getName())){
-			NCMessage msg = NCMessage
-			dos.writeUTF("OK");
+			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NICK_OK);
+			dos.writeUTF(msgreq.toEncodedString());
 		}
 			
 		else  {
-			dos.writeUTF("DUPLICATED");
+			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NICK_DUPLICATED);
+			dos.writeUTF(msgreq.toEncodedString());
 			}
 		
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
