@@ -18,7 +18,7 @@ public class DirectoryThread extends Thread {
 			private static final byte COD_REGISTRO = 4;
 			private static final byte COD_CONSULTA = 5;
 			private static final byte COD_RESPUESTA_CONSULTA = 6;
-			//TODO  resto de codigos
+			
 			
 	//Estructura para guardar las asociaciones ID_PROTOCOLO -> Dirección del servidor
 	protected HashMap<Integer,InetSocketAddress> servers;
@@ -32,10 +32,10 @@ public class DirectoryThread extends Thread {
 			double corruptionProbability)
 			throws SocketException {
 		super(name);
-		//TODO Anotar la dirección en la que escucha el servidor de Directorio
+		// Anotar la dirección en la que escucha el servidor de Directorio
 		InetSocketAddress serverAddress = new InetSocketAddress(directoryPort);
 		
- 		//TODO Crear un socket de servidor
+ 		// Crear un socket de servidor
 		socket = new DatagramSocket(serverAddress);
 		
 		messageDiscardProbability = corruptionProbability;
@@ -51,24 +51,24 @@ public class DirectoryThread extends Thread {
 		while (running) {
 
 			try {
-				//TODO 1) Recibir la solicitud por el socket
+				// 1) Recibir la solicitud por el socket
 				DatagramPacket pckt = new DatagramPacket(buf, buf.length);
 				socket.receive(pckt);
 				
-				//TODO 2) Extraer quién es el cliente (su dirección)
+				// 2) Extraer quién es el cliente (su dirección)
 				buf = new byte[PACKET_MAX_SIZE];
 				InetSocketAddress clientAddr = (InetSocketAddress) pckt.getSocketAddress();
 				
-				//TODO (Solo Boletín 2) Devolver una respuesta idéntica en contenido a la solicitud
+				// (Solo Boletín 2) Devolver una respuesta idéntica en contenido a la solicitud
 //				pckt = new DatagramPacket(buf, buf.length, ca);
 //				socket.send(pckt);
 				
-				//TODO 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
+				// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				processRequestFromClient(pckt.getData(), clientAddr);
 				
-				//TODO 5) Tratar las excepciones que puedan producirse
+				// 5) Tratar las excepciones que puedan producirse
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				//  Auto-generated catch block
 				e.printStackTrace();
 			} 
 				
@@ -88,7 +88,7 @@ public class DirectoryThread extends Thread {
 	//Método para procesar la solicitud enviada por clientAddr
 	public void processRequestFromClient(byte[] data, InetSocketAddress clientAddr) throws IOException {
 		
-		//TODO 1) Extraemos el tipo de mensaje recibido
+		// 1) Extraemos el tipo de mensaje recibido
 		ByteBuffer bb = ByteBuffer.wrap(data);
 		int codigo=bb.get();
 		int protocolo= bb.getInt();
@@ -99,7 +99,7 @@ public class DirectoryThread extends Thread {
 		
 		switch(codigo) { 
 		
-		//TODO 2) Procesar el caso de que sea un registro y enviar mediante sendOK
+		// 2) Procesar el caso de que sea un registro y enviar mediante sendOK
 		case COD_REGISTRO:
 			if(!servers.containsValue(clientAddr)){
 				byte[] iparr= new byte[4];
@@ -115,16 +115,16 @@ public class DirectoryThread extends Thread {
 			
 			break;
 		
-			//TODO 3) Procesar el caso de que sea una consulta
+			// 3) Procesar el caso de que sea una consulta
 		case COD_CONSULTA:
-			//TODO 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
+			// 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
 			if(servers.containsKey(protocolo)){
 				InetSocketAddress consultaAddr = new InetSocketAddress(servers.get(protocolo).getAddress(), servers.get(protocolo).getPort());
 				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
 
 				sendServerInfo(consultaAddr, clientAddr);
 			}
-			//TODO 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
+			// 3.2) Devolver una notificación si no existe un servidor (sendEmpty)
 			else sendEmpty(clientAddr);
 			break;
 		
@@ -133,24 +133,24 @@ public class DirectoryThread extends Thread {
 
 	//Método para enviar una respuesta vacía (no hay servidor)
 	private void sendEmpty(InetSocketAddress clientAddr) throws IOException {
-		//TODO Construir respuesta
+		// Construir respuesta
 		//Formato cod(1)
 		ByteBuffer bb = ByteBuffer.allocate(1); 
 		bb.put(COD_EMPTY); 
 		byte[] buf  = bb.array();
 		DatagramPacket pckt = new DatagramPacket(buf, buf.length, clientAddr);
 		
-		//TODO Enviar respuesta
+		// Enviar respuesta
 		socket.send(pckt);
 	}
 
 	//Método para enviar la dirección del servidor al cliente
 	private void sendServerInfo(InetSocketAddress serverAddress, InetSocketAddress clientAddr) throws IOException {
-		//TODO Obtener la representación binaria de la dirección
+		// Obtener la representación binaria de la dirección
 		
 		byte[] iparr= serverAddress.getAddress().getAddress(); // primer get addr se obtiene el inetAdrres y con el segundo el array 
 
-		//TODO Construir respuesta
+		// Construir respuesta
 		//formato : cod(1)+ ip(4) + puerto(4)
 		ByteBuffer bb = ByteBuffer.allocate(9); 
 		bb.put(COD_RESPUESTA_CONSULTA); 
@@ -163,7 +163,7 @@ public class DirectoryThread extends Thread {
 		}
 		System.out.println("ENVIO CONSULTA: "+COD_RESPUESTA_CONSULTA+"\t"+cadena+":"+serverAddress.getPort());
 				
-		//TODO Enviar respuesta
+		// Enviar respuesta
 		byte[] mensaje = bb.array();
 		DatagramPacket pckt = new DatagramPacket(mensaje, mensaje.length, clientAddr);
 		socket.send(pckt);
@@ -171,13 +171,13 @@ public class DirectoryThread extends Thread {
 
 	//Método para enviar la confirmación del registro
 	private void sendOK(InetSocketAddress clientAddr) throws IOException {
-		//TODO Construir respuesta
+		// Construir respuesta
 		//formato: cod(1)
 		ByteBuffer bb =  ByteBuffer.allocate(1);
 		bb.put(COD_OK);
 		DatagramPacket pckt = new DatagramPacket(bb.array(), bb.array().length, clientAddr);
 		
-		//TODO Enviar respuesta
+		// Enviar respuesta
 		socket.send(pckt);
 	}
 	
