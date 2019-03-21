@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -73,13 +74,23 @@ public class NCServerThread extends Thread {
 	//Obtenemos el nick y solicitamos al ServerManager que verifique si está duplicado
 	private void receiveAndVerifyNickname() throws IOException {
 		//La lógica de nuestro programa nos obliga a que haya un nick registrado antes de proseguir
-		String nick = dis.readUTF();
-		if(serverManager.addUser(nick))
-			dos.writeUTF("OK");
-		else  {dos.writeUTF("DUPLICATED");
-			System.out.println(nick + " Duplicado ");
-			}
+//		String nick = dis.readUTF();
+//		if(serverManager.addUser(nick))
+//			dos.writeUTF("OK");
+//		else  {dos.writeUTF("DUPLICATED");
+//			System.out.println(nick + " Duplicado ");
+//			}
 		
+		NCMessage msg = NCMessage.readMessageFromSocket(dis);
+		NCMessageNick nick = (NCMessageNick) msg;
+		if(serverManager.addUser(nick.getName())){
+			NCMessage msg = NCMessage
+			dos.writeUTF("OK");
+		}
+			
+		else  {
+			dos.writeUTF("DUPLICATED");
+			}
 		
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
 		//TODO Extraer el nick del mensaje

@@ -99,7 +99,7 @@ public class NCController {
 	private void registerNickName() {
 		try {
 			//Pedimos que se registre el nick (se comprobará si está duplicado)
-			boolean registered = ncConnector.registerNickname_UnformattedMessage(nickname);
+			boolean registered = ncConnector.registerNickname(nickname);
 			//TODO: Cambiar la llamada anterior a registerNickname() al usar mensajes formateados 
 			if (registered) {
 				//TODO Si el registro fue exitoso pasamos al siguiente estado del autómata

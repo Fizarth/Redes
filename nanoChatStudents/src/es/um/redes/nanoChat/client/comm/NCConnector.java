@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageControl;
+import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.messageML.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -47,14 +49,19 @@ public class NCConnector {
 	public boolean registerNickname(String nick) throws IOException {
 		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
 		//Creamos un mensaje de tipo RoomMessage con opcode OP_NICK en el que se inserte el nick
-		NCRoomMessage message = (NCRoomMessage) NCMessage.makeRoomMessage(NCMessage.OP_NICK, nick);
+		NCMessageNick message = (NCMessageNick) NCMessage.makeRoomMessage(NCMessage.OP_NICK, nick);
 		//Obtenemos el mensaje de texto listo para enviar
 		String rawMessage = message.toEncodedString();
 		//Escribimos el mensaje en el flujo de salida, es decir, provocamos que se envíe por la conexión TCP
 		dos.writeUTF(rawMessage);
 		//TODO Leemos el mensaje recibido como respuesta por el flujo de entrada 
+		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 		//TODO Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)
-		return true;
+		
+		System.out.println("NCConnector: "+msg.getOpcode());
+		System.out.println(msg.getOpcode()== NCMessage.OP_NICK_OK);
+		if(msg.getOpcode()== NCMessage.OP_NICK_OK)return true;
+		else return false;
 	}
 	
 	//Método para obtener la lista de salas del servidor

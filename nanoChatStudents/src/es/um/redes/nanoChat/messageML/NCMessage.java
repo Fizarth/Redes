@@ -119,7 +119,13 @@ public abstract class NCMessage {
 		switch (code) {
 		//TODO Parsear el resto de mensajes 
 		case OP_NICK:{
-			return NCRoomMessage.readFromString(code, message);
+			return NCMessageNick.readFromString(code, message);
+		}
+		case OP_NICK_OK:{
+			return NCMessageControl.readFromString(code);
+		}
+		case OP_NICK_DUPLICATED:{
+			return NCMessageControl.readFromString(code);
 		}
 		default:
 			System.err.println("Unknown message type received:" + code);
