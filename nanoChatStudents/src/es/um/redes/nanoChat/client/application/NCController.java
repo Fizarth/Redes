@@ -14,6 +14,9 @@ public class NCController {
 	//Diferentes estados del cliente de acuerdo con el autómata
 	private static final byte PRE_CONNECTION = 1;
 	private static final byte PRE_REGISTRATION = 2;
+	
+	private static final byte PRE_ROOM = 3;
+	private static final byte IN_ROOM = 4;
 	//Código de protocolo implementado por este cliente
 	//TODO Cambiar para cada grupo
 	private static final int PROTOCOL = 98044828; // el nuestro es 48848082 +49196746
@@ -73,8 +76,9 @@ public class NCController {
 	public void processCommand() throws IOException {
 		switch (currentCommand) {
 		case NCCommands.COM_NICK:
-			if (clientStatus == PRE_REGISTRATION)
+			if (clientStatus == PRE_REGISTRATION){
 				registerNickName();
+			}
 			else
 				System.out.println("* You have already registered a nickname ("+nickname+")");
 			break;
@@ -83,10 +87,11 @@ public class NCController {
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_ENTER:
-			System.out.println("* You are in " + room + " now" );
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
-			enterChat();
-			
+			if(clientStatus ==PRE_ROOM){
+				enterChat();
+			}
+			else System.out.println("Ya estas en una sala. Por favor, sal de la sala para entrar en otra.");
 			//TODO Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_QUIT:
@@ -107,6 +112,7 @@ public class NCController {
 			if (registered) {
 				//TODO Si el registro fue exitoso pasamos al siguiente estado del autómata
 				System.out.println("* Your nickname is now "+nickname);
+				clientStatus=PRE_ROOM;
 			}
 			else
 				//En este caso el nick ya existía
@@ -126,11 +132,23 @@ public class NCController {
 	//Método para tramitar la solicitud de acceso del usuario a una sala concreta
 	private void enterChat() throws IOException {
 		//TODO Se solicita al servidor la entrada en la sala correspondiente ncConnector.enterRoom()
-		ncConnector.enterRoom(room);
-		System.out.println("ENTROOOOOOOO");
+		boolean acceso=ncConnector.enterRoom(room);
 		//TODO Si la respuesta es un rechazo entonces informamos al usuario y salimos
+		if(!acceso){
+			System.out.println("Acceso denegado");
+			//---TODO de momento hacemos que se desconecte el usuario porque sino se mete a la sala
+			System.exit(0);
+		}
 		//TODO En caso contrario informamos que estamos dentro y seguimos
 		//TODO Cambiamos el estado del autómata para aceptar nuevos comandos
+		else{
+			
+			
+			System.out.println("* You are in " + room + " now" );
+			clientStatus=IN_ROOM;
+
+		}
+		
 		do {
 			
 			//Pasamos a aceptar sólo los comandos que son válidos dentro de una sala

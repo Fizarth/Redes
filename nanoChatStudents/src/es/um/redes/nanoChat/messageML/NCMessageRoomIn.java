@@ -35,7 +35,7 @@ public class NCMessageRoomIn extends NCMessage{
 
 
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
-	public static NCMessageNick readFromString(byte code, String message) {
+	public static NCMessageRoomIn readFromString(byte code, String message) {
 		String found_name = null;
 
 		// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
@@ -45,11 +45,11 @@ public class NCMessageRoomIn extends NCMessage{
 			// Name found
 			found_name = mat_name.group(1);
 		} else {
-			System.out.println("Error en RoomMessage: no se ha encontrado parametro.");
+			System.out.println("Error en MessageRoomIn: no se ha encontrado parametro.");
 			return null;
 		}
 		
-		return new NCMessageNick(code, found_name);
+		return new NCMessageRoomIn(code, found_name);
 	}
 
 

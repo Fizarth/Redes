@@ -9,6 +9,7 @@ import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
+import es.um.redes.nanoChat.messageML.NCMessageRoomIn;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -51,6 +52,19 @@ public class NCServerThread extends Thread {
 				switch (message.getOpcode()) {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
+				case NCMessage.OP_ENTER_ROOM:
+					NCMessageRoomIn room = (NCMessageRoomIn) message;
+					roomManager= serverManager.enterRoom(user, room.getName(), socket);
+					
+					if(roomManager !=null){
+						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
+						dos.writeUTF(msgresp.toEncodedString());
+					}
+					else{
+						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
+						dos.writeUTF(msgresp.toEncodedString());
+					}
+					
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
 				
@@ -83,22 +97,30 @@ public class NCServerThread extends Thread {
 //			System.out.println(nick + " Duplicado ");
 //			}
 		
-		NCMessage msg = NCMessage.readMessageFromSocket(dis);
-		NCMessageNick nick = (NCMessageNick) msg;
-		if(serverManager.addUser(nick.getName())){
-			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
-			dos.writeUTF(msgreq.toEncodedString());
-		}
-			
-		else  {
-			NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
-			dos.writeUTF(msgreq.toEncodedString());
-			}
+		
 		
 		//TODO Entramos en un bucle hasta comprobar que alguno de los nicks proporcionados no está duplicado
-		//TODO Extraer el nick del mensaje
-		//TODO Validar el nick utilizando el ServerManager - addUser()
-		//TODO Contestar al cliente con el resultado (éxito o duplicado)
+		Boolean duplicated = true;
+		while (duplicated){
+			//TODO Extraer el nick del mensaje
+			NCMessage msg = NCMessage.readMessageFromSocket(dis);
+			NCMessageNick nick = (NCMessageNick) msg;
+			//TODO Validar el nick utilizando el ServerManager - addUser()
+			//TODO Contestar al cliente con el resultado (éxito o duplicado)
+			if(serverManager.addUser(nick.getName())){
+				user=nick.getName();
+				NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
+				dos.writeUTF(msgresp.toEncodedString());
+				duplicated =false;
+			}
+				
+			else  {
+				NCMessageControl msgreq = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
+				dos.writeUTF(msgreq.toEncodedString());
+				}
+		}
+		
+		
 	}
 
 	//Mandamos al cliente la lista de salas existentes

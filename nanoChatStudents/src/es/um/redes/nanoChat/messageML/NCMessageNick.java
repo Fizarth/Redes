@@ -46,7 +46,7 @@ public class NCMessageNick extends NCMessage{
 			// Name found
 			found_name = mat_name.group(1);
 		} else {
-			System.out.println("Error en RoomMessage: no se ha encontrado parametro.");
+			System.out.println("Error en MessageNick: no se ha encontrado parametro.");
 			return null;
 		}
 		
