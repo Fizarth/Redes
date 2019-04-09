@@ -61,7 +61,7 @@ public class DirectoryConnector {
 		byte[] response = new byte [PACKET_MAX_SIZE];
 		pckt = new DatagramPacket(response, response.length);
 		
-		//formato : cod(1)+ ip(4) + puerto(4)
+		
 
 		
 		// Establecer el temporizador para el caso en que no haya respuesta
@@ -72,9 +72,9 @@ public class DirectoryConnector {
 		
 		 response =pckt.getData();
 		 
-		 
+		//formato : cod(1)+ ip(4) + puerto(4)
 		 InetSocketAddress respuesta = getAddressFromResponse(pckt);
-		
+		//----TODO sendEmpty y sendServerInfo
 
 		
 		return respuesta;
