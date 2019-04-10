@@ -21,7 +21,7 @@ public abstract class NCMessage {
 	public static final byte OP_INFO_ROOM_REQUEST = 7;
 	
 	public static final byte OP_ENTER_ROOM = 8;
-	public static final byte OP_EXIT_ROOM= 9;
+	public static final byte OP_EXIT_ROOM = 9;
 	public static final byte OP_MESSAGE = 10;
 
 	
