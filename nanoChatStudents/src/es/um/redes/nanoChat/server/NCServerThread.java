@@ -9,7 +9,7 @@ import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
-import es.um.redes.nanoChat.messageML.NCMessageRoomIn;
+import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -53,7 +53,7 @@ public class NCServerThread extends Thread {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				case NCMessage.OP_ENTER_ROOM:
-					NCMessageRoomIn room = (NCMessageRoomIn) message;
+					NCMessageRoom room = (NCMessageRoom) message;
 					roomManager= serverManager.enterRoom(user, room.getName(), socket);
 					
 					if(roomManager !=null){

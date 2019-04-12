@@ -2,7 +2,20 @@ package es.um.redes.nanoChat.messageML;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+/*
+ * NICK
+----
 
+<message>
+	<operation>opCode </operation>
+<name>nick </name>
+</message>
+
+
+Operaciones válidas:
+
+"Nick"
+*/
 public class NCMessageNick extends NCMessage{
 	
 	private String nick;
