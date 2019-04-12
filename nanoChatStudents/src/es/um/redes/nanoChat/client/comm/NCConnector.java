@@ -121,7 +121,7 @@ public class NCConnector {
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)
 		
-		NCMessageRoom message = (NCMessageRoom ) NCMessage.makeMessageRoom(NCMessage.OP_INFO_ROOM,room);
+		NCMessageRoom message = (NCMessageRoom ) NCMessage.makeRoomMessage(NCMessage.OP_INFO_ROOM,room);
 		String rawMessage = message.toEncodedString();
 		dos.writeUTF(rawMessage);
 		
