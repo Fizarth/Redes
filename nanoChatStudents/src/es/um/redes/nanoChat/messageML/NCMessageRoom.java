@@ -7,12 +7,15 @@ import java.util.regex.Pattern;
 ----
 
 <message>
-<operation>operation</operation>
-<name>name</name>
+	<operation> opCode</operation>
+	<room> room</room>
 </message>
+
 
 Operaciones válidas:
 
+"EnterRoom"
+"InfoRoom"
 
 */
 public class NCMessageRoom extends NCMessage{

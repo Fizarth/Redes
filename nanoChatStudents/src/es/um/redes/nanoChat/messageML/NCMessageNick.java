@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 <message>
 	<operation>opCode </operation>
-<name>nick </name>
+	<name>nick </name>
 </message>
 
 

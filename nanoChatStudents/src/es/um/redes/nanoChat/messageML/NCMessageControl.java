@@ -7,13 +7,14 @@ import java.util.regex.Pattern;
 ----
 
 <message>
-<operation>operation</operation>
+	<operation>operation</operation>
 </message>
 
 Operaciones válidas:
 
 "OK"
 "NoOk"
+"ExitRoom"
 "QueryRoom"
 "ListRoom"
 "Exit"
