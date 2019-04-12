@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
-import es.um.redes.nanoChat.messageML.NCMessageRoomIn;
+import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.messageML.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -75,7 +75,7 @@ public class NCConnector {
 	//Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
 		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
-		NCMessageRoomIn msgSend = (NCMessageRoomIn) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
+		NCMessageRoom msgSend = (NCMessageRoom) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
 		dos.writeUTF(msgSend.toEncodedString());
 		
 		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);

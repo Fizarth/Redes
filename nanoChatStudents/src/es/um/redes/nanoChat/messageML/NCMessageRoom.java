@@ -2,8 +2,23 @@ package es.um.redes.nanoChat.messageML;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+/*
+ * ROOM
+----
 
-public class NCMessageRoomIn extends NCMessage{
+<message>
+	<operation> opCode</operation>
+	<room> room</room>
+</message>
+
+
+Operaciones válidas:
+
+"EnterRoom"
+"InfoRoom"
+
+*/
+public class NCMessageRoom extends NCMessage{
 	
 	private String room;
 	
@@ -14,7 +29,7 @@ public class NCMessageRoomIn extends NCMessage{
 	/**
 	 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
 	 */
-	public NCMessageRoomIn(byte opcode, String name) {
+	public NCMessageRoom(byte opcode, String name) {
 		this.opcode = opcode;
 		this.room = name;
 	}
@@ -35,7 +50,7 @@ public class NCMessageRoomIn extends NCMessage{
 
 
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
-	public static NCMessageRoomIn readFromString(byte code, String message) {
+	public static NCMessageRoom readFromString(byte code, String message) {
 		String found_name = null;
 
 		// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
@@ -49,7 +64,7 @@ public class NCMessageRoomIn extends NCMessage{
 			return null;
 		}
 		
-		return new NCMessageRoomIn(code, found_name);
+		return new NCMessageRoom(code, found_name);
 	}
 
 

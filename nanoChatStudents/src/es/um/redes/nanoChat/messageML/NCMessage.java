@@ -23,6 +23,8 @@ public abstract class NCMessage {
 	public static final byte OP_ENTER_ROOM = 8;
 	public static final byte OP_EXIT_ROOM = 9;
 	public static final byte OP_MESSAGE = 10;
+	
+	public static final byte OP_EXIT = 11;
 
 	
 	
@@ -40,7 +42,7 @@ public abstract class NCMessage {
 	 */
 	private static final Byte[] _valid_opcodes = { 
 		OP_NICK,OP_OK,OP_NO_OK,OP_QUERY_ROOM,OP_LIST_ROOM,OP_INFO_ROOM,
-		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIT_ROOM,OP_MESSAGE		
+		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIT_ROOM,OP_MESSAGE,OP_EXIT		
 		};
 
 	/**
@@ -48,7 +50,7 @@ public abstract class NCMessage {
 	 */
 	private static final String[] _valid_opcodes_str = {
 		"Nick","OK","NoOk","QueryRoom","ListRoom","InfoRoom","InfoRoomRequest",
-		"EnterRoom","ExitRoom","Message"
+		"EnterRoom","ExitRoom","Message","Exit"
 	};
 
 	/**
@@ -132,7 +134,7 @@ public abstract class NCMessage {
 		}
 		
 		case OP_ENTER_ROOM:{
-			return NCMessageRoomIn.readFromString(code,message);
+			return NCMessageRoom.readFromString(code,message);
 		}
 		default:
 			System.err.println("Unknown message type received:" + code);
@@ -151,7 +153,7 @@ public abstract class NCMessage {
 		return (new NCMessageNick(code, nick));
 	}
 	public static NCMessage makeRoomMessage(byte code, String room) {
-		return (new NCMessageRoomIn(code, room));
+		return (new NCMessageRoom(code, room));
 	}
 	
 	

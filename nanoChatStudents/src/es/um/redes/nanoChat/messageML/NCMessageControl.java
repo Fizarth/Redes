@@ -3,17 +3,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /*
- * ROOM
+ * CONTROL
 ----
 
 <message>
-<operation>operation</operation>
+	<operation>operation</operation>
 </message>
 
 Operaciones válidas:
 
-NickOK
-NickDUplicated
+"OK"
+"NoOk"
+"ExitRoom"
+"QueryRoom"
+"ListRoom"
+"Exit"
 */
 
 
