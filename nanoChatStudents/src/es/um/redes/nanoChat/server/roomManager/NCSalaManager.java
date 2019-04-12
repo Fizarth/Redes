@@ -1,20 +1,26 @@
 package es.um.redes.nanoChat.server.roomManager;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageChat;
+
 public class NCSalaManager extends NCRoomManager {
 	
 	//Superclase String roomName
-	NCRoomDescription roomDescription ;
+	NCRoomDescription roomDescription = null;
 		/* 	roomName; members; timeLastMessage; */	
 	private HashMap<String, Socket> miembros;
 
 
 	public NCSalaManager() {
 		this.miembros = new HashMap<String,Socket>();	
+		ArrayList<String> members = new ArrayList<String>();
+		this.roomDescription = new NCRoomDescription(roomName, members, 0);
 	}
 	
 	@Override
@@ -28,32 +34,35 @@ public class NCSalaManager extends NCRoomManager {
 
 	@Override
 	public void broadcastMessage(String u, String message) throws IOException {
-		// TODO Auto-generated method stub
 		for(String usur : roomDescription.members) {
 			if (usur.compareTo(u)!=0) {
-				NCMessageChat mensage = new
-				
-			}
-			
+				Socket s = this.miembros.get(usur);
+				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+				NCMessageChat mensaje = new NCMessageChat(NCMessage.OP_MESSAGE,message);
+				dos.writeUTF(mensaje.toEncodedString());
+			}			
 		}
-		
+		this.roomDescription.timeLastMessage = System.currentTimeMillis();
 	}
 
 	@Override
 	public void removeUser(String u) {
-		this.miembros.remove(u);
+		if(this.miembros.remove(u) != null) {
+			this.roomDescription.members.remove(u);
+		}
 	}
 
 	@Override
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
+		this.roomDescription.roomName = roomName;
 		
 	}
 
 	@Override
 	public NCRoomDescription getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.roomDescription;
+			
 	}
 
 	@Override
