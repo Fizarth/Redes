@@ -2,8 +2,11 @@ package es.um.redes.nanoChat.messageML;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 
 
 public abstract class NCMessage {
@@ -158,6 +161,14 @@ public abstract class NCMessage {
 	
 	public static NCMessage makeChatMessage(byte code, String msg){
 		return (new NCMessageChat(code, msg));
+	}
+	
+	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, String name, String ...nombres){
+		return (new NCMessageInfoRoom(code, name, nombres));
+	}
+	
+	public static NCMessageRoomsInfo makeRoomsInfoMessage(byte code, ArrayList<InfoRoom> info){
+		return (new NCMessageRoomsInfo(code, info));
 	}
 	
 	
