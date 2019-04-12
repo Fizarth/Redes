@@ -132,6 +132,7 @@ public abstract class NCMessage {
 		case OP_EXIT_ROOM:{
 			return NCMessageControl.readFromString(code);
 		}
+		
 		case OP_ENTER_ROOM:{
 			return NCMessageRoom.readFromString(code,message);
 		}
