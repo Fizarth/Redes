@@ -1,5 +1,6 @@
 package es.um.redes.nanoChat.messageML;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,7 @@ public class NCMessageInfoRoom extends NCMessage{
 
 	private String nombreRoom;
 	private int numUsers;
-	private String[] nombresUsers;
+	private ArrayList<String> nombresUsers;
 	
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
@@ -42,11 +43,11 @@ public class NCMessageInfoRoom extends NCMessage{
 		/**
 		 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
 		 */
-		public NCMessageInfoRoom(byte opcode, String name, String ...nombres) {
+		public NCMessageInfoRoom(byte opcode, String name, ArrayList<String> usuarios) {
 			this.opcode=opcode;
 			this.nombreRoom=name;
-			this.numUsers=nombres.length;
-			this.nombresUsers=nombres;
+			this.numUsers=usuarios.size();
+			this.nombresUsers=usuarios;
 		}
 
 		@Override
@@ -58,8 +59,8 @@ public class NCMessageInfoRoom extends NCMessage{
 			sb.append("<"+OPERATION_MARK+">"+opcodeToString(opcode)+"</"+OPERATION_MARK+">"+END_LINE); //Construimos el campo
 			sb.append("<"+ROOM_MARK+">"+nombreRoom+"</"+ROOM_MARK+">"+END_LINE);
 			sb.append("<"+NUMUSER_MARK+">"+Integer.toString(numUsers)+"</"+NICK_MARK+">"+END_LINE);
-			for(int i=0; i<numUsers;i++){
-				sb.append("<"+NICK_MARK+">"+nombresUsers[i]+"</"+NICK_MARK+">"+END_LINE);
+			for(String nick : nombresUsers){
+				sb.append("<"+NICK_MARK+">"+nick+"</"+NICK_MARK+">"+END_LINE);
 			}
 			sb.append("</"+MESSAGE_MARK+">"+END_LINE);
 
@@ -71,23 +72,36 @@ public class NCMessageInfoRoom extends NCMessage{
 		//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
 		public static NCMessageInfoRoom readFromString(byte code, String message) {
 			String found_name = null;
+			ArrayList<String> found_usuarios = new ArrayList<String>();
 
 			Pattern pat = Pattern.compile(patron);
 			Matcher mat_name = pat.matcher(message);
 			while (mat_name.find()) {
-				// Name found
-				found_name += mat_name.group(2)+"  ";
+				switch (mat_name.group(1)) {
+				case ROOM_MARK:
+					found_name= mat_name.group(2);
+					break;
+
+				case NICK_MARK:
+					found_usuarios.add(mat_name.group(2));
+					break;
+				}
 			}
-			if(found_name.compareTo("")!=0){
-				System.out.println(found_name);
+			if(found_name!=null || found_usuarios.size()!=0){
+//				System.out.println(found_name);
+//				for (String string : found_usuarios) {
+//					System.out.println(string);
+//				}
+				
+				return new NCMessageInfoRoom(code, found_name,found_usuarios);
 			}
 				
 			else {
-				System.out.println("Error en MessageChat: no se ha encontrado parametro.");
-					
+				System.out.println("Error en MessageinfoRoom: no se ha encontrado parametro.");
+				return null;	
 			}
 
-			return new NCMessageInfoRoom(code, found_name);
+			
 		}
 
 
@@ -99,7 +113,7 @@ public class NCMessageInfoRoom extends NCMessage{
 			return numUsers;
 		}
 
-		public String[] getNombresUsers() {
+		public ArrayList<String> getNombresUsers() {
 			return nombresUsers;
 		}
 

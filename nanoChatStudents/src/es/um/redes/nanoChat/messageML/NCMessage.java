@@ -163,7 +163,7 @@ public abstract class NCMessage {
 		return (new NCMessageChat(code, msg));
 	}
 	
-	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, String name, String ...nombres){
+	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, String name, ArrayList<String> nombres){
 		return (new NCMessageInfoRoom(code, name, nombres));
 	}
 	
