@@ -16,7 +16,6 @@ Operaciones válidas:
 "NoOk"
 "ExitRoom"
 "QueryRoom"
-"ListRoom"
 "Exit"
 */
 

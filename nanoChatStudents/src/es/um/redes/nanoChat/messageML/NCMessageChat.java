@@ -2,24 +2,24 @@ package es.um.redes.nanoChat.messageML;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+/*
+ * CHAT
+----
 
+<message>
+	<operation> opCode</operation>
+	<mensaje>Mensaje de Texto </mensaje>
+</message>
+
+
+
+Operaciones válidas:
+
+"Message"
+*/
 public class NCMessageChat extends NCMessage{
-	/*
-	 * CHAT
-	----
-
-	<message>
-		<operation> opCode</operation>
-		<mensaje>Mensaje de Texto </mensaje>
-	</message>
-
-
-
-	Operaciones válidas:
-
-	"Message"
-	*/
-private String mensaje;
+	
+	private String mensaje;
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
 	private static final String RE_NAME = "<mensaje>(.*?)</mensaje>";

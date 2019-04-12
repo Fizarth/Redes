@@ -155,6 +155,10 @@ public abstract class NCMessage {
 		return (new NCMessageRoom(code, room));
 	}
 	
+	public static NCMessage makeChatMessage(byte code, String msg){
+		return (new NCMessageChat(code, msg));
+	}
+	
 	
 }
 

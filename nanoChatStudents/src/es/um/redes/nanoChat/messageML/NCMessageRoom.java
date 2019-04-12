@@ -60,7 +60,7 @@ public class NCMessageRoom extends NCMessage{
 			// Name found
 			found_name = mat_name.group(1);
 		} else {
-			System.out.println("Error en MessageRoomIn: no se ha encontrado parametro.");
+			System.out.println("Error en MessageRoom: no se ha encontrado parametro.");
 			return null;
 		}
 		
