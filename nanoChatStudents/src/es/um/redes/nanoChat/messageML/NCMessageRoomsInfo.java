@@ -54,6 +54,8 @@ public class NCMessageRoomsInfo extends NCMessage{
 	private static final String RE_NUMUSER = "<numUser>(.*?)</numUser>";
 	private static final String NUMUSER_MARK = "numUser";
 	
+	private static final String regexpr = "<(\\w+?)>(.*?)</\\1>";
+	
 
 
 	/**
@@ -71,7 +73,15 @@ public class NCMessageRoomsInfo extends NCMessage{
 		
 		sb.append("<"+MESSAGE_MARK+">"+END_LINE);
 		sb.append("<"+OPERATION_MARK+">"+opcodeToString(opcode)+"</"+OPERATION_MARK+">"+END_LINE); //Construimos el campo
-		sb.append("<"+NAME_MARK+">"+mensaje+"</"+NAME_MARK+">"+END_LINE);
+		
+		for (InfoRoom ir : rooms) {
+			sb.append("<"+ROOM_MARK+">"+END_LINE);
+			sb.append("<"+NAME_ROOM_MARK+">"+ir.name+"</"+NAME_ROOM_MARK+">"+END_LINE);
+			sb.append("<"+SIZE_MARK+">"+ir.maxMiembros+"</"+SIZE_MARK+">"+END_LINE);
+			sb.append("<"+NUMUSER_MARK +">"+ir.miembros+"</"+NUMUSER_MARK +">"+END_LINE);
+			sb.append("</"+ROOM_MARK+">"+END_LINE);	
+		}
+		
 		sb.append("</"+MESSAGE_MARK+">"+END_LINE);
 
 		return sb.toString(); //Se obtiene el mensaje
@@ -80,27 +90,58 @@ public class NCMessageRoomsInfo extends NCMessage{
 
 
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
-	public static NCMessageRoom readFromString(byte code, String message) {
-		String found_name = null;
-
-		// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
-		Pattern pat_name = Pattern.compile(RE_NAME);
-		Matcher mat_name = pat_name.matcher(message);
-		if (mat_name.find()) {
-			// Name found
-			found_name = mat_name.group(1);
-		} else {
-			System.out.println("Error en MessageChat: no se ha encontrado parametro.");
-			return null;
-		}
+	public static NCMessageRoomsInfo readFromString(byte code, String message) {
 		
-		return new NCMessageRoom(code, found_name);
+		
+		ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
+		
+		Pattern pat_room = Pattern.compile(RE_ROOM);
+
+		Matcher mat_room = pat_room.matcher(message);
+		while (mat_room.find()) {
+			
+			System.out.println("\n\n"+mat_room.group(1)+"\n\n");
+			
+			Pattern pat_reg = Pattern.compile(regexpr);
+			Matcher mat_reg = pat_reg.matcher(mat_room.group(1));
+			
+			String found_name = null;
+			int found_size = 0;
+			int found_miembros = 0;
+			
+			//sabemos que obligatoriamente tendrá estos campos, por lo que tendrá que hacer match 3 veces.
+			for(int i = 0; i<3;i++) {
+				if(mat_reg.find()) {
+					System.out.println(mat_reg.group(1));
+					switch(mat_reg.group(1)){
+					case NAME_ROOM_MARK:
+						found_name = mat_reg.group(2);
+						break;
+					case SIZE_MARK: 
+						found_size = Integer.parseInt(mat_reg.group(2));
+						break;
+					case NUMUSER_MARK:
+						found_miembros = Integer.parseInt(mat_reg.group(2));
+						break;
+						
+					}
+				}				
+			}
+			InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
+			found_rooms.add(found_room);
+			
+		}
+		if(found_rooms.isEmpty()) 
+			System.out.println("No se han encontrado salas disponibles");
+		
+			
+		return new NCMessageRoomsInfo(code, found_rooms);
 	}
 
 
 	//Devolvemos el nombre contenido en el mensaje
-	public String getName() {
-		return mensaje;
+	public ArrayList<InfoRoom> getRooms() {
+		return rooms;
 	}
 
 

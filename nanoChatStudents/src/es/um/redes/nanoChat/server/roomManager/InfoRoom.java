@@ -6,5 +6,9 @@ public class InfoRoom {
 	public int maxMiembros;
 	public int miembros;
 	
-
+	public InfoRoom(String name, int maxMiembros, int miembros) {
+		this.name = name;
+		this.maxMiembros = maxMiembros;
+		this.miembros = miembros;
+	}
 }
