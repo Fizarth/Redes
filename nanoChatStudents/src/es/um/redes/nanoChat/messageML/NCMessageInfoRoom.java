@@ -36,6 +36,8 @@ public class NCMessageInfoRoom extends NCMessage{
 		
 		private static final String RE_NICK = "<nick>(.*?)</nick>";
 		private static final String NICK_MARK = "nick";
+		
+		private static final String patron  = "<(\\w+?)>(.*?)</\\1>";
 
 		/**
 		 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
@@ -67,21 +69,25 @@ public class NCMessageInfoRoom extends NCMessage{
 
 
 		//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
-		public static NCMessageRoom readFromString(byte code, String message) {
+		public static NCMessageInfoRoom readFromString(byte code, String message) {
 			String found_name = null;
 
-			// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
-			Pattern pat_name = Pattern.compile(RE_ROOM);
-			Matcher mat_name = pat_name.matcher(message);
-			if (mat_name.find()) {
+			Pattern pat = Pattern.compile(patron);
+			Matcher mat_name = pat.matcher(message);
+			while (mat_name.find()) {
 				// Name found
-				found_name = mat_name.group(1);
-			} else {
-				System.out.println("Error en MessageChat: no se ha encontrado parametro.");
-				return null;
+				found_name += mat_name.group(2)+"  ";
 			}
-			
-			return new NCMessageRoom(code, found_name);
+			if(found_name.compareTo("")!=0){
+				System.out.println(found_name);
+			}
+				
+			else {
+				System.out.println("Error en MessageChat: no se ha encontrado parametro.");
+					
+			}
+
+			return new NCMessageInfoRoom(code, found_name);
 		}
 
 

@@ -49,7 +49,7 @@ public class NCMessageChat extends NCMessage{
 
 
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
-	public static NCMessageRoom readFromString(byte code, String message) {
+	public static NCMessageChat readFromString(byte code, String message) {
 		String found_name = null;
 
 		// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
@@ -63,7 +63,7 @@ public class NCMessageChat extends NCMessage{
 			return null;
 		}
 		
-		return new NCMessageRoom(code, found_name);
+		return new NCMessageChat(code, found_name);
 	}
 
 
