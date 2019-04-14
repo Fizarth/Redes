@@ -139,6 +139,13 @@ public abstract class NCMessage {
 		case OP_ENTER_ROOM:{
 			return NCMessageRoom.readFromString(code,message);
 		}
+		
+		case OP_QUERY_ROOM:{
+			return NCMessageControl.readFromString(code);
+		}
+		case OP_LIST_ROOM:{
+			return NCMessageRoomsInfo.readFromString(code, message);
+		}
 		default:
 			System.err.println("Unknown message type received:" + code);
 			return null;

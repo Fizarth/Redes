@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory.Default;
+
 /*
  * INFO ROOM
 ----
@@ -38,7 +40,7 @@ public class NCMessageInfoRoom extends NCMessage{
 		private static final String RE_NICK = "<nick>(.*?)</nick>";
 		private static final String NICK_MARK = "nick";
 		
-		private static final String patron  = "<(\\w+?)>(.*?)</\\1>";
+		private static final String patron  = "<([^message]\\w+?)>(.*?)</\\1>";
 
 		/**
 		 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
@@ -85,7 +87,10 @@ public class NCMessageInfoRoom extends NCMessage{
 				case NICK_MARK:
 					found_usuarios.add(mat_name.group(2));
 					break;
+				default:
+					break;
 				}
+				
 			}
 			if(found_name!=null || found_usuarios.size()!=0){
 //				System.out.println(found_name);

@@ -5,13 +5,19 @@ import java.util.regex.Pattern;
 
 import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 
-public class pruebaPatron {
+public class pruebaPatronInfoRoom {
 
 	public static void main(String[] args) {
-		String cadenaOk="<room>nombre</room>"
+		String cadenaOk=
+				"<message>"
+				+"<operation>opCode</operation>"
+				+
+				"<room>nombre</room>"
 				+ "<numUser>2</numUser>"
 				+ "<nick>nick1</nick>"
-				+ "<nick>nick2</nick>";
+				+ "<nick>nick2</nick>"
+				+"</message>"
+				;
 			
 		String cadenaError= "cadena incorrecta";
 		
@@ -19,7 +25,7 @@ public class pruebaPatron {
 //		String RE_NUMUSER = "<numUser>(.*?)</numUser>";
 //		String RE_NICK = "<nick>(.*?)</nick>";
 //		
-//		String patron  = "<(\\w+?)>(.*?)</\\1>";
+//		String patron  = "<([^message]\\w+?)>(.*?)</\\1>";
 //		
 //		String found_name = "";
 //		String aux=null;
@@ -32,8 +38,8 @@ public class pruebaPatron {
 //		
 //	
 //		Pattern pat = Pattern.compile(patron);
-//		Matcher mat_name = pat.matcher(cadena);
-//			while (mat_name.find()) {
+//		Matcher mat_name = pat.matcher(cadenaOk);
+//		while (mat_name.find()) {
 //				// Name found
 //				found_name += mat_name.group(2)+"  ";
 //			}

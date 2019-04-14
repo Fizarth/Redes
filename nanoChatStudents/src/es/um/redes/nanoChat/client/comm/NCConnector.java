@@ -69,7 +69,7 @@ public class NCConnector {
 	//Método para obtener la lista de salas del servidor
 	/*HEMOS PENSADO QUE EN LUGAR 
 	 * 		public ArrayList<NCRoomDescription> getRooms() 
-	 * Devolver INFO ROOM, ya que eso contenia inf que considerabamos imnecesaria.
+	 * Devolver INFO ROOM, ya que eso contenia inf que considerabamos innecesaria.
 	 * */
 	public ArrayList<InfoRoom> getRooms() throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
@@ -78,13 +78,22 @@ public class NCConnector {
 		dos.writeUTF(rawMessage);
 		
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
+		NCMessageRoomsInfo me = (NCMessageRoomsInfo) msg;
 		ArrayList<InfoRoom> rooms = new ArrayList<InfoRoom>();
-		if(msg.getOpcode() == NCMessage.OP_LIST_ROOM) {
-			NCMessageRoomsInfo me = (NCMessageRoomsInfo) msg;
+		if(me.getOpcode() == NCMessage.OP_LIST_ROOM) {
+			
 			//--TODO dependiendo del mensaje que creemos hacer.
+			rooms=me.getRooms();
+			for(InfoRoom i: rooms){
+				System.out.println("NCConector-getRooms-> "+i.name+" "+i.maxMiembros+" "+i.miembros);
+			}
+			return rooms;
 		}
 		
-		return null;
+		else{
+			System.out.println(" NCConnector- getRooms: error");
+			return null;
+		}
 	}
 	
 	//Método para solicitar la entrada en una sala

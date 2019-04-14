@@ -9,23 +9,29 @@ import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 
 public class PatronListRoom {
 	
-static String messge = "<room> "
+static String messge = 
+		"<message>"
+		+"<operation>opCode</operation>"
+		+
+		"<room>\n"
 		+ "<name>NombreRoom1</name>"
 		+ "<size>15</size>"
 		+ "<numUser>5</numUser>"
-		+ " </room>"
-		+ " <room>"
+		+ " </room>\n"
+		+ " <room>\n"
 		+ "<name>NombreRoom2</name>"
 		+ "<size>15</size>   "
 		+ "<numUser>1</numUser>"
-		+ "</room>"
-		+ "<room>"
+		+ "</room>\n"
+		+ "<room>\n"
 		+ "<name>NombreRoom3</name>"
 		+ "<size>15</size>"
 		+ "<numUser>10</numUser>"
-		+ "</room>";
+		+ "</room>\n"
+		+"</message>"
+		;
 
-private static final String RE_ROOM = "<room>(.*?)</room>";
+private static final String RE_ROOM = "<room>\n(.*?)</room>\n";
 private static final String regexpr = "<(\\w+?)>(.*?)</\\1>";
 
 private static final String NAME_ROOM_MARK = "name";

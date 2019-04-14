@@ -21,5 +21,9 @@ public abstract class NCRoomManager {
 	//Método para devolver el número de usuarios conectados a una sala
 	public abstract int usersInRoom();
 	
+	
+	//------
+	public abstract InfoRoom getInfo();
+	
 
 }

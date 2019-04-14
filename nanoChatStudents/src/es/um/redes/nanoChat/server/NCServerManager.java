@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
+import es.um.redes.nanoChat.server.roomManager.NCSalaManager;
 
 /**
  * Esta clase contiene el estado general del servidor (sin la lógica relacionada con cada sala particular)
@@ -41,6 +43,18 @@ class NCServerManager {
 		//TODO Añade la información al ArrayList
 		return null;
 	}
+	//-----Creada por nosotras para devolver la lista de salas
+	public synchronized ArrayList<InfoRoom> getRoomsInfo() {
+		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
+		ArrayList<InfoRoom> salas = new ArrayList<>();
+		for(NCRoomManager r: rooms.values()){
+			System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
+			//TODO Añade la información al ArrayList
+			salas.add(r.getInfo());
+		}
+		
+		return salas;
+	}
 	
 	
 	//Intenta registrar al usuario en el servidor.
@@ -57,28 +71,35 @@ class NCServerManager {
 	//Elimina al usuario del servidor
 	public synchronized void removeUser(String user) {
 		//TODO Elimina al usuario del servidor
+		users.remove(user);
 	}
 	
 	//Un usuario solicita acceso para entrar a una sala y registrar su conexión en ella
 	public synchronized NCRoomManager enterRoom(String u, String room, Socket s) {
 		//TODO Verificamos si la sala existe
-		System.out.println("NCServerManager contiene "+ room +" : "+rooms.containsKey(room));
+//		System.out.println("NCServerManager contiene "+ room +" : "+rooms.containsKey(room));
 		if (rooms.containsKey(room)) {
-			NCRoomManager manager = rooms.get(room);
+//			NCRoomManager manager = rooms.get(room);
+			NCSalaManager manager = (NCSalaManager) rooms.get(room);
 			//---TODO suponemos ahora mismo que entra siempre.
-			manager.registerUser(u,s);
-			System.out.println("NC SERVER MANAGER añade usuario" + u+ " a sala "+room);
-			return manager;
+			boolean registrado=manager.registerUser(u,s);
+			if(registrado)System.out.println("NCServerManager añade usuario " + u+ " a sala "+room);
+			else System.out.println("No se ha podido registrar usuario " + u+ " en sala "+room);
+				return manager;
 		}
 		
 		//TODO Decidimos qué hacer si la sala no existe (devolver error O crear la sala)
 		else{ //Si no existe la sala, la crea
-			
+			NCSalaManager manager = new NCSalaManager(room);
+			rooms.put(room, manager);
+			manager.registerUser(u, s);
+			System.out.println("NCServerManager crea la sala "+room+" y añade al usuario "+u);
+			return manager;
 			
 //			rooms.put(room, value);
 		}
 		//TODO Si la sala existe y si es aceptado en la sala entonces devolvemos el RoomManager de la sala
-		return null;
+		
 	}
 	
 	//Un usuario deja la sala en la que estaba 

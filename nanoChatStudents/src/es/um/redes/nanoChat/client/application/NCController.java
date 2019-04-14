@@ -8,6 +8,7 @@ import es.um.redes.nanoChat.client.comm.NCConnector;
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.client.shell.NCShell;
 import es.um.redes.nanoChat.directory.connector.DirectoryConnector;
+import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 public class NCController {
@@ -84,7 +85,11 @@ public class NCController {
 			break;
 		case NCCommands.COM_ROOMLIST:
 			//TODO LLamar a getAndShowRooms() si el estado actual del autómata lo permite
+			if(clientStatus == PRE_ROOM){
+				getAndShowRooms();
+			}
 			//TODO Si no está permitido informar al usuario
+			else System.out.println("Debes salir de la sala para solicitar la lista de salas");
 			break;
 		case NCCommands.COM_ENTER:
 			//TODO LLamar a enterChat() si el estado actual del autómata lo permite
@@ -123,10 +128,16 @@ public class NCController {
 	}
 
 	//Método que solicita al servidor de NanoChat la lista de salas e imprime el resultado obtenido
-	private void getAndShowRooms() {
+	private void getAndShowRooms() throws IOException {
 		//TODO Lista que contendrá las descripciones de las salas existentes
+		ArrayList<InfoRoom> salas =new ArrayList<>();
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
+		salas = ncConnector.getRooms();
+		System.out.println("NCController- getAndShowRooms-> salas empty: "+salas.isEmpty());
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
+		for(InfoRoom info:salas){
+			System.out.println("Sala: "+info.name+" de tamaño máximo: "+info.maxMiembros+", donde actualmente hay: "+info.miembros+" usuarios");
+		}
 	}
 
 	//Método para tramitar la solicitud de acceso del usuario a una sala concreta

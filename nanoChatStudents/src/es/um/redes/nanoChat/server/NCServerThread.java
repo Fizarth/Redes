@@ -4,12 +4,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import javax.sound.midi.MidiDevice.Info;
 
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.messageML.NCMessageRoom;
+import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
+import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -51,6 +56,9 @@ public class NCServerThread extends Thread {
 				NCMessage message = NCMessage.readMessageFromSocket(dis);
 				switch (message.getOpcode()) {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
+				case NCMessage.OP_QUERY_ROOM:
+					sendRoomList();
+//					break; //??
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				case NCMessage.OP_ENTER_ROOM:
 					NCMessageRoom room = (NCMessageRoom) message;
@@ -124,8 +132,23 @@ public class NCServerThread extends Thread {
 	}
 
 	//Mandamos al cliente la lista de salas existentes
-	private void sendRoomList()  {
+	private void sendRoomList() throws IOException  {
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
+		ArrayList<InfoRoom> salas=serverManager.getRoomsInfo();
+//		NCMessage msg = NCMessage.readMessageFromSocket(dis);
+//		NCMessageControl query = (NCMessageControl) msg;
+		
+//		if(query.getOpcode()== NCMessage.OP_QUERY_ROOM){
+			System.out.println(" NCServerThread- sendRoomList "+salas.size());
+			for(InfoRoom i:salas){
+				System.out.println(i.name);
+				System.out.println(i.miembros);
+			}
+			NCMessageRoomsInfo msgresp = (NCMessageRoomsInfo)NCMessage.makeRoomsInfoMessage(NCMessage.OP_LIST_ROOM,salas);
+			dos.writeUTF(msgresp.toEncodedString());
+//		}
+		
+		
 	}
 
 	private void processRoomMessages()  {
