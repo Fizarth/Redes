@@ -133,7 +133,7 @@ public class NCController {
 		ArrayList<InfoRoom> salas =new ArrayList<>();
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
 		salas = ncConnector.getRooms();
-		System.out.println("NCController- getAndShowRooms-> salas empty: "+salas.isEmpty());
+		//System.out.println("NCController- getAndShowRooms-> salas empty: "+salas.isEmpty());
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
 		for(InfoRoom info:salas){
 			System.out.println("Sala: "+info.name+" de tamaño máximo: "+info.maxMiembros+", donde actualmente hay: "+info.miembros+" usuarios");

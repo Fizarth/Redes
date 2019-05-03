@@ -84,14 +84,14 @@ public class NCConnector {
 			
 			//--TODO dependiendo del mensaje que creemos hacer.
 			rooms=me.getRooms();
-			for(InfoRoom i: rooms){
-				System.out.println("NCConector-getRooms-> "+i.name+" "+i.maxMiembros+" "+i.miembros);
-			}
+//			for(InfoRoom i: rooms){
+//				System.out.println("NCConector-getRooms-> "+i.name+" "+i.maxMiembros+" "+i.miembros);
+//			}
 			return rooms;
 		}
 		
 		else{
-			System.out.println(" NCConnector- getRooms: error");
+			//System.out.println(" NCConnector- getRooms: error");
 			return null;
 		}
 	}

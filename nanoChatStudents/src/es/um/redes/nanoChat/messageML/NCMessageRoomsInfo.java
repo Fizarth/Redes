@@ -91,116 +91,117 @@ public class NCMessageRoomsInfo extends NCMessage{
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
 	public static NCMessageRoomsInfo readFromString(byte code, String message) {
 		
-		System.out.println("NCMRoomsInfo-readFromString:\n"+message);
-		ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
-		
-		Pattern pat_room = Pattern.compile(RE_ROOM); //cambiar RE_ROOM por patron
-		Matcher mat_room = pat_room.matcher(message);
-		while (mat_room.find()) {
-			System.out.println("\n\n"+mat_room.group(1)+"\n\n");
-			
-			Pattern pat_reg = Pattern.compile(regexpr);
-			Matcher mat_reg = pat_reg.matcher(mat_room.group(1));
-			
-			String found_name = null;
-			int found_size = 0;
-			int found_miembros = 0;
-			
-			//sabemos que obligatoriamente tendrá estos campos, por lo que tendrá que hacer match 3 veces.
-			for(int i = 0; i<3;i++) {
-				if(mat_reg.find()) {
-					System.out.println(mat_reg.group(1));
-					switch(mat_reg.group(1)){
-					case NAME_ROOM_MARK:
-						found_name = mat_reg.group(2);
-						System.out.println("NCMRoomsInfo-readFromString "+found_name);
-						break;
-					case SIZE_MARK: 
-						found_size = Integer.parseInt(mat_reg.group(2));
-						System.out.println("NCMRoomsInfo-readFromString "+found_size);
-						break;
-					case NUMUSER_MARK:
-						found_miembros = Integer.parseInt(mat_reg.group(2));
-						System.out.println("NCMRoomsInfo-readFromString "+found_miembros);
-						break;
-					}
-				}				
-			}
-			
-
-			
-			System.out.println(found_name+" "+found_miembros+" "+found_size);
-			InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
-			found_rooms.add(found_room);
-			
-		}
-		 
-		
-		if(found_rooms.isEmpty()) 
-			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
-		
-			
-		return new NCMessageRoomsInfo(code, found_rooms);
-	}
+//		System.out.println("NCMRoomsInfo-readFromString:\n"+message);
+//		ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
+//		
+//		Pattern pat_room = Pattern.compile(RE_ROOM); //cambiar RE_ROOM por patron
+//		Matcher mat_room = pat_room.matcher(message);
+//		while (mat_room.find()) {
+//			System.out.println("\n\n"+mat_room.group(1)+"\n\n");
+//			
+//			Pattern pat_reg = Pattern.compile(regexpr);
+//			Matcher mat_reg = pat_reg.matcher(mat_room.group(1));
+//			
+//			String found_name = null;
+//			int found_size = 0;
+//			int found_miembros = 0;
+//			
+//			//sabemos que obligatoriamente tendrá estos campos, por lo que tendrá que hacer match 3 veces.
+//			for(int i = 0; i<3;i++) {
+//				if(mat_reg.find()) {
+//					System.out.println(mat_reg.group(1));
+//					switch(mat_reg.group(1)){
+//					case NAME_ROOM_MARK:
+//						found_name = mat_reg.group(2);
+//						System.out.println("NCMRoomsInfo-readFromString "+found_name);
+//						break;
+//					case SIZE_MARK: 
+//						found_size = Integer.parseInt(mat_reg.group(2));
+//						System.out.println("NCMRoomsInfo-readFromString "+found_size);
+//						break;
+//					case NUMUSER_MARK:
+//						found_miembros = Integer.parseInt(mat_reg.group(2));
+//						System.out.println("NCMRoomsInfo-readFromString "+found_miembros);
+//						break;
+//					}
+//				}				
+//			}
+//			
+//
+//			
+//			System.out.println(found_name+" "+found_miembros+" "+found_size);
+//			InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
+//			found_rooms.add(found_room);
+//			
+//		}
+//		 
+//		
+//		if(found_rooms.isEmpty()) 
+//			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
+//		
+//			
+//		return new NCMessageRoomsInfo(code, found_rooms);
+//	}
+	
 //	 ESTE CODIGO FUNCIONA ALGO MEJOR
 //
 ////	
-//	 System.out.println("NCMRoomsInfo-readFromString:\n"+message);
-//	ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
-//	
-//	ArrayList<String> found_name = new ArrayList<>();
-//	ArrayList<Integer> found_size = new ArrayList<>();
-//	ArrayList<Integer> found_miembros = new ArrayList<>();
-//	
-//	Pattern pat_room = Pattern.compile(regexpr); //cambiar RE_ROOM por patron
-//	Matcher mat_room = pat_room.matcher(message);
-//	while (mat_room.find()) {
-//		System.out.println("\n\n"+mat_room.group(1)+"\n\n");
-//		
-////		Pattern pat_reg = Pattern.compile(regexpr);
-////		Matcher mat_reg = pat_reg.matcher(mat_room.group(1));
-//		
-//		
-//		
-//		//sabemos que obligatoriamente tendrá estos campos, por lo que tendrá que hacer match 3 veces.
-//
-//				System.out.println(mat_room.group(1));
-//				switch(mat_room.group(1)){
-//				case NAME_ROOM_MARK:
-//					found_name.add( mat_room.group(2));
-//					System.out.println("NCMRoomsInfo-readFromString name "+found_name);
-//					break;
-//				case SIZE_MARK:
-//					System.out.println("SE HA ENCONTRADO UN SIZE");
-//					found_size .add( Integer.parseInt(mat_room.group(2)));
-//					System.out.println("NCMRoomsInfo-readFromString size "+found_size);
-//					break;
-//				case NUMUSER_MARK:
-//					found_miembros .add(Integer.parseInt(mat_room.group(2)));
-//					System.out.println("NCMRoomsInfo-readFromString miembros "+found_miembros);
-//					break;
-//				default: 
-//					break;
-////				}
-//			}
-//	 
-////	System.out.println(found_name+" "+found_miembros+" "+found_size);
-////	InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
-////	found_rooms.add(found_room);
-//	
-//	
-//}
-//for(int i=0;i<found_miembros.size();i++){
-//	InfoRoom found_room = new InfoRoom(found_name.get(i), found_size.get(i),found_miembros.get(i));
-//	System.out.println(found_room.name+found_room.miembros);
+	 //System.out.println("NCMRoomsInfo-readFromString:\n"+message);
+	ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
+	
+	ArrayList<String> found_name = new ArrayList<>();
+	ArrayList<Integer> found_size = new ArrayList<>();
+	ArrayList<Integer> found_miembros = new ArrayList<>();
+	
+	Pattern pat_room = Pattern.compile(regexpr); //cambiar RE_ROOM por patron
+	Matcher mat_room = pat_room.matcher(message);
+	while (mat_room.find()) {
+		//System.out.println("\n\n"+mat_room.group(1)+"\n\n");
+		
+//		Pattern pat_reg = Pattern.compile(regexpr);
+//		Matcher mat_reg = pat_reg.matcher(mat_room.group(1));
+		
+		
+		
+		//sabemos que obligatoriamente tendrá estos campos, por lo que tendrá que hacer match 3 veces.
+
+				//System.out.println(mat_room.group(1));
+				switch(mat_room.group(1)){
+				case NAME_ROOM_MARK:
+					found_name.add( mat_room.group(2));
+					//System.out.println("NCMRoomsInfo-readFromString name "+found_name);
+					break;
+				case SIZE_MARK:
+					//System.out.println("SE HA ENCONTRADO UN SIZE");
+					found_size .add( Integer.parseInt(mat_room.group(2)));
+					//System.out.println("NCMRoomsInfo-readFromString size "+found_size);
+					break;
+				case NUMUSER_MARK:
+					found_miembros .add(Integer.parseInt(mat_room.group(2)));
+					//System.out.println("NCMRoomsInfo-readFromString miembros "+found_miembros);
+					break;
+				default: 
+					break;
+//				}
+			}
+	 
+//	System.out.println(found_name+" "+found_miembros+" "+found_size);
+//	InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
 //	found_rooms.add(found_room);
-//}
-//	if(found_rooms.isEmpty()) 
-//		System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
-//	
-//		
-//	return new NCMessageRoomsInfo(code, found_rooms);
-//}
+	
+	
+}
+for(int i=0;i<found_miembros.size();i++){
+	InfoRoom found_room = new InfoRoom(found_name.get(i), found_size.get(i),found_miembros.get(i));
+	//System.out.println(found_room.name+found_room.miembros);
+	found_rooms.add(found_room);
+}
+	if(found_rooms.isEmpty()) 
+		System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
+	
+		
+	return new NCMessageRoomsInfo(code, found_rooms);
+}
 
 
 	//Devolvemos el nombre contenido en el mensaje

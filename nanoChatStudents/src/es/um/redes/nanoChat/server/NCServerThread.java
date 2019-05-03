@@ -139,11 +139,11 @@ public class NCServerThread extends Thread {
 //		NCMessageControl query = (NCMessageControl) msg;
 		
 //		if(query.getOpcode()== NCMessage.OP_QUERY_ROOM){
-			System.out.println(" NCServerThread- sendRoomList "+salas.size());
-			for(InfoRoom i:salas){
-				System.out.println(i.name);
-				System.out.println(i.miembros);
-			}
+//			System.out.println(" NCServerThread- sendRoomList "+salas.size());
+//			for(InfoRoom i:salas){
+//				System.out.println(i.name);
+//				System.out.println(i.miembros);
+//			}
 			NCMessageRoomsInfo msgresp = (NCMessageRoomsInfo)NCMessage.makeRoomsInfoMessage(NCMessage.OP_LIST_ROOM,salas);
 			dos.writeUTF(msgresp.toEncodedString());
 //		}
