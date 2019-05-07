@@ -133,11 +133,13 @@ public class NCConnector {
 		NCMessageRoom message = (NCMessageRoom ) NCMessage.makeRoomMessage(NCMessage.OP_INFO_ROOM,room);
 		String rawMessage = message.toEncodedString();
 		dos.writeUTF(rawMessage);
-		
-		NCMessage msg = NCMessage.readMessageFromSocket(dis);
-		if(msg.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
-			NCMessageInfoRoom me = (NCMessageInfoRoom) msg;
+		NCRoomDescription info;
+		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
+		if(msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
+			NCMessageInfoRoom me = (NCMessageInfoRoom) msgRev;
 			//--TODO dependiendo del mensaje que creemos hacer.
+			info = new NCRoomDescription(me.getName(),me.getNombresUsers(),10); //TODO---- cambiar el 10 por tiempo ultimo msg
+			return info;
 		}
 		
 		//TODO Construimos el mensaje de solicitud de información de la sala específica

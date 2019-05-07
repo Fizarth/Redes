@@ -56,6 +56,18 @@ class NCServerManager {
 		return salas;
 	}
 	
+	public synchronized NCRoomDescription getRoomInfo(String room) {
+		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
+		for(NCRoomManager r: rooms.values()){
+			//System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
+			//TODO Añade la información al ArrayList
+			if(r.getDescription().roomName.compareTo(room)==0)
+				return r.getDescription();
+		}
+		
+		return null;
+	}
+	
 	
 	//Intenta registrar al usuario en el servidor.
 	public synchronized boolean addUser(String user) {
@@ -106,7 +118,6 @@ class NCServerManager {
 	public synchronized void leaveRoom(String u, String room) {
 		//TODO Verificamos si la sala existe
 		if(rooms.containsKey(room)) {
-			System.out.println("SERVER_MANAGER: LEAVE ROOM: user "+u +" room: "+room);
 			NCSalaManager manager = (NCSalaManager) rooms.get(room);
 			manager.removeUser(u);
 		}

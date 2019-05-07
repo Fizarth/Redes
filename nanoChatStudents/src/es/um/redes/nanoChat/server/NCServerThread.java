@@ -6,15 +6,18 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
 import javax.sound.midi.MidiDevice.Info;
 
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
+import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 
 /**
@@ -160,14 +163,20 @@ public class NCServerThread extends Thread {
 		boolean exit = false;
 		while (!exit) {
 			NCMessage message = NCMessage.readMessageFromSocket(dis);
+			System.out.println("SERVER_THRAD Mensaje: "+message.getOpcode());
 			switch (message.getOpcode()) {
 			case NCMessage.OP_EXIT_ROOM:
 				serverManager.leaveRoom(user,currentRoom);
 				exit = true;
 				break;
 			case NCMessage.OP_MESSAGE:
+			
 				break;
 			case NCMessage.OP_INFO_ROOM:
+				System.out.println("INFO ROOM MSG: SERVER THREAD");
+				NCRoomDescription info = serverManager.getRoomInfo(currentRoom);
+				NCMessageInfoRoom msgresp = (NCMessageInfoRoom)NCMessage.makeInfoRoomMessage(NCMessage.OP_INFO_ROOM_REQUEST, currentRoom, info.members);
+				dos.writeUTF(msgresp.toEncodedString());
 				break;
 			default:
 				
