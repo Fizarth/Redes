@@ -63,7 +63,7 @@ public class NCServerThread extends Thread {
 				case NCMessage.OP_ENTER_ROOM:
 					NCMessageRoom room = (NCMessageRoom) message;
 					roomManager= serverManager.enterRoom(user, room.getName(), socket);
-					
+					currentRoom = room.getName();
 					if(roomManager !=null){
 						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
 						dos.writeUTF(msgresp.toEncodedString());
@@ -161,7 +161,7 @@ public class NCServerThread extends Thread {
 		while (!exit) {
 			NCMessage message = NCMessage.readMessageFromSocket(dis);
 			switch (message.getOpcode()) {
-			case NCMessage.OP_EXIT:
+			case NCMessage.OP_EXIT_ROOM:
 				serverManager.leaveRoom(user,currentRoom);
 				exit = true;
 				break;
@@ -170,6 +170,7 @@ public class NCServerThread extends Thread {
 			case NCMessage.OP_INFO_ROOM:
 				break;
 			default:
+				
 				break;
 			}
 			

@@ -57,7 +57,7 @@ public class NCSalaManager extends NCRoomManager {
 
 	@Override
 	public void removeUser(String u) {
-		if(this.miembros.remove(u) != null) {
+		if(this.miembros.containsKey(u)) {
 			this.roomDescription.members.remove(u);
 			
 			//-----
