@@ -168,10 +168,13 @@ public class NCController {
 		} while (currentCommand != NCCommands.COM_EXIT);
 		System.out.println("* Your are out of the room");
 		//TODO Llegados a este punto el usuario ha querido salir de la sala, cambiamos el estado del autómata
+		
+		
+	
 	}
 
 	//Método para procesar los comandos específicos de una sala
-	private void processRoomCommand() {
+	private void processRoomCommand() throws IOException {
 		switch (currentCommand) {
 		case NCCommands.COM_ROOMINFO:
 			//El usuario ha solicitado información sobre la sala y llamamos al método que la obtendrá
@@ -198,9 +201,12 @@ public class NCController {
 	}
 
 	//Método para notificar al servidor que salimos de la sala
-	private void exitTheRoom() {
+	private void exitTheRoom() throws IOException {
 		//TODO Mandamos al servidor el mensaje de salida
+		 ncConnector.leaveRoom(room);
 		//TODO Cambiamos el estado del autómata para indicar que estamos fuera de la sala
+		 clientStatus = PRE_ROOM;
+		 
 	}
 
 	//Método para enviar un mensaje al chat de la sala

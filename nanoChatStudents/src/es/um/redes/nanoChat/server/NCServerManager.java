@@ -105,8 +105,14 @@ class NCServerManager {
 	//Un usuario deja la sala en la que estaba 
 	public synchronized void leaveRoom(String u, String room) {
 		//TODO Verificamos si la sala existe
+		if(rooms.containsKey(room)) {
+			NCRoomManager ncManager = rooms.get(room);
+			ncManager.removeUser(u);
+		}
 		//TODO Si la sala existe sacamos al usuario de la sala
 		//TODO Decidir qué hacer si la sala se queda vacía
+		
+		//la dejamos vacia.
 	}
 	
 }

@@ -58,7 +58,7 @@ public class NCServerThread extends Thread {
 				//TODO 1) si se nos pide la lista de salas se envía llamando a sendRoomList();
 				case NCMessage.OP_QUERY_ROOM:
 					sendRoomList();
-//					break; //??
+					break;
 				//TODO 2) Si se nos pide entrar en la sala entonces obtenemos el RoomManager de la sala,
 				case NCMessage.OP_ENTER_ROOM:
 					NCMessageRoom room = (NCMessageRoom) message;
@@ -67,16 +67,20 @@ public class NCServerThread extends Thread {
 					if(roomManager !=null){
 						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
 						dos.writeUTF(msgresp.toEncodedString());
+						processRoomMessages();
 					}
 					else{
 						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
 						dos.writeUTF(msgresp.toEncodedString());
 					}
 					
+					break;
+				
 				//TODO 2) notificamos al usuario que ha sido aceptado y procesamos mensajes con processRoomMessages()
 				//TODO 2) Si el usuario no es aceptado en la sala entonces se le notifica al cliente
 				
 				//una vez que entro en la sala: llamo a -> processRoomMenssage()
+					
 				}
 			}
 		} catch (Exception e) {
@@ -151,10 +155,24 @@ public class NCServerThread extends Thread {
 		
 	}
 
-	private void processRoomMessages()  {
+	private void processRoomMessages() throws IOException  {
 		//TODO Comprobamos los mensajes que llegan hasta que el usuario decida salir de la sala
 		boolean exit = false;
 		while (!exit) {
+			NCMessage message = NCMessage.readMessageFromSocket(dis);
+			switch (message.getOpcode()) {
+			case NCMessage.OP_EXIT:
+				serverManager.leaveRoom(user,currentRoom);
+				exit = true;
+				break;
+			case NCMessage.OP_MESSAGE:
+				break;
+			case NCMessage.OP_INFO_ROOM:
+				break;
+			default:
+				break;
+			}
+			
 			//TODO Se recibe el mensaje enviado por el usuario
 			//TODO Se analiza el código de operación del mensaje y se trata en consecuencia
 		}
