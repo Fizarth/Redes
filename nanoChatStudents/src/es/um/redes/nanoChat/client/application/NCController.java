@@ -198,7 +198,6 @@ public class NCController {
 	private void getAndShowInfo() throws IOException {
 		//TODO Pedimos al servidor información sobre la sala en concreto
 		NCRoomDescription info = ncConnector.getRoomInfo(room);
-		System.out.println("NCCONTROLER: getAndShowInfo() : room : "+ room);
 		//TODO Mostramos por pantalla la información
 		System.out.println("Nombre de la sala:\t"+info.roomName+"\nUltimo Mensaje:\t"+info.timeLastMessage);
 		for (String name : info.members) {

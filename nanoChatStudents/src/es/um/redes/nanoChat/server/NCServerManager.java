@@ -95,8 +95,8 @@ class NCServerManager {
 			NCSalaManager manager = (NCSalaManager) rooms.get(room);
 			//---TODO suponemos ahora mismo que entra siempre.
 			boolean registrado=manager.registerUser(u,s);
-			if(registrado)System.out.println("NCServerManager añade usuario " + u+ " a sala "+room);
-			else System.out.println("No se ha podido registrar usuario " + u+ " en sala "+room);
+//			if(registrado)System.out.println("NCServerManager añade usuario " + u+ " a sala "+room);
+//			else System.out.println("No se ha podido registrar usuario " + u+ " en sala "+room);
 				return manager;
 		}
 		

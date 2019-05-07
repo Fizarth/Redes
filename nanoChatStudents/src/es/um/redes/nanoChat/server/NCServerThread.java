@@ -163,7 +163,6 @@ public class NCServerThread extends Thread {
 		boolean exit = false;
 		while (!exit) {
 			NCMessage message = NCMessage.readMessageFromSocket(dis);
-			System.out.println("SERVER_THRAD Mensaje: "+message.getOpcode());
 			switch (message.getOpcode()) {
 			case NCMessage.OP_EXIT_ROOM:
 				serverManager.leaveRoom(user,currentRoom);
@@ -173,7 +172,6 @@ public class NCServerThread extends Thread {
 			
 				break;
 			case NCMessage.OP_INFO_ROOM:
-				System.out.println("INFO ROOM MSG: SERVER THREAD");
 				NCRoomDescription info = serverManager.getRoomInfo(currentRoom);
 				NCMessageInfoRoom msgresp = (NCMessageInfoRoom)NCMessage.makeInfoRoomMessage(NCMessage.OP_INFO_ROOM_REQUEST, currentRoom, info.members);
 				dos.writeUTF(msgresp.toEncodedString());

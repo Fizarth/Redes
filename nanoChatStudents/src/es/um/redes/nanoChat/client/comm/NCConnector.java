@@ -128,13 +128,15 @@ public class NCConnector {
 	
 	//Método para pedir la descripción de una sala
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
-		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)
+		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)		
 		
 		NCMessageRoom message = (NCMessageRoom ) NCMessage.makeRoomMessage(NCMessage.OP_INFO_ROOM,room);
 		String rawMessage = message.toEncodedString();
 		dos.writeUTF(rawMessage);
+		
 		NCRoomDescription info;
 		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
+		
 		if(msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
 			NCMessageInfoRoom me = (NCMessageInfoRoom) msgRev;
 			//--TODO dependiendo del mensaje que creemos hacer.
