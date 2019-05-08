@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageChat;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
@@ -125,8 +126,9 @@ public class NCConnector {
 	
 	//IMPORTANTE!!
 	//TODO Es necesario implementar métodos para recibir y enviar mensajes de chat a una sala
-	public void enviarMensaje(String mensajeChat){
-		
+	public void enviarMensaje(String mensajeChat) throws IOException{
+		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, mensajeChat);
+		dos.writeUTF(msgSend.toEncodedString());
 	}
 	 public String recibirMensaje(){
 		 return null;
