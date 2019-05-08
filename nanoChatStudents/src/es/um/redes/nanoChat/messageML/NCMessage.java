@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 
 public abstract class NCMessage {
@@ -181,7 +182,7 @@ public abstract class NCMessage {
 		return (new NCMessageInfoRoom(code, name, nombres));
 	}
 	
-	public static NCMessageRoomsInfo makeRoomsInfoMessage(byte code, ArrayList<InfoRoom> info){
+	public static NCMessageRoomsInfo makeRoomsInfoMessage(byte code, ArrayList<NCRoomDescription> info){
 		return (new NCMessageRoomsInfo(code, info));
 	}
 	

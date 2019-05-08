@@ -9,16 +9,25 @@ package es.um.redes.nanoChat.messageML;
             <name>NombreRoom1</name>    
             <size> 15 </size>  
             <numUser>5</numUser>
+            <time> timelast <\time>
+            <nick> usu1<\nick>
+            <nick> ....
       </room>
       <room>
             <name>NombreRoom2</name>   
             <size> 15 </size>     
             <numUser>1</numUser>
+            <time> timelast <\time>
+            <nick> usu1<\nick>
+            <nick> ....
       </room>
       <room>
             <name>NombreRoom3</name>     
             <size> 15 </size>   
             <numUser>10</numUser>
+            <time> timelast <\time>
+            <nick> usu1<\nick>
+            <nick> ....
       </room>
         ….
 </message>
@@ -35,11 +44,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 public class NCMessageRoomsInfo extends NCMessage{
 	
 	private String mensaje;
-	private ArrayList<InfoRoom> rooms;
+	private ArrayList<NCRoomDescription> rooms;
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
 	private static final String RE_ROOM = "<room>\\n(.*?)</room>\\n";
@@ -54,13 +64,16 @@ public class NCMessageRoomsInfo extends NCMessage{
 	private static final String RE_NUMUSER = "<numUser>(.*?)</numUser>";
 	private static final String NUMUSER_MARK = "numUser";
 	
+	private static final String TIME_MARK = "time";
+	private static final String NICK_MARK = "nick";
+	
 	private static final String regexpr  = "<(\\w+?)>(.*?)</\\1>";
 
 
 	/**
 	 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
 	 */
-	public NCMessageRoomsInfo(byte opcode, ArrayList<InfoRoom> rooms) {
+	public NCMessageRoomsInfo(byte opcode, ArrayList<NCRoomDescription> rooms) {
 		this.opcode = opcode;
 		this.rooms = rooms;
 	}
@@ -73,11 +86,17 @@ public class NCMessageRoomsInfo extends NCMessage{
 		sb.append("<"+MESSAGE_MARK+">"+END_LINE);
 		sb.append("<"+OPERATION_MARK+">"+opcodeToString(opcode)+"</"+OPERATION_MARK+">"+END_LINE); //Construimos el campo
 		
-		for (InfoRoom ir : rooms) {
+		for (NCRoomDescription ir : rooms) {
 			sb.append("<"+ROOM_MARK+">"+END_LINE);
-			sb.append("<"+NAME_ROOM_MARK+">"+ir.name+"</"+NAME_ROOM_MARK+">"+END_LINE);
+			sb.append("<"+NAME_ROOM_MARK+">"+ir.roomName+"</"+NAME_ROOM_MARK+">"+END_LINE);
 			sb.append("<"+SIZE_MARK+">"+ir.maxMiembros+"</"+SIZE_MARK+">"+END_LINE);
-			sb.append("<"+NUMUSER_MARK +">"+ir.miembros+"</"+NUMUSER_MARK +">"+END_LINE);
+			sb.append("<"+NUMUSER_MARK +">"+ir.members.size()+"</"+NUMUSER_MARK +">"+END_LINE);
+			sb.append("<"+TIME_MARK +">"+ir.timeLastMessage+"</"+TIME_MARK +">"+END_LINE);
+			
+			for(String s: ir.members) {
+				sb.append("<"+NICK_MARK +">"+s+"</"+NICK_MARK +">"+END_LINE);
+			}
+			
 			sb.append("</"+ROOM_MARK+">"+END_LINE);	
 		}
 		
@@ -96,6 +115,8 @@ public class NCMessageRoomsInfo extends NCMessage{
 	ArrayList<String> found_name = new ArrayList<>();
 	ArrayList<Integer> found_size = new ArrayList<>();
 	ArrayList<Integer> found_miembros = new ArrayList<>();
+	ArrayList<Long> found_times = new ArrayList<>();
+	
 	
 	Pattern pat_room = Pattern.compile(regexpr); //cambiar RE_ROOM por patron
 	Matcher mat_room = pat_room.matcher(message);
@@ -114,6 +135,8 @@ public class NCMessageRoomsInfo extends NCMessage{
 				case NAME_ROOM_MARK:
 					found_name.add( mat_room.group(2));
 					//System.out.println("NCMRoomsInfo-readFromString name "+found_name);
+					
+					//TODO PROBAR---- 
 					break;
 				case SIZE_MARK:
 					//System.out.println("SE HA ENCONTRADO UN SIZE");
@@ -149,7 +172,7 @@ for(int i=0;i<found_miembros.size();i++){
 
 
 	//Devolvemos el nombre contenido en el mensaje
-	public ArrayList<InfoRoom> getRooms() {
+	public ArrayList<NCRoomDescription> getRooms() {
 		return rooms;
 	}
 

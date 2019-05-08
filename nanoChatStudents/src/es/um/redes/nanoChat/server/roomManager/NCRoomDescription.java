@@ -10,6 +10,7 @@ public class NCRoomDescription {
 	//Campos de los que, al menos, se compone una descripción de una sala 
 	//--TODO mandar esta inf en un mensaje cuando pidan la inf de una sala. NPI donde.
 	public String roomName;
+	public int maxMiembros;
 	public ArrayList<String> members;
 	public long timeLastMessage;
 	
@@ -18,12 +19,13 @@ public class NCRoomDescription {
 		this.roomName = roomName;
 		this.members = members;
 		this.timeLastMessage = timeLastMessage;
+		this.maxMiembros = 15;
 	}
 		
 	//Método que devuelve una representación de la Descripción lista para ser impresa por pantalla
 	public String toPrintableString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("Room Name: "+roomName+"\t Members ("+members.size()+ ") : ");
+		sb.append("Room Name: "+roomName+"\t Members ("+members.size()+ "/"+maxMiembros+") : ");
 		for (String member: members) {
 			sb.append(member+" ");
 		}

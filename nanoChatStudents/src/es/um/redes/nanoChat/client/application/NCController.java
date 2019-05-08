@@ -131,13 +131,15 @@ public class NCController {
 	//Método que solicita al servidor de NanoChat la lista de salas e imprime el resultado obtenido
 	private void getAndShowRooms() throws IOException {
 		//TODO Lista que contendrá las descripciones de las salas existentes
-		ArrayList<InfoRoom> salas =new ArrayList<>();
+		//ArrayList<InfoRoom> salas =new ArrayList<>();
+		ArrayList<NCRoomDescription> salas =new ArrayList<>();
 		//TODO Le pedimos al conector que obtenga la lista de salas ncConnector.getRooms()
 		salas = ncConnector.getRooms();
 		//System.out.println("NCController- getAndShowRooms-> salas empty: "+salas.isEmpty());
 		//TODO Una vez recibidas iteramos sobre la lista para imprimir información de cada sala
-		for(InfoRoom info:salas){
-			System.out.println("Sala: "+info.name+" de tamaño máximo: "+info.maxMiembros+", donde actualmente hay: "+info.miembros+" usuarios");
+		for(NCRoomDescription info:salas){
+			info.toPrintableString();
+			//System.out.println("Sala: "+info.+" de tamaño máximo: "+info.maxMiembros+", donde actualmente hay: "+info.miembros+" usuarios");
 		}
 	}
 

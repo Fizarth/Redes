@@ -73,7 +73,7 @@ public class NCConnector {
 	 * 		public ArrayList<NCRoomDescription> getRooms() 
 	 * Devolver INFO ROOM, ya que eso contenia inf que considerabamos innecesaria.
 	 * */
-	public ArrayList<InfoRoom> getRooms() throws IOException {
+	public ArrayList<NCRoomDescription> getRooms() throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
 		NCMessageControl message = (NCMessageControl) NCMessage.makeControlMessage(NCMessage.OP_QUERY_ROOM);
 		String rawMessage = message.toEncodedString();
@@ -81,7 +81,7 @@ public class NCConnector {
 		
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 		NCMessageRoomsInfo me = (NCMessageRoomsInfo) msg;
-		ArrayList<InfoRoom> rooms = new ArrayList<InfoRoom>();
+		ArrayList<NCRoomDescription> rooms = new ArrayList<NCRoomDescription>();
 		if(me.getOpcode() == NCMessage.OP_LIST_ROOM) {
 			
 			//--TODO dependiendo del mensaje que creemos hacer.
