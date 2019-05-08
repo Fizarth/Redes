@@ -173,8 +173,8 @@ public abstract class NCMessage {
 		return (new NCMessageRoom(code, room));
 	}
 	
-	public static NCMessage makeChatMessage(byte code, String msg){
-		return (new NCMessageChat(code, msg));
+	public static NCMessage makeChatMessage(byte code, String user,String msg){
+		return (new NCMessageChat(code, user, msg));
 	}
 	
 	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, String name, ArrayList<String> nombres){

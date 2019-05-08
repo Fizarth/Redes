@@ -218,13 +218,14 @@ public class NCController {
 	//Método para enviar un mensaje al chat de la sala
 	private void sendChatMessage() throws IOException {
 		//TODO Mandamos al servidor un mensaje de chat
-		ncConnector.enviarMensaje(chatMessage);
+		ncConnector.enviarMensaje(nickname,chatMessage);
 		
 	}
 
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
 	private void processIncommingMessage() {		
 		//TODO Recibir el mensaje
+		String mensaje=ncConnector.recibirMensaje();
 		//TODO En función del tipo de mensaje, actuar en consecuencia
 		//TODO (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast mostramos la información de quién envía el mensaje y el mensaje en sí
 	}

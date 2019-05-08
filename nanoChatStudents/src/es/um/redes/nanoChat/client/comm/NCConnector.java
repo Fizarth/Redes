@@ -126,12 +126,14 @@ public class NCConnector {
 	
 	//IMPORTANTE!!
 	//TODO Es necesario implementar métodos para recibir y enviar mensajes de chat a una sala
-	public void enviarMensaje(String mensajeChat) throws IOException{
-		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, mensajeChat);
+	public void enviarMensaje(String usuario,String mensajeChat) throws IOException{
+		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, usuario,mensajeChat);
 		dos.writeUTF(msgSend.toEncodedString());
 	}
 	 public String recibirMensaje(){
 		 return null;
+		 
+		 
 	 }
 	//Método para pedir la descripción de una sala
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
