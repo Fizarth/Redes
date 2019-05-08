@@ -155,6 +155,7 @@ public class NCMessageRoomsInfo extends NCMessage{
 //	InfoRoom found_room = new InfoRoom(found_name, found_size,found_miembros);
 //	found_rooms.add(found_room);
 	
+				System.out.println("commit");
 	
 }
 for(int i=0;i<found_miembros.size();i++){
