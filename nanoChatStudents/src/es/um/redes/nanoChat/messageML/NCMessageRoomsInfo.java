@@ -110,7 +110,7 @@ public class NCMessageRoomsInfo extends NCMessage{
 	//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
 	public static NCMessageRoomsInfo readFromString(byte code, String message) {
 		
-	ArrayList<InfoRoom> found_rooms = new ArrayList<InfoRoom>();
+	ArrayList<NCRoomDescription> found_rooms = new ArrayList<NCRoomDescription>();
 	
 	ArrayList<String> found_name = new ArrayList<>();
 	ArrayList<Integer> found_size = new ArrayList<>();
