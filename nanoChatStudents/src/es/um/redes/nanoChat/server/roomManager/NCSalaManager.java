@@ -49,7 +49,7 @@ public class NCSalaManager extends NCRoomManager {
 			if (usur.compareTo(u)!=0) {
 				Socket s = this.miembros.get(usur);
 				DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-				NCMessageChat mensaje = new NCMessageChat(NCMessage.OP_MESSAGE,message);
+				NCMessageChat mensaje = new NCMessageChat(NCMessage.OP_MESSAGE,u ,message);
 				dos.writeUTF(mensaje.toEncodedString());
 			}			
 		}
