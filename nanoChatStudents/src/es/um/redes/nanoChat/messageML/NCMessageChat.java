@@ -30,7 +30,7 @@ public class NCMessageChat extends NCMessage{
 	private static final String RE_USER = "<user>(.*?)</user>";
 	private static final String USER_MARK = "user";
 	
-	private static final String patron  = "<([^message]\\w+?)>(.*?)</\\1>";
+	private static final String patron  = "<(\\w+?)>(.*?)</\\1>";
 
 	/**
 	 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
@@ -61,9 +61,7 @@ public class NCMessageChat extends NCMessage{
 	public static NCMessageChat readFromString(byte code, String message) {
 		String found_name = null;
 		String found_user = null;
-		// Tienen que estar los campos porque el mensaje es de tipo RoomMessage
 		
-	
 		
 		Pattern pat = Pattern.compile(patron);
 		Matcher mat_name = pat.matcher(message);
@@ -76,6 +74,7 @@ public class NCMessageChat extends NCMessage{
 				break;
 
 			case NAME_MARK:
+				
 				found_name = mat_name.group(2);
 				break;
 			default:

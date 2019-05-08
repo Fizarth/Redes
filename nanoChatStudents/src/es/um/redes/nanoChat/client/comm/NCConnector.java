@@ -135,7 +135,6 @@ public class NCConnector {
 		 InfoMensaje info;
 		 
 		 NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
-		 
 		 if(msgRev.getOpcode() == NCMessage.OP_MESSAGE) {
 				NCMessageChat me = (NCMessageChat) msgRev;
 				info= new InfoMensaje(me.getUser(), me.getName());
