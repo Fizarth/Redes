@@ -20,6 +20,7 @@ public class NCRoomDescription {
 		this.members = members;
 		this.timeLastMessage = timeLastMessage;
 		this.maxMiembros = 15;
+		
 	}
 		
 	//Método que devuelve una representación de la Descripción lista para ser impresa por pantalla
