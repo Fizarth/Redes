@@ -125,7 +125,12 @@ public class NCConnector {
 	
 	//IMPORTANTE!!
 	//TODO Es necesario implementar métodos para recibir y enviar mensajes de chat a una sala
-	
+	public void enviarMensaje(String mensajeChat){
+		
+	}
+	 public String recibirMensaje(){
+		 return null;
+	 }
 	//Método para pedir la descripción de una sala
 	public NCRoomDescription getRoomInfo(String room) throws IOException {
 		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)		

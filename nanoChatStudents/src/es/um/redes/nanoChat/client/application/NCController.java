@@ -218,6 +218,7 @@ public class NCController {
 	//Método para enviar un mensaje al chat de la sala
 	private void sendChatMessage() {
 		//TODO Mandamos al servidor un mensaje de chat
+		
 	}
 
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
