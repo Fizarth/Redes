@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 <message>
 	<operation> opCode</operation>
+	<usur> usuario </usur>
 	<mensaje>Mensaje de Texto </mensaje>
 </message>
 
@@ -28,7 +29,7 @@ public class NCMessageChat extends NCMessage{
 	/**
 	 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
 	 */
-	public NCMessageChat(byte opcode, String msg) {
+	public NCMessageChat(byte opcode, String usuario, String msg) {
 		this.opcode = opcode;
 		this.mensaje = msg;
 	}
