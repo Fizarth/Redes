@@ -8,6 +8,7 @@ import es.um.redes.nanoChat.client.comm.NCConnector;
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.client.shell.NCShell;
 import es.um.redes.nanoChat.directory.connector.DirectoryConnector;
+import es.um.redes.nanoChat.server.roomManager.InfoMensaje;
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -223,9 +224,10 @@ public class NCController {
 	}
 
 	//Método para procesar los mensajes recibidos del servidor mientras que el shell estaba esperando un comando de usuario
-	private void processIncommingMessage() {		
+	private void processIncommingMessage() throws IOException {		
 		//TODO Recibir el mensaje
-		String mensaje=ncConnector.recibirMensaje();
+		InfoMensaje info=ncConnector.recibirMensaje();
+		System.out.println("<"+ info.usuario+">\t"+info.texto);
 		//TODO En función del tipo de mensaje, actuar en consecuencia
 		//TODO (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast mostramos la información de quién envía el mensaje y el mensaje en sí
 	}

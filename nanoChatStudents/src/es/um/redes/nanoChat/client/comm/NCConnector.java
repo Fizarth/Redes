@@ -16,6 +16,7 @@ import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
 import es.um.redes.nanoChat.messageML.NCRoomMessage;
+import es.um.redes.nanoChat.server.roomManager.InfoMensaje;
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
@@ -130,8 +131,20 @@ public class NCConnector {
 		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, usuario,mensajeChat);
 		dos.writeUTF(msgSend.toEncodedString());
 	}
-	 public String recibirMensaje(){
-		 return null;
+	 public InfoMensaje recibirMensaje() throws IOException{
+		 InfoMensaje info;
+		 
+		 NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
+		 
+		 if(msgRev.getOpcode() == NCMessage.OP_MESSAGE) {
+				NCMessageChat me = (NCMessageChat) msgRev;
+				info= new InfoMensaje(me.getUser(), me.getName());
+				return info;
+		 }
+		 else{
+			 System.out.println("ERROR: recibir mensaje");
+			 return null;
+		 }
 		 
 		 
 	 }
