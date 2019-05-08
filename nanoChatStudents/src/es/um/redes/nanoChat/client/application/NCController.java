@@ -216,8 +216,9 @@ public class NCController {
 	}
 
 	//Método para enviar un mensaje al chat de la sala
-	private void sendChatMessage() {
+	private void sendChatMessage() throws IOException {
 		//TODO Mandamos al servidor un mensaje de chat
+		ncConnector.enviarMensaje(chatMessage);
 		
 	}
 
