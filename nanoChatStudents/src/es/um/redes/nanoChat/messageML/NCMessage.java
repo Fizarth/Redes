@@ -135,11 +135,9 @@ public abstract class NCMessage {
 		case OP_EXIT_ROOM:{
 			return NCMessageControl.readFromString(code);
 		}
-		
 		case OP_ENTER_ROOM:{
 			return NCMessageRoom.readFromString(code,message);
 		}
-		
 		case OP_QUERY_ROOM:{
 			return NCMessageControl.readFromString(code);
 		}
@@ -148,7 +146,6 @@ public abstract class NCMessage {
 		}
 		case OP_INFO_ROOM:{
 			return NCMessageRoom.readFromString(code,message);
-		
 		}
 		case OP_INFO_ROOM_REQUEST:{
 			return NCMessageInfoRoom.readFromString(code, message);
