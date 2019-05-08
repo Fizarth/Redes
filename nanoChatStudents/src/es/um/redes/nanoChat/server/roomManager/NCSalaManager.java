@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.sound.midi.MidiDevice.Info;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageChat;
@@ -17,8 +16,7 @@ public class NCSalaManager extends NCRoomManager {
 	NCRoomDescription roomDescription = null;
 		/* 	roomName; members; timeLastMessage; */
 	private HashMap<String, Socket> miembros;
-	//-------
-	InfoRoom info;
+	
 	
 
 	public NCSalaManager(String roomName) {
@@ -26,8 +24,7 @@ public class NCSalaManager extends NCRoomManager {
 		this.miembros = new HashMap<String,Socket>();	
 		ArrayList<String> members = new ArrayList<String>();
 		this.roomDescription = new NCRoomDescription(roomName, members, 0);
-		//-----
-		this.info= new InfoRoom(roomName, 15, 0);
+		
 	}
 	
 	@Override
@@ -37,7 +34,6 @@ public class NCSalaManager extends NCRoomManager {
 			this.roomDescription.members.add(u);
 			//-------
 			this.miembros.put(u,s);
-			this.info.miembros++;
 			return true;
 		}
 		return false;
@@ -61,7 +57,6 @@ public class NCSalaManager extends NCRoomManager {
 		if(this.miembros.containsKey(u)) {
 			this.roomDescription.members.remove(u);
 			this.miembros.remove(u);
-			this.info.miembros--;
 		}
 	}
 	
@@ -71,8 +66,7 @@ public class NCSalaManager extends NCRoomManager {
 		this.roomName = roomName;
 		this.roomDescription.roomName = roomName;
 		
-		//-----
-		this.info.name=roomName;
+		
 		
 	}
 
@@ -87,10 +81,5 @@ public class NCSalaManager extends NCRoomManager {
 		return this.miembros.size();
 	}
 	
-	//------
-	@Override
-	public InfoRoom getInfo(){
-		return info;
-	}
-
+	
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 import es.um.redes.nanoChat.server.roomManager.NCSalaManager;
@@ -44,21 +43,16 @@ class NCServerManager {
 	//Devuelve la descripción de las salas existentes
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
-		//TODO Añade la información al ArrayList
-		return null;
+				ArrayList<NCRoomDescription> salas = new ArrayList<>();
+				for(NCRoomManager r: rooms.values()){
+					//System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
+					//TODO Añade la información al ArrayList
+					salas.add(r.getDescription());
+				}
+				
+				return salas;
 	}
-	//-----Creada por nosotras para devolver la lista de salas
-	public synchronized ArrayList<InfoRoom> getRoomsInfo() {
-		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
-		ArrayList<InfoRoom> salas = new ArrayList<>();
-		for(NCRoomManager r: rooms.values()){
-			//System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
-			//TODO Añade la información al ArrayList
-			salas.add(r.getInfo());
-		}
-		
-		return salas;
-	}
+	
 	
 	public synchronized NCRoomDescription getRoomInfo(String room) {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala

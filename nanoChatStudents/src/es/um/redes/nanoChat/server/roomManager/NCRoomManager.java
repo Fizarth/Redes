@@ -22,8 +22,7 @@ public abstract class NCRoomManager {
 	public abstract int usersInRoom();
 	
 	
-	//------
-	public abstract InfoRoom getInfo();
+	
 	
 
 }

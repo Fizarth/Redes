@@ -17,7 +17,6 @@ import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
 import es.um.redes.nanoChat.messageML.NCRoomMessage;
 import es.um.redes.nanoChat.server.roomManager.InfoMensaje;
-import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 //Esta clase proporciona la funcionalidad necesaria para intercambiar mensajes entre el cliente y el servidor de NanoChat

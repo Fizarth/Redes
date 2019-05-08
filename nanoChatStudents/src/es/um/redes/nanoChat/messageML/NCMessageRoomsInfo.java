@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 public class NCMessageRoomsInfo extends NCMessage{
@@ -159,7 +158,7 @@ public class NCMessageRoomsInfo extends NCMessage{
 	
 }
 for(int i=0;i<found_miembros.size();i++){
-	InfoRoom found_room = new InfoRoom(found_name.get(i), found_size.get(i),found_miembros.get(i));
+	NCRoomDescription found_room = new NCRoomDescription(found_name.get(i), found_size.get(i),found_miembros.get(i));
 	//System.out.println(found_room.name+found_room.miembros);
 	found_rooms.add(found_room);
 }

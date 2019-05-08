@@ -7,9 +7,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 
-import javax.sound.midi.MidiDevice.Info;
-
-import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageChat;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
@@ -17,7 +14,6 @@ import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
 import es.um.redes.nanoChat.messageML.NCMessageRoom;
 import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
-import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
 import es.um.redes.nanoChat.server.roomManager.NCSalaManager;
@@ -143,7 +139,7 @@ public class NCServerThread extends Thread {
 	//Mandamos al cliente la lista de salas existentes
 	private void sendRoomList() throws IOException  {
 		//TODO La lista de salas debe obtenerse a partir del RoomManager y después enviarse mediante su mensaje correspondiente
-		ArrayList<InfoRoom> salas=serverManager.getRoomsInfo();
+		ArrayList<NCRoomDescription> salas=serverManager.getRoomList();
 //		NCMessage msg = NCMessage.readMessageFromSocket(dis);
 //		NCMessageControl query = (NCMessageControl) msg;
 		

@@ -1,6 +1,6 @@
 package es.um.redes.nanoChat.server.roomManager;
 
-import java.util.ArrayList;
+
 
 public class InfoMensaje {
 	
