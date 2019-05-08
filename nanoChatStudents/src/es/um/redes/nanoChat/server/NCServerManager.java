@@ -29,6 +29,10 @@ class NCServerManager {
 		nextRoom = INITIAL_ROOM;
 	}
 	
+	public NCRoomManager getManagerRoom(String room) {
+		return this.rooms.get(room);
+	}
+	
 	//Método para registrar un RoomManager 
 	public void registerRoomManager(NCRoomManager rm) {
 		//TODO Dar soporte para que pueda haber más de una sala en el servidor

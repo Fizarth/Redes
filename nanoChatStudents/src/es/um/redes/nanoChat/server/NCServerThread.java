@@ -11,6 +11,7 @@ import javax.sound.midi.MidiDevice.Info;
 
 import es.um.redes.nanoChat.client.shell.NCCommands;
 import es.um.redes.nanoChat.messageML.NCMessage;
+import es.um.redes.nanoChat.messageML.NCMessageChat;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
@@ -19,6 +20,7 @@ import es.um.redes.nanoChat.messageML.NCMessageRoomsInfo;
 import es.um.redes.nanoChat.server.roomManager.InfoRoom;
 import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 import es.um.redes.nanoChat.server.roomManager.NCRoomManager;
+import es.um.redes.nanoChat.server.roomManager.NCSalaManager;
 
 /**
  * A new thread runs for each connected client
@@ -169,7 +171,9 @@ public class NCServerThread extends Thread {
 				exit = true;
 				break;
 			case NCMessage.OP_MESSAGE:
-			
+				NCSalaManager managerRoom = (NCSalaManager) serverManager.getManagerRoom(currentRoom);
+				NCMessageChat msgIn = (NCMessageChat) message;
+				managerRoom.broadcastMessage(user, msgIn.getName());
 				break;
 			case NCMessage.OP_INFO_ROOM:
 				NCRoomDescription info = serverManager.getRoomInfo(currentRoom);
