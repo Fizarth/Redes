@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
+
 /*
  * INFO ROOM
 ----
@@ -12,6 +14,7 @@ import java.util.regex.Pattern;
       <operation>opCode</operation>
       <room>room1</room>
       <numUser>2</numUser>
+      <time> timelast </time>
       <nick>nick1</nick>
       <nick>nick2</nick>
 </message>
@@ -23,9 +26,10 @@ Operaciones válidas:
 */
 public class NCMessageInfoRoom extends NCMessage{
 
-	private String nombreRoom;
-	private int numUsers;
-	private ArrayList<String> nombresUsers;
+	
+
+	
+	private NCRoomDescription room;
 	
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
@@ -38,16 +42,16 @@ public class NCMessageInfoRoom extends NCMessage{
 		private static final String RE_NICK = "<nick>(.*?)</nick>";
 		private static final String NICK_MARK = "nick";
 		
+		private static final String TIME_MARK = "time";
+		
 		private static final String patron  = "<([^message]\\w+?)>(.*?)</\\1>";
 
 		/**
 		 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
 		 */
-		public NCMessageInfoRoom(byte opcode, String name, ArrayList<String> usuarios) {
+		public NCMessageInfoRoom(byte opcode, NCRoomDescription room ) {
 			this.opcode=opcode;
-			this.nombreRoom=name;
-			this.numUsers=usuarios.size();
-			this.nombresUsers=usuarios;
+			this.room = room;
 		}
 
 		@Override
@@ -57,9 +61,10 @@ public class NCMessageInfoRoom extends NCMessage{
 			
 			sb.append("<"+MESSAGE_MARK+">"+END_LINE);
 			sb.append("<"+OPERATION_MARK+">"+opcodeToString(opcode)+"</"+OPERATION_MARK+">"+END_LINE); //Construimos el campo
-			sb.append("<"+ROOM_MARK+">"+nombreRoom+"</"+ROOM_MARK+">"+END_LINE);
-			sb.append("<"+NUMUSER_MARK+">"+Integer.toString(numUsers)+"</"+NICK_MARK+">"+END_LINE);
-			for(String nick : nombresUsers){
+			sb.append("<"+ROOM_MARK+">"+room.roomName+"</"+ROOM_MARK+">"+END_LINE);
+			sb.append("<"+NUMUSER_MARK+">"+Integer.toString(room.members.size())+"</"+NICK_MARK+">"+END_LINE);
+			sb.append("<"+TIME_MARK+">"+room.timeLastMessage+"</"+TIME_MARK+">"+END_LINE);
+			for(String nick : room.members){
 				sb.append("<"+NICK_MARK+">"+nick+"</"+NICK_MARK+">"+END_LINE);
 			}
 			sb.append("</"+MESSAGE_MARK+">"+END_LINE);
@@ -72,6 +77,7 @@ public class NCMessageInfoRoom extends NCMessage{
 		//Parseamos el mensaje contenido en message con el fin de obtener los distintos campos
 		public static NCMessageInfoRoom readFromString(byte code, String message) {
 			String found_name = null;
+			long found_time =0;
 			ArrayList<String> found_usuarios = new ArrayList<String>();
 
 			Pattern pat = Pattern.compile(patron);
@@ -85,6 +91,9 @@ public class NCMessageInfoRoom extends NCMessage{
 				case NICK_MARK:
 					found_usuarios.add(mat_name.group(2));
 					break;
+				case TIME_MARK:
+					found_time=Long.parseLong(mat_name.group(2));
+					break;
 				default:
 					break;
 				}
@@ -95,8 +104,8 @@ public class NCMessageInfoRoom extends NCMessage{
 //				for (String string : found_usuarios) {
 //					System.out.println(string);
 //				}
-				
-				return new NCMessageInfoRoom(code, found_name,found_usuarios);
+				NCRoomDescription room = new NCRoomDescription(found_name, found_usuarios, found_time);
+				return new NCMessageInfoRoom(code, room);
 			}
 				
 			else {
@@ -108,16 +117,13 @@ public class NCMessageInfoRoom extends NCMessage{
 		}
 
 
-		public String getName() {
-			return nombreRoom;
-		}
 
-		public int size() {
-			return numUsers;
-		}
 
-		public ArrayList<String> getNombresUsers() {
-			return nombresUsers;
+
+	
+		
+		public NCRoomDescription getRoomInfo() {
+			return this.room;
 		}
 
 		

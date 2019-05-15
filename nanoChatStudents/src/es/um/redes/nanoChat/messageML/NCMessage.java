@@ -153,6 +153,9 @@ public abstract class NCMessage {
 		case OP_MESSAGE:{
 			return NCMessageChat.readFromString(code, message);
 		}
+		case OP_EXIT:{
+			return NCMessageControl.readFromString(code);
+		}
 		default:
 			System.err.println("Unknown message type received:" + code);
 			return null;
@@ -177,8 +180,8 @@ public abstract class NCMessage {
 		return (new NCMessageChat(code, user, msg));
 	}
 	
-	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, String name, ArrayList<String> nombres){
-		return (new NCMessageInfoRoom(code, name, nombres));
+	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, NCRoomDescription room){
+		return (new NCMessageInfoRoom(code,room));
 	}
 	
 	public static NCMessageRoomsInfo makeRoomsInfoMessage(byte code, ArrayList<NCRoomDescription> info){

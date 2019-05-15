@@ -53,7 +53,7 @@ public class pruebaPatronInfoRoom {
 //			}
 		
 		NCMessageInfoRoom infoRoom= NCMessageInfoRoom.readFromString((byte) 0, cadenaOk);
-		System.out.println(infoRoom.getName()+" "+infoRoom.size()+" "+ infoRoom.getNombresUsers().toString());
+//		System.out.println(infoRoom.getName()+" "+infoRoom.size()+" "+ infoRoom.getNombresUsers().toString());
 
 
 	}

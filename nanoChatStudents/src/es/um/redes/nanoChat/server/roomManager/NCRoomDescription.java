@@ -17,7 +17,7 @@ public class NCRoomDescription {
 		this.roomName = roomName;
 		this.members = members;
 		this.timeLastMessage = timeLastMessage;
-		this.maxMiembros = 15;
+		this.maxMiembros = (int) Math.random()*6+1; // usuarios de 1 a 5 de max
 		
 	}
 		

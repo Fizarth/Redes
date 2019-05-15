@@ -89,8 +89,15 @@ class NCServerManager {
 		//TODO Verificamos si la sala existe
 //		System.out.println("NCServerManager contiene "+ room +" : "+rooms.containsKey(room));
 		if (rooms.containsKey(room)) {
+			
 //			NCRoomManager manager = rooms.get(room);
 			NCSalaManager manager = (NCSalaManager) rooms.get(room);
+			
+			if(manager.getDescription().members.size() >= manager.getDescription().maxMiembros)
+				return null;
+			
+			
+			
 			//---TODO suponemos ahora mismo que entra siempre.
 			boolean registrado=manager.registerUser(u,s);
 //			if(registrado)System.out.println("NCServerManager añade usuario " + u+ " a sala "+room);

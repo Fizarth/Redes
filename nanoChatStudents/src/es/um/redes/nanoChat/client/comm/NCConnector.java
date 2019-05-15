@@ -89,9 +89,9 @@ public class NCConnector {
 			
 			//--TODO dependiendo del mensaje que creemos hacer.
 			rooms=me.getRooms();
-			for(NCRoomDescription i: rooms){
-				System.out.println("NCConector-getRooms-> "+i.roomName+" "+i.maxMiembros+" "+i.members.toString());
-			}
+//			for(NCRoomDescription i: rooms){
+//				System.out.println("NCConector-getRooms-> "+i.roomName+" "+i.maxMiembros+" "+i.members.toString());
+//			}
 			return rooms;
 		}
 		
@@ -164,7 +164,7 @@ public class NCConnector {
 		if(msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
 			NCMessageInfoRoom me = (NCMessageInfoRoom) msgRev;
 			//--TODO dependiendo del mensaje que creemos hacer.
-			info = new NCRoomDescription(me.getName(),me.getNombresUsers(),10); //TODO---- cambiar el 10 por tiempo ultimo msg
+			info = new NCRoomDescription(me.getRoomInfo().roomName,me.getRoomInfo().members,me.getRoomInfo().timeLastMessage); 
 			return info;
 		}
 		

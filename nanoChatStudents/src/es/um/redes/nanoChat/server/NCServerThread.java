@@ -65,10 +65,17 @@ public class NCServerThread extends Thread {
 					NCMessageRoom room = (NCMessageRoom) message;
 					roomManager= serverManager.enterRoom(user, room.getName(), socket);
 					currentRoom = room.getName();
-					if(roomManager !=null){
-						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
-						dos.writeUTF(msgresp.toEncodedString());
-						processRoomMessages();
+					if(roomManager !=null ){
+//						
+							NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_OK);
+							dos.writeUTF(msgresp.toEncodedString());
+							processRoomMessages();
+//						}
+//						else {
+//							NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
+//							dos.writeUTF(msgresp.toEncodedString());
+//						}
+						
 					}
 					else{
 						NCMessageControl msgresp = (NCMessageControl)NCMessage.makeControlMessage(NCMessage.OP_NO_OK);
@@ -173,7 +180,7 @@ public class NCServerThread extends Thread {
 				break;
 			case NCMessage.OP_INFO_ROOM:
 				NCRoomDescription info = serverManager.getRoomInfo(currentRoom);
-				NCMessageInfoRoom msgresp = (NCMessageInfoRoom)NCMessage.makeInfoRoomMessage(NCMessage.OP_INFO_ROOM_REQUEST, currentRoom, info.members);
+				NCMessageInfoRoom msgresp = (NCMessageInfoRoom)NCMessage.makeInfoRoomMessage(NCMessage.OP_INFO_ROOM_REQUEST, info);
 				dos.writeUTF(msgresp.toEncodedString());
 				break;
 			default:
