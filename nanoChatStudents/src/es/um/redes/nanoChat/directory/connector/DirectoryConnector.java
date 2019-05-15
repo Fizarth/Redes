@@ -103,7 +103,7 @@ public class DirectoryConnector {
 		ret.get(array);
 		int port = ret.getInt();
 		
-		System.out.println("RESPUESTA CONSULTA: "+ opCode+"\t"+InetAddress.getByAddress(array)+" puerto: "+port);
+//		System.out.println("RESPUESTA CONSULTA: "+ opCode+"\t"+InetAddress.getByAddress(array)+" puerto: "+port);
 		
 		
 		InetSocketAddress inet = new InetSocketAddress(InetAddress.getByAddress(array), port);
@@ -135,7 +135,7 @@ public class DirectoryConnector {
 		// Procesamos la respuesta para ver si se ha podido registrar correctamente
 		ByteBuffer bb = ByteBuffer.wrap(pckt.getData());
 		int codigo=bb.get();
-		System.out.println(codigo);
+//		System.out.println(codigo);
 		if(codigo==COD_OK) {
 			System.out.println("Registrado con éxito");
 			return true;

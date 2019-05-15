@@ -94,7 +94,7 @@ public class DirectoryThread extends Thread {
 		int protocolo= bb.getInt();
 		
 		
-		System.out.println(codigo);
+//		System.out.println(codigo);
 		
 		
 		switch(codigo) { 
@@ -161,7 +161,7 @@ public class DirectoryThread extends Thread {
 		for (int i = 0; i<iparr.length;i++) {
 			cadena+=iparr[i];
 		}
-		System.out.println("ENVIO CONSULTA: "+COD_RESPUESTA_CONSULTA+"\t"+cadena+":"+serverAddress.getPort());
+//		System.out.println("ENVIO CONSULTA: "+COD_RESPUESTA_CONSULTA+"\t"+cadena+":"+serverAddress.getPort());
 				
 		// Enviar respuesta
 		byte[] mensaje = bb.array();
