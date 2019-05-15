@@ -32,6 +32,8 @@ public class NCConnector {
 		//TODO Se extraen los streams de entrada y salida
 		dis = new DataInputStream(socket.getInputStream());
 		dos = new DataOutputStream(socket.getOutputStream());
+		
+		
 	}
 
 
@@ -79,6 +81,8 @@ public class NCConnector {
 		dos.writeUTF(rawMessage);
 		
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
+		
+		
 		NCMessageRoomsInfo me = (NCMessageRoomsInfo) msg;
 		ArrayList<NCRoomDescription> rooms = new ArrayList<NCRoomDescription>();
 		if(me.getOpcode() == NCMessage.OP_LIST_ROOM) {
