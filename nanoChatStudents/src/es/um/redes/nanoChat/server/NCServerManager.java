@@ -45,7 +45,7 @@ class NCServerManager {
 		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
 				ArrayList<NCRoomDescription> salas = new ArrayList<>();
 				for(NCRoomManager r: rooms.values()){
-					//System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
+					System.out.println("NCServerManager getInfo "+r.getDescription().roomName+" "+r.getDescription().members.toString());
 					//TODO Añade la información al ArrayList
 					salas.add(r.getDescription());
 				}
