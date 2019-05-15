@@ -26,6 +26,7 @@ public class NCServerThread extends Thread {
 	private Socket socket = null;
 	//Manager global compartido entre los Threads
 	private NCServerManager serverManager = null;
+	
 	//Input and Output Streams
 	private DataInputStream dis;
 	private DataOutputStream dos;

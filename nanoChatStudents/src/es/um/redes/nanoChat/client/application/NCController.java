@@ -281,6 +281,8 @@ public class NCController {
 		try {
 			directoryConnector = new DirectoryConnector(directoryHostname);
 			serverAddress = directoryConnector.getServerForProtocol(PROTOCOL);
+			
+			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			serverAddress = null;

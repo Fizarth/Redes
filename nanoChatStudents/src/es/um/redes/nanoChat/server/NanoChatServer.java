@@ -79,7 +79,10 @@ public class NanoChatServer implements Runnable {
         }
 
         //Después tenemos que registrar el servidor en el directorio para que los clientes lo puedan encontrar
-		try {
+		int intentos = 5;
+		while (intentos>0) {
+        
+        try {
 			directory = new DirectoryConnector(directoryHostname);
 			boolean registered = directory.registerServerForProtocol(MYPROTOCOL, PORT);
 			if (!registered) {
@@ -92,6 +95,7 @@ public class NanoChatServer implements Runnable {
             System.err.println("Could not communicate with the Directory: " 
             		+ directoryHostname + ".");
             System.exit(-1);
+		}
 		}
 
         
