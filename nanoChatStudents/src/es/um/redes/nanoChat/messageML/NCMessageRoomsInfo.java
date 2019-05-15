@@ -108,13 +108,8 @@ public class NCMessageRoomsInfo extends NCMessage {
 
 	}
 
-<<<<<<< HEAD
-	// Parseamos el mensaje contenido en message con el fin de obtener los distintos
-	// campos
-=======
 	// Parseamos el mensaje contenido en message con el fin de obtener los
 	// distintos campos
->>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 	public static NCMessageRoomsInfo readFromString(byte code, String message) {
 
 		ArrayList<NCRoomDescription> found_rooms = new ArrayList<NCRoomDescription>();
@@ -125,44 +120,6 @@ public class NCMessageRoomsInfo extends NCMessage {
 		ArrayList<Long> found_times = new ArrayList<>();
 		ArrayList<String> found_nicks = new ArrayList<>();
 
-<<<<<<< HEAD
-		String found_name1 = null;
-		Long found_time1 = null;
-
-		Pattern pat_room = Pattern.compile(regexpr); // cambiar RE_ROOM por patron
-		
-		Matcher mat_room = pat_room.matcher(message);
-		
-		while (mat_room.find()) {
-			switch (mat_room.group(1)) {
-			case NAME_ROOM_MARK:
-				// mi idea es que cuando llega una nueva room se resetea todo
-				if (found_name1 != null) {
-					NCRoomDescription ncdescription = new NCRoomDescription(found_name1, found_nicks, found_time1);
-					found_rooms.add(ncdescription);
-					found_nicks = new ArrayList<>();
-				}
-				found_name1 = mat_room.group(2);
-				found_name.add(mat_room.group(2));
-		
-				break;
-			case SIZE_MARK:
-				found_size.add(Integer.parseInt(mat_room.group(2)));
-				break;
-			case NUMUSER_MARK:
-				found_miembros.add(Integer.parseInt(mat_room.group(2)));
-				// System.out.println("NCMRoomsInfo-readFromString miembros "+found_miembros);
-				break;
-			case TIME_MARK:
-				found_times.add(Long.parseLong(mat_room.group(2)));
-				found_time1 = Long.parseLong(mat_room.group(2));
-				break;
-			case NICK_MARK:
-				found_nicks.add(mat_room.group(2));
-			default:
-				break;
-
-=======
 		Pattern pat_room = Pattern.compile(regexpr); // cambiar RE_ROOM por
 														// patron
 		Matcher mat_room = pat_room.matcher(message);
@@ -185,19 +142,7 @@ public class NCMessageRoomsInfo extends NCMessage {
 				break;
 			default:
 				break;
->>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 			}
-<<<<<<< HEAD
-
-
-		}
-		if (found_name1 != null) {
-			NCRoomDescription ncdescription = new NCRoomDescription(found_name1, found_nicks, found_time1);
-			found_rooms.add(ncdescription);
-		}
-		
-		
-=======
 		}
 		for (int i = 0; i < found_name.size(); i++) {
 			ArrayList<String> members = new ArrayList<>();
@@ -210,25 +155,10 @@ public class NCMessageRoomsInfo extends NCMessage {
 		}
 		if (found_rooms.isEmpty())
 			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
->>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 
 		return new NCMessageRoomsInfo(code, found_rooms);
 	}
 
-<<<<<<< HEAD
-		if (found_rooms.isEmpty()) {
-			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
-			return null;
-		}
-		
-		
-
-
-		return new NCMessageRoomsInfo(code, found_rooms);
-	}
-
-=======
->>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 	// Devolvemos el nombre contenido en el mensaje
 	public ArrayList<NCRoomDescription> getRooms() {
 		return rooms;
