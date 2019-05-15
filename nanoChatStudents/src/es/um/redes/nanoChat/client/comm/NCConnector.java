@@ -89,9 +89,9 @@ public class NCConnector {
 			
 			//--TODO dependiendo del mensaje que creemos hacer.
 			rooms=me.getRooms();
-//			for(InfoRoom i: rooms){
-//				System.out.println("NCConector-getRooms-> "+i.name+" "+i.maxMiembros+" "+i.miembros);
-//			}
+			for(NCRoomDescription i: rooms){
+				System.out.println("NCConector-getRooms-> "+i.roomName+" "+i.maxMiembros+" "+i.members.toString());
+			}
 			return rooms;
 		}
 		

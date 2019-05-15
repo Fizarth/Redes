@@ -9,24 +9,24 @@ package es.um.redes.nanoChat.messageML;
             <name>NombreRoom1</name>    
             <size> 15 </size>  
             <numUser>5</numUser>
-            <time> timelast <\time>
-            <nick> usu1<\nick>
+            <time> timelast </time>
+            <nick> usu1</nick>
             <nick> ....
       </room>
       <room>
             <name>NombreRoom2</name>   
             <size> 15 </size>     
             <numUser>1</numUser>
-            <time> timelast <\time>
-            <nick> usu1<\nick>
+            <time> timelast </time>
+            <nick> usu1</nick>
             <nick> ....
       </room>
       <room>
             <name>NombreRoom3</name>     
             <size> 15 </size>   
             <numUser>10</numUser>
-            <time> timelast <\time>
-            <nick> usu1<\nick>
+            <time> timelast </time>
+            <nick> usu1</nick>
             <nick> ....
       </room>
         ….
@@ -69,7 +69,8 @@ public class NCMessageRoomsInfo extends NCMessage {
 	private static final String regexpr = "<(\\w+?)>(.*?)</\\1>";
 
 	/**
-	 * Creamos un mensaje de tipo Room a partir del código de operación y del nombre
+	 * Creamos un mensaje de tipo Room a partir del código de operación y del
+	 * nombre
 	 */
 	public NCMessageRoomsInfo(byte opcode, ArrayList<NCRoomDescription> rooms) {
 		this.opcode = opcode;
@@ -107,8 +108,13 @@ public class NCMessageRoomsInfo extends NCMessage {
 
 	}
 
+<<<<<<< HEAD
 	// Parseamos el mensaje contenido en message con el fin de obtener los distintos
 	// campos
+=======
+	// Parseamos el mensaje contenido en message con el fin de obtener los
+	// distintos campos
+>>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 	public static NCMessageRoomsInfo readFromString(byte code, String message) {
 
 		ArrayList<NCRoomDescription> found_rooms = new ArrayList<NCRoomDescription>();
@@ -119,6 +125,7 @@ public class NCMessageRoomsInfo extends NCMessage {
 		ArrayList<Long> found_times = new ArrayList<>();
 		ArrayList<String> found_nicks = new ArrayList<>();
 
+<<<<<<< HEAD
 		String found_name1 = null;
 		Long found_time1 = null;
 
@@ -155,7 +162,32 @@ public class NCMessageRoomsInfo extends NCMessage {
 			default:
 				break;
 
+=======
+		Pattern pat_room = Pattern.compile(regexpr); // cambiar RE_ROOM por
+														// patron
+		Matcher mat_room = pat_room.matcher(message);
+		while (mat_room.find()) {
+			switch (mat_room.group(1)) {
+			case NAME_ROOM_MARK:
+				found_name.add(mat_room.group(2));
+				break;
+			case TIME_MARK:
+				found_times.add(Long.parseLong(mat_room.group(2)));
+				break;
+			case SIZE_MARK:
+				found_size.add(Integer.parseInt(mat_room.group(2)));
+				break;
+			case NUMUSER_MARK:
+				found_miembros.add(Integer.parseInt(mat_room.group(2)));
+				break;
+			case NICK_MARK:
+				found_nicks.add(mat_room.group(2));
+				break;
+			default:
+				break;
+>>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 			}
+<<<<<<< HEAD
 
 
 		}
@@ -165,8 +197,25 @@ public class NCMessageRoomsInfo extends NCMessage {
 		}
 		
 		
+=======
+		}
+		for (int i = 0; i < found_name.size(); i++) {
+			ArrayList<String> members = new ArrayList<>();
+			for (int j = 0; j < found_miembros.get(i); j++) {
+				members.add(found_nicks.get(0));
+				found_nicks.remove(0);
+			}
+			NCRoomDescription found_room = new NCRoomDescription(found_name.get(i), members, found_times.get(i));
+			found_rooms.add(found_room);
+		}
+		if (found_rooms.isEmpty())
+			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
+>>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 
+		return new NCMessageRoomsInfo(code, found_rooms);
+	}
 
+<<<<<<< HEAD
 		if (found_rooms.isEmpty()) {
 			System.out.println("Error en MessageRoomsInfo: No se han encontrado salas disponibles");
 			return null;
@@ -178,6 +227,8 @@ public class NCMessageRoomsInfo extends NCMessage {
 		return new NCMessageRoomsInfo(code, found_rooms);
 	}
 
+=======
+>>>>>>> branch 'master' of https://github.com/Fizarth/Redes
 	// Devolvemos el nombre contenido en el mensaje
 	public ArrayList<NCRoomDescription> getRooms() {
 		return rooms;
