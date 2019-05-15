@@ -74,7 +74,7 @@ public class DirectoryConnector {
 		 
 		//formato : cod(1)+ ip(4) + puerto(4)
 		 InetSocketAddress respuesta = getAddressFromResponse(pckt);
-		//----TODO sendEmpty y sendServerInfo
+		
 
 		
 		return respuesta;
