@@ -150,7 +150,7 @@ public class NCMessageRoomsInfo extends NCMessage {
 				members.add(found_nicks.get(0));
 				found_nicks.remove(0);
 			}
-			NCRoomDescription found_room = new NCRoomDescription(found_name.get(i), members, found_times.get(i));
+			NCRoomDescription found_room = new NCRoomDescription(found_name.get(i), members, found_times.get(i), found_size.get(i));
 			found_rooms.add(found_room);
 		}
 		if (found_rooms.isEmpty())

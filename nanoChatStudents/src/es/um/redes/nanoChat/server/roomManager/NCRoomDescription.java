@@ -13,11 +13,11 @@ public class NCRoomDescription {
 	public long timeLastMessage;
 	
 	//Constructor a partir de los valores para los campos
-	public NCRoomDescription(String roomName, ArrayList<String> members, long timeLastMessage) {
+	public NCRoomDescription(String roomName, ArrayList<String> members, long timeLastMessage, int m) {
 		this.roomName = roomName;
 		this.members = members;
 		this.timeLastMessage = timeLastMessage;
-		this.maxMiembros = (int) (Math.random()*6+2); // usuarios de 1 a 5 de max
+		this.maxMiembros = m; // usuarios de 1 a 5 de max
 		
 	}
 		

@@ -23,7 +23,8 @@ public class NCSalaManager extends NCRoomManager {
 		this.roomName=roomName;
 		this.miembros = new HashMap<String,Socket>();	
 		ArrayList<String> members = new ArrayList<String>();
-		this.roomDescription = new NCRoomDescription(roomName, members, 0);
+		int tamano = (int)(Math.random()*6+2);
+		this.roomDescription = new NCRoomDescription(roomName, members, 0, tamano );
 		
 	}
 	

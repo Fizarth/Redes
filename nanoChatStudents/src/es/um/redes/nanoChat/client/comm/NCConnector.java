@@ -164,7 +164,7 @@ public class NCConnector {
 		if(msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
 			NCMessageInfoRoom me = (NCMessageInfoRoom) msgRev;
 			//--TODO dependiendo del mensaje que creemos hacer.
-			info = new NCRoomDescription(me.getRoomInfo().roomName,me.getRoomInfo().members,me.getRoomInfo().timeLastMessage); 
+			info = new NCRoomDescription(me.getRoomInfo().roomName,me.getRoomInfo().members,me.getRoomInfo().timeLastMessage, me.getRoomInfo().maxMiembros); 
 			return info;
 		}
 		
