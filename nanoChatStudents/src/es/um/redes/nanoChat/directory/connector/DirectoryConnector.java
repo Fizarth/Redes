@@ -51,38 +51,36 @@ public class DirectoryConnector {
 
 		// Generar el mensaje de consulta llamando a buildQuery()
 		byte[] req = buildQuery(protocol);
-
 		// Construir el datagrama con la consulta
-		DatagramPacket pckt = new DatagramPacket(req, req.length, directoryAddress);
-
-		// Enviar datagrama por el socket
-		socket.send(pckt);
-
+		DatagramPacket pckte = new DatagramPacket(req, req.length, directoryAddress);
 		// preparar el buffer para la respuesta
 		byte[] response = new byte[PACKET_MAX_SIZE];
-		pckt = new DatagramPacket(response, response.length);
+		DatagramPacket pcktr = new DatagramPacket(response, response.length);
+		InetSocketAddress respuesta = null;
 
 		int intentos = 5;
-		while (intentos > 0) {
+		boolean msgRecv = false;
+		while (intentos > 0 && !msgRecv) {
 			try {
+				// Enviar datagrama por el socket
+				socket.send(pckte);
 				// Establecer el temporizador para el caso en que no haya respuesta
-				// Recibir la respuesta
 				socket.setSoTimeout(TIMEOUT);
-				socket.receive(pckt);
+				// Recibir la respuesta
+				socket.receive(pcktr);
+				// Procesamos la respuesta para devolver la dirección que hay en ella
 
-			} catch (IOException e) {
-				System.out.println("TIMEOUT EXCEDIDO, vuelve a mandar el mensaje");
+				response = pcktr.getData();
+				// formato : cod(1)+ ip(4) + puerto(4)
+				respuesta = getAddressFromResponse(pcktr);
+				msgRecv = true;
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("TimeOut: no se pudo establecer la conexion con el directorio");
 				intentos--;
 			}
+
 		}
-		
-		if (intentos == 0) return null;
-
-		// Procesamos la respuesta para devolver la dirección que hay en ella
-		response = pckt.getData();
-
-		// formato : cod(1)+ ip(4) + puerto(4)
-		InetSocketAddress respuesta = getAddressFromResponse(pckt);
 
 		return respuesta;
 	}
@@ -136,38 +134,37 @@ public class DirectoryConnector {
 		// Construir solicitud de registro (buildRegistration)
 		byte[] solicitud = buildRegistration(protocol, port);
 		// Enviar solicitud
-		DatagramPacket pckt = new DatagramPacket(solicitud, solicitud.length, directoryAddress);
-		socket.send(pckt);
-		// Recibe respuesta
-//		socket.receive(pckt);
-		
+		DatagramPacket pckte = new DatagramPacket(solicitud, solicitud.length, directoryAddress);
+
+		byte[] response = new byte[PACKET_MAX_SIZE];
+		DatagramPacket pcktr = new DatagramPacket(response, response.length);
+
 		int intentos = 5;
 		while (intentos > 0) {
 			try {
-				// Establecer el temporizador para el caso en que no haya respuesta
-				// Recibir la respuesta
+				socket.send(pckte);
 				socket.setSoTimeout(TIMEOUT);
-				socket.receive(pckt);
+				// Recibe respuesta
+				socket.receive(pcktr);
+				// Procesamos la respuesta para ver si se ha podido registrar correctamente
+				ByteBuffer bb = ByteBuffer.wrap(pcktr.getData());
+				int codigo = bb.get();
+//			System.out.println(codigo);
+				if (codigo == COD_OK) {
+					System.out.println("Registrado con éxito");
+					return true;
+				} else {
+					System.out.println("No se ha podido registrar");
+					return false;
+				}
 
-			} catch (IOException e) {
-				System.out.println("TIMEOUT EXCEDIDO, vuelve a mandar el mensaje de registro");
+			} catch (Exception e) {
+				System.out.println("TimeOut: no se pudo establecer la conexion con el directorio");
 				intentos--;
 			}
 		}
-		
-		if (intentos == 0) return false;
-		// Procesamos la respuesta para ver si se ha podido registrar correctamente
-		ByteBuffer bb = ByteBuffer.wrap(pckt.getData());
-		int codigo = bb.get();
-//		System.out.println(codigo);
-		if (codigo == COD_OK) {
-//			System.out.println("Registrado con éxito");
-			return true;
-		
-		} else {
-//			System.out.println("No se ha podido registrar");
-			return false;
-		}
+		return false;
+
 	}
 
 	// Método para construir una solicitud de registro de servidor

@@ -19,6 +19,10 @@ public class NanoChat {
 		
 
 		// Comenzamos la conversación con el servidor de Chats si hemos podido contactar con él
+		
+		
+		
+		
 		if (controller.getServerFromDirectory(args[0])) {
 			if (controller.connectToChatServer()) {
 				// Entramos en el bucle para pedirle al controlador que procese comandos del shell

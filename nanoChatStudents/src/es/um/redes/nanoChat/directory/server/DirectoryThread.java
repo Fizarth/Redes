@@ -63,6 +63,13 @@ public class DirectoryThread extends Thread {
 //				pckt = new DatagramPacket(buf, buf.length, ca);
 //				socket.send(pckt);
 				
+				double rand = Math.random();
+				if (rand < messageDiscardProbability) {
+					System.err.println("Directory DISCARDED corrupt request from... ");
+					continue;
+				}
+				
+				
 				// 4) Analizar y procesar la solicitud (llamada a processRequestFromCLient)
 				processRequestFromClient(pckt.getData(), clientAddr);
 				
@@ -74,11 +81,6 @@ public class DirectoryThread extends Thread {
 				
 				// 3) Vemos si el mensaje debe ser descartado por la probabilidad de descarte
 
-				double rand = Math.random();
-				if (rand < messageDiscardProbability) {
-					System.err.println("Directory DISCARDED corrupt request from... ");
-					continue;
-				}
 				
 				
 		}
@@ -111,7 +113,7 @@ public class DirectoryThread extends Thread {
 			}
 			else sendNO_OK(clientAddr);
 			
-//			System.out.println("Registrado: "+ clientAddr.getHostName()+":" +clientAddr.getPort()+ "\tProtocolo: "+ protocolo );
+			System.out.println("Registrado: "+ clientAddr.getHostName()+":" +clientAddr.getPort()+ "\tProtocolo: "+ protocolo );
 			
 			break;
 		
@@ -119,9 +121,8 @@ public class DirectoryThread extends Thread {
 		case COD_CONSULTA:
 			// 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
 			if(servers.containsKey(protocolo)){
-				
 				InetSocketAddress consultaAddr = new InetSocketAddress(servers.get(protocolo).getAddress(), servers.get(protocolo).getPort());
-//				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
+				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
 
 				sendServerInfo(consultaAddr, clientAddr);
 			}
