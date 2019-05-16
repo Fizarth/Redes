@@ -31,7 +31,7 @@ public class NCRoomDescription {
 			sb.append(member+" ");
 		}
 		if (timeLastMessage != 0)
-			sb.append("\tLast message: "+new Date(timeLastMessage).toString());
+			sb.append("\tLast Public message: "+new Date(timeLastMessage).toString());
 		else 
 			sb.append("\tLast message: not yet");
 		return sb.toString();

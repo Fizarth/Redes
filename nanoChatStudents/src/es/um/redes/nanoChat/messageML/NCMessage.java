@@ -26,8 +26,9 @@ public abstract class NCMessage {
 	public static final byte OP_ENTER_ROOM = 8;
 	public static final byte OP_EXIT_ROOM = 9;
 	public static final byte OP_MESSAGE = 10;
+	public static final byte OP_MESSAGE_PRIVATE = 11;
 	
-	public static final byte OP_EXIT = 11;
+	public static final byte OP_EXIT = 12;
 
 	
 	
@@ -45,7 +46,7 @@ public abstract class NCMessage {
 	 */
 	private static final Byte[] _valid_opcodes = { 
 		OP_NICK,OP_OK,OP_NO_OK,OP_QUERY_ROOM,OP_LIST_ROOM,OP_INFO_ROOM,
-		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIT_ROOM,OP_MESSAGE,OP_EXIT		
+		OP_INFO_ROOM_REQUEST,OP_ENTER_ROOM,OP_EXIT_ROOM,OP_MESSAGE,OP_MESSAGE_PRIVATE,OP_EXIT		
 		};
 
 	/**
@@ -53,7 +54,7 @@ public abstract class NCMessage {
 	 */
 	private static final String[] _valid_opcodes_str = {
 		"Nick","OK","NoOk","QueryRoom","ListRoom","InfoRoom","InfoRoomRequest",
-		"EnterRoom","ExitRoom","Message","Exit"
+		"EnterRoom","ExitRoom","Message","MessagePrivate","Exit"
 	};
 
 	/**
@@ -153,6 +154,9 @@ public abstract class NCMessage {
 		case OP_MESSAGE:{
 			return NCMessageChat.readFromString(code, message);
 		}
+		case OP_MESSAGE_PRIVATE:{
+			return NCMessageChatPrivado.readFromString(code, message);
+		}
 		case OP_EXIT:{
 			return NCMessageControl.readFromString(code);
 		}
@@ -178,6 +182,9 @@ public abstract class NCMessage {
 	
 	public static NCMessage makeChatMessage(byte code, String user,String msg){
 		return (new NCMessageChat(code, user, msg));
+	}
+	public static NCMessage makeChatMessagePrivate(byte code, String emisor,String receptor,String msg){
+		return (new NCMessageChatPrivado(code, emisor,receptor, msg));
 	}
 	
 	public static NCMessageInfoRoom makeInfoRoomMessage(byte code, NCRoomDescription room){

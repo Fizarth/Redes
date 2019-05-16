@@ -21,6 +21,8 @@ public abstract class NCRoomManager {
 	//Método para devolver el número de usuarios conectados a una sala
 	public abstract int usersInRoom();
 	
+	public abstract void sendPrivateMessage(String emisor, String receptor, String message) throws IOException;
+	
 	
 	
 	

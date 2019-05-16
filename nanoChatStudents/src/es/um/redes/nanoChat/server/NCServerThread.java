@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageChat;
+import es.um.redes.nanoChat.messageML.NCMessageChatPrivado;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
@@ -178,6 +179,11 @@ public class NCServerThread extends Thread {
 				NCSalaManager managerRoom = (NCSalaManager) serverManager.getManagerRoom(currentRoom);
 				NCMessageChat msgIn = (NCMessageChat) message;
 				managerRoom.broadcastMessage(user, msgIn.getName());
+				break;
+			case NCMessage.OP_MESSAGE_PRIVATE:
+				managerRoom = (NCSalaManager) serverManager.getManagerRoom(currentRoom);
+				NCMessageChatPrivado msgPri = (NCMessageChatPrivado) message;
+				managerRoom.sendPrivateMessage(user, msgPri.getReceptor(), msgPri.getName());
 				break;
 			case NCMessage.OP_INFO_ROOM:
 				NCRoomDescription info = serverManager.getRoomInfo(currentRoom);

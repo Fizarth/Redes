@@ -156,6 +156,11 @@ public class NCShell {
 				}
 				vargs.add(message.toString());
 				break;
+			case NCCommands.COM_SEND_PRIVATE:
+				while (st.hasMoreTokens()) {
+					vargs.add(st.nextToken());
+				}
+				break;
 			default:
 				System.out.println("That command is only valid if you are not in a room");;
 			}
@@ -193,6 +198,13 @@ public class NCShell {
 				return false;
 			}
 			break;
+		//private requiere el parámetro <user> y el parámetro <message> 
+		case NCCommands.COM_SEND_PRIVATE:
+			if(args.length<2){
+				System.out
+					.println("Correct use: private <user> <message>");
+				return false;
+			}
 		default:
 		}
 		//El resto no requieren parámetro

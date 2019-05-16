@@ -39,6 +39,9 @@ public class NCController {
 	private InetSocketAddress serverAddress;
 	// Estado actual del cliente, de acuerdo con el autómata
 	private byte clientStatus = PRE_CONNECTION;
+	
+	//usuario al que se le quiere enviar el mensaje
+	private String usReceptor;
 
 	// Constructor
 	public NCController() {
@@ -70,6 +73,14 @@ public class NCController {
 			break;
 		case NCCommands.COM_SEND:
 			chatMessage = args[0];
+			break;
+		case NCCommands.COM_SEND_PRIVATE:
+			usReceptor=args[0];
+			String msgPrivado="";
+			for(int i=1;i<args.length;i++){
+				msgPrivado+=args[i]+" ";
+			}
+			chatMessage = msgPrivado;
 			break;
 		default:
 		}
@@ -197,6 +208,9 @@ public class NCController {
 			// El usuario quiere enviar un mensaje al chat de la sala
 			sendChatMessage();
 			break;
+		case NCCommands.COM_SEND_PRIVATE:
+			sendChatPrivateMessage();
+			break;
 		case NCCommands.COM_SOCKET_IN:
 			// En este caso lo que ha sucedido es que hemos recibido un mensaje desde la
 			// sala y hay que procesarlo
@@ -239,13 +253,24 @@ public class NCController {
 		ncConnector.enviarMensaje(nickname, chatMessage);
 
 	}
+	// Método para enviar un mensaje privado al chat de la sala
+	private void sendChatPrivateMessage() throws IOException{
+		ncConnector.enviarMensaje(nickname, usReceptor,chatMessage);
+	}
 
 	// Método para procesar los mensajes recibidos del servidor mientras que el
 	// shell estaba esperando un comando de usuario
 	private void processIncommingMessage() throws IOException {
 		// TODO Recibir el mensaje
 		InfoMensaje info = ncConnector.recibirMensaje();
-		System.out.println("<" + info.usuario + ">\t" + info.texto);
+		System.out.println("NCController linea 266 info.privado == "+info.privado);
+		if(info.privado==false){
+			System.out.println("Recibido mensaje público:\n<" + info.usuario + ">\t" + info.texto);
+		}
+		else{
+			System.out.println("Recibido mensaje privado:\n<" + info.usuario + ">\t" + info.texto);
+		}
+		
 		// TODO En función del tipo de mensaje, actuar en consecuencia
 		// TODO (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast
 		// mostramos la información de quién envía el mensaje y el mensaje en sí

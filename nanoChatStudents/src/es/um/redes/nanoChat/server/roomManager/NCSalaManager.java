@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageChat;
+import es.um.redes.nanoChat.messageML.NCMessageChatPrivado;
+import es.um.redes.nanoChat.messageML.NCMessageControl;
 
 public class NCSalaManager extends NCRoomManager {
 	
@@ -80,6 +82,30 @@ public class NCSalaManager extends NCRoomManager {
 	@Override
 	public int usersInRoom() {
 		return this.miembros.size();
+	}
+
+	@Override
+	public void sendPrivateMessage(String emisor, String receptor, String message) throws IOException {
+		boolean receptorEncontrado=false;
+		for(String usur : roomDescription.members) {
+			if (usur.compareTo(emisor)!=0) {
+				if(usur.compareTo(receptor)==0){
+					receptorEncontrado=true;
+					Socket s = this.miembros.get(receptor);
+					DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+					NCMessageChatPrivado mensaje = new NCMessageChatPrivado(NCMessage.OP_MESSAGE_PRIVATE,emisor,receptor ,message);
+					dos.writeUTF(mensaje.toEncodedString());
+				} 
+			}			
+		}if(!receptorEncontrado){
+			System.out.println("Usuario "+receptor+" no esta en la sala");
+			Socket s = this.miembros.get(emisor);
+			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+			NCMessageControl control= new NCMessageControl(NCMessage.OP_NO_OK);
+			dos.writeUTF(control.toEncodedString());
+			
+		}
+		
 	}
 	
 	

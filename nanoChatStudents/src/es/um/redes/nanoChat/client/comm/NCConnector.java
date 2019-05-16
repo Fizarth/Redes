@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import es.um.redes.nanoChat.messageML.NCMessage;
 import es.um.redes.nanoChat.messageML.NCMessageChat;
+import es.um.redes.nanoChat.messageML.NCMessageChatPrivado;
 import es.um.redes.nanoChat.messageML.NCMessageControl;
 import es.um.redes.nanoChat.messageML.NCMessageInfoRoom;
 import es.um.redes.nanoChat.messageML.NCMessageNick;
@@ -24,162 +25,212 @@ public class NCConnector {
 	private Socket socket;
 	protected DataOutputStream dos;
 	protected DataInputStream dis;
-	
+
 	public NCConnector(InetSocketAddress serverAddress) throws UnknownHostException, IOException {
-		//TODO Se crea el socket a partir de la dirección proporcionada 
-		socket = new Socket(serverAddress.getAddress(), serverAddress.getPort());  //si en vez de crearlo vacio le pasamos serverAddress no hace falta poner el bind despues
-		//socket.bind(serverAddress);
-		//TODO Se extraen los streams de entrada y salida
+		// TODO Se crea el socket a partir de la dirección proporcionada
+		socket = new Socket(serverAddress.getAddress(), serverAddress.getPort()); // si
+																					// en
+																					// vez
+																					// de
+																					// crearlo
+																					// vacio
+																					// le
+																					// pasamos
+																					// serverAddress
+																					// no
+																					// hace
+																					// falta
+																					// poner
+																					// el
+																					// bind
+																					// despues
+		// socket.bind(serverAddress);
+		// TODO Se extraen los streams de entrada y salida
 		dis = new DataInputStream(socket.getInputStream());
 		dos = new DataOutputStream(socket.getOutputStream());
-		
-		
+
 	}
 
-
-	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
+	// Método para registrar el nick en el servidor. Nos informa sobre si la
+	// inscripción se hizo con éxito o no.
 	public boolean registerNickname_UnformattedMessage(String nick) throws IOException {
-		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
-		
+		// Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or
+		// RCV(NICK_DUPLICATED)
+
 		dos.writeUTF(nick);
 		String respuesta = dis.readUTF();
-		if(respuesta.compareTo("OK")==0)return true;
-		else return false;
-		//TODO Enviamos una cadena con el nick por el flujo de salidays
-		//TODO Leemos la cadena recibida como respuesta por el flujo de entrada 
-		//TODO Si la cadena recibida es NICK_OK entonces no está duplicado (en función de ello modificar el return)
-		
+		if (respuesta.compareTo("OK") == 0)
+			return true;
+		else
+			return false;
+		// TODO Enviamos una cadena con el nick por el flujo de salidays
+		// TODO Leemos la cadena recibida como respuesta por el flujo de entrada
+		// TODO Si la cadena recibida es NICK_OK entonces no está duplicado (en
+		// función de ello modificar el return)
+
 	}
 
-	
-	//Método para registrar el nick en el servidor. Nos informa sobre si la inscripción se hizo con éxito o no.
+	// Método para registrar el nick en el servidor. Nos informa sobre si la
+	// inscripción se hizo con éxito o no.
 	public boolean registerNickname(String nick) throws IOException {
-		//Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or RCV(NICK_DUPLICATED)
-		//Creamos un mensaje de tipo RoomMessage con opcode OP_NICK en el que se inserte el nick
-		
+		// Funcionamiento resumido: SEND(nick) and RCV(NICK_OK) or
+		// RCV(NICK_DUPLICATED)
+		// Creamos un mensaje de tipo RoomMessage con opcode OP_NICK en el que
+		// se inserte el nick
+
 		NCMessageNick message = (NCMessageNick) NCMessage.makeNickMessage(NCMessage.OP_NICK, nick);
-		//Obtenemos el mensaje de texto listo para enviar
+		// Obtenemos el mensaje de texto listo para enviar
 		String rawMessage = message.toEncodedString();
-		//Escribimos el mensaje en el flujo de salida, es decir, provocamos que se envíe por la conexión TCP
+		// Escribimos el mensaje en el flujo de salida, es decir, provocamos que
+		// se envíe por la conexión TCP
 		dos.writeUTF(rawMessage);
-		//TODO Leemos el mensaje recibido como respuesta por el flujo de entrada 
+		// TODO Leemos el mensaje recibido como respuesta por el flujo de
+		// entrada
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
-		//TODO Analizamos el mensaje para saber si está duplicado el nick (modificar el return en consecuencia)	
-		if(msg.getOpcode()== NCMessage.OP_OK)return true;
-		else return false;
+		// TODO Analizamos el mensaje para saber si está duplicado el nick
+		// (modificar el return en consecuencia)
+		if (msg.getOpcode() == NCMessage.OP_OK)
+			return true;
+		else
+			return false;
 	}
-	
-	//Método para obtener la lista de salas del servidor
-	/*HEMOS PENSADO QUE EN LUGAR 
-	 * 		public ArrayList<NCRoomDescription> getRooms() 
-	 * Devolver INFO ROOM, ya que eso contenia inf que considerabamos innecesaria.
-	 * */
+
+	// Método para obtener la lista de salas del servidor
+	/*
+	 * HEMOS PENSADO QUE EN LUGAR public ArrayList<NCRoomDescription> getRooms()
+	 * Devolver INFO ROOM, ya que eso contenia inf que considerabamos
+	 * innecesaria.
+	 */
 	public ArrayList<NCRoomDescription> getRooms() throws IOException {
-		//Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
+		// Funcionamiento resumido: SND(GET_ROOMS) and RCV(ROOM_LIST)
 		NCMessageControl message = (NCMessageControl) NCMessage.makeControlMessage(NCMessage.OP_QUERY_ROOM);
 		String rawMessage = message.toEncodedString();
 		dos.writeUTF(rawMessage);
-		
+
 		NCMessage msg = NCMessage.readMessageFromSocket(dis);
-		
-		
+
 		NCMessageRoomsInfo me = (NCMessageRoomsInfo) msg;
 		ArrayList<NCRoomDescription> rooms = new ArrayList<NCRoomDescription>();
-		if(me.getOpcode() == NCMessage.OP_LIST_ROOM) {
-			
-			//--TODO dependiendo del mensaje que creemos hacer.
-			rooms=me.getRooms();
-//			for(NCRoomDescription i: rooms){
-//				System.out.println("NCConector-getRooms-> "+i.roomName+" "+i.maxMiembros+" "+i.members.toString());
-//			}
+		if (me.getOpcode() == NCMessage.OP_LIST_ROOM) {
+
+			// --TODO dependiendo del mensaje que creemos hacer.
+			rooms = me.getRooms();
+			// for(NCRoomDescription i: rooms){
+			// System.out.println("NCConector-getRooms-> "+i.roomName+"
+			// "+i.maxMiembros+" "+i.members.toString());
+			// }
 			return rooms;
 		}
-		
-		else{
-			//System.out.println(" NCConnector- getRooms: error");
+
+		else {
+			// System.out.println(" NCConnector- getRooms: error");
 			return null;
 		}
 	}
-	
-	//Método para solicitar la entrada en una sala
+
+	// Método para solicitar la entrada en una sala
 	public boolean enterRoom(String room) throws IOException {
-		//Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or RCV(REJECT)
+		// Funcionamiento resumido: SND(ENTER_ROOM<room>) and RCV(IN_ROOM) or
+		// RCV(REJECT)
 		NCMessageRoom msgSend = (NCMessageRoom) NCMessage.makeRoomMessage(NCMessage.OP_ENTER_ROOM, room);
 		dos.writeUTF(msgSend.toEncodedString());
-		
+
 		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
-		if (msgRev.getOpcode()== NCMessage.OP_OK) {
+		if (msgRev.getOpcode() == NCMessage.OP_OK) {
 			return true;
 		}
-		//TODO completar el método
-		else return false;
+		// TODO completar el método
+		else
+			return false;
 	}
-	
-	//Método para salir de una sala
+
+	// Método para salir de una sala
 	public void leaveRoom(String room) throws IOException {
-		//Funcionamiento resumido: SND(EXIT_ROOM)
+		// Funcionamiento resumido: SND(EXIT_ROOM)
 		NCMessageControl msgSend = (NCMessageControl) NCMessage.makeControlMessage(NCMessage.OP_EXIT_ROOM);
 		dos.writeUTF(msgSend.toEncodedString());
-		
+
 	}
-	
-	//Método que utiliza el Shell para ver si hay datos en el flujo de entrada
+
+	// Método que utiliza el Shell para ver si hay datos en el flujo de entrada
 	public boolean isDataAvailable() throws IOException {
 		return (dis.available() != 0);
 	}
-	
-	//IMPORTANTE!!
-	//TODO Es necesario implementar métodos para recibir y enviar mensajes de chat a una sala
-	public void enviarMensaje(String usuario,String mensajeChat) throws IOException{
-		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, usuario,mensajeChat);
+
+	// IMPORTANTE!!
+	// TODO Es necesario implementar métodos para recibir y enviar mensajes de
+	// chat a una sala
+	public void enviarMensaje(String usuario, String mensajeChat) throws IOException {
+		NCMessageChat msgSend = (NCMessageChat) NCMessage.makeChatMessage(NCMessage.OP_MESSAGE, usuario, mensajeChat);
 		dos.writeUTF(msgSend.toEncodedString());
 	}
-	 public InfoMensaje recibirMensaje() throws IOException{
-		 InfoMensaje info;
-		 
-		 NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
-		 if(msgRev.getOpcode() == NCMessage.OP_MESSAGE) {
-				NCMessageChat me = (NCMessageChat) msgRev;
-				info= new InfoMensaje(me.getUser(), me.getName());
-				return info;
-		 }
-		 else{
-			 System.out.println("ERROR: recibir mensaje");
-			 return null;
-		 }
-		 
-		 
-	 }
-	//Método para pedir la descripción de una sala
-	public NCRoomDescription getRoomInfo(String room) throws IOException {
-		//Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)		
+
+	public void enviarMensaje(String usEmisor, String usReceptor, String mensajeChat) throws IOException {
+		NCMessageChatPrivado msgSend = (NCMessageChatPrivado) NCMessage
+				.makeChatMessagePrivate(NCMessage.OP_MESSAGE_PRIVATE, usEmisor, usReceptor, mensajeChat);
+		dos.writeUTF(msgSend.toEncodedString());
+
+	}
+
+	public InfoMensaje recibirMensaje() throws IOException {
+		InfoMensaje info;
 		
-		NCMessageRoom message = (NCMessageRoom ) NCMessage.makeRoomMessage(NCMessage.OP_INFO_ROOM,room);
+		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
+		System.out.println(msgRev.getOpcode());
+		if (msgRev.getOpcode() == NCMessage.OP_MESSAGE) {
+			NCMessageChat me = (NCMessageChat) msgRev;
+			info = new InfoMensaje(me.getUser(), me.getName(),false);
+			System.out.println("NCConector linea 183 info.privado == "+info.privado);
+			return info;
+		} else 
+			if (msgRev.getOpcode() == NCMessage.OP_MESSAGE_PRIVATE) {
+			NCMessageChatPrivado me = (NCMessageChatPrivado) msgRev;
+			info = new InfoMensaje(me.getEmisor(), me.getName(),true);
+			System.out.println("NCConector linea 188 info.privado == "+info.privado);
+			return info;
+		} else 
+			if(msgRev.getOpcode() == NCMessage.OP_NO_OK){
+			System.out.println("ERROR: usuario receptor no esta en la sala");
+			return null;
+		}else{
+			System.out.println("ERROR: recibir mensaje");
+			return null;
+		}
+
+	}
+
+	// Método para pedir la descripción de una sala
+	public NCRoomDescription getRoomInfo(String room) throws IOException {
+		// Funcionamiento resumido: SND(GET_ROOMINFO) and RCV(ROOMINFO)
+
+		NCMessageRoom message = (NCMessageRoom) NCMessage.makeRoomMessage(NCMessage.OP_INFO_ROOM, room);
 		String rawMessage = message.toEncodedString();
 		dos.writeUTF(rawMessage);
-		
+
 		NCRoomDescription info;
 		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
-		
-		if(msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
+
+		if (msgRev.getOpcode() == NCMessage.OP_INFO_ROOM_REQUEST) {
 			NCMessageInfoRoom me = (NCMessageInfoRoom) msgRev;
-			//--TODO dependiendo del mensaje que creemos hacer.
-			info = new NCRoomDescription(me.getRoomInfo().roomName,me.getRoomInfo().members,me.getRoomInfo().timeLastMessage, me.getRoomInfo().maxMiembros); 
+			// --TODO dependiendo del mensaje que creemos hacer.
+			info = new NCRoomDescription(me.getRoomInfo().roomName, me.getRoomInfo().members,
+					me.getRoomInfo().timeLastMessage, me.getRoomInfo().maxMiembros);
 			return info;
 		}
-		
-		//TODO Construimos el mensaje de solicitud de información de la sala específica
-		//TODO Recibimos el mensaje de respuesta
-		//TODO Devolvemos la descripción contenida en el mensaje
+
+		// TODO Construimos el mensaje de solicitud de información de la sala
+		// específica
+		// TODO Recibimos el mensaje de respuesta
+		// TODO Devolvemos la descripción contenida en el mensaje
 		return null;
 	}
-	
-	//Método para cerrar la comunicación con la sala
-	//TODO (Opcional) Enviar un mensaje de salida del servidor de Chat
+
+	// Método para cerrar la comunicación con la sala
+	// TODO (Opcional) Enviar un mensaje de salida del servidor de Chat
 	public void disconnect() {
-		NCMessageControl msgSend = (NCMessageControl) NCMessage.makeControlMessage(NCMessage.OP_EXIT);		
+		NCMessageControl msgSend = (NCMessageControl) NCMessage.makeControlMessage(NCMessage.OP_EXIT);
 		try {
-			if (socket != null) {				
+			if (socket != null) {
 				dos.writeUTF(msgSend.toEncodedString());
 				socket.close();
 			}
@@ -188,6 +239,5 @@ public class NCConnector {
 			socket = null;
 		}
 	}
-
 
 }
