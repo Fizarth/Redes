@@ -32,7 +32,7 @@ public class NCController {
 	// Nick del usuario
 	private String nickname;
 	// Sala de chat en la que se encuentra el usuario (si está en alguna)
-	private String room;
+	private String room="";
 	// Mensaje enviado o por enviar al chat
 	private String chatMessage;
 	// Dirección de internet del servidor de NanoChat
@@ -69,7 +69,10 @@ public class NCController {
 				nickname = args[0];
 			break;
 		case NCCommands.COM_ENTER:
-			room = args[0];
+			for(int i=0;i<args.length;i++){
+				room += args[i]+" ";
+			}
+			
 			break;
 		case NCCommands.COM_SEND:
 			chatMessage = args[0];
@@ -219,6 +222,7 @@ public class NCController {
 		case NCCommands.COM_EXIT:
 			// El usuario quiere salir de la sala
 			exitTheRoom();
+			room="";
 		}
 	}
 
@@ -263,12 +267,14 @@ public class NCController {
 	private void processIncommingMessage() throws IOException {
 		// TODO Recibir el mensaje
 		InfoMensaje info = ncConnector.recibirMensaje();
-		System.out.println("NCController linea 266 info.privado == "+info.privado);
-		if(info.privado==false){
+		if(info!=null&&info.privado==false){
 			System.out.println("Recibido mensaje público:\n<" + info.usuario + ">\t" + info.texto);
 		}
-		else{
+		else if(info!=null&&info.privado==true){
 			System.out.println("Recibido mensaje privado:\n<" + info.usuario + ">\t" + info.texto);
+		}
+		else{
+			System.out.println("ERROR: No se ha podido mandar el mensaje al usuario "+usReceptor);
 		}
 		
 		// TODO En función del tipo de mensaje, actuar en consecuencia

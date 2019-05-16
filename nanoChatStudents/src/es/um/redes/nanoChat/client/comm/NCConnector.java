@@ -176,21 +176,17 @@ public class NCConnector {
 		InfoMensaje info;
 		
 		NCMessage msgRev = NCMessage.readMessageFromSocket(dis);
-		System.out.println(msgRev.getOpcode());
 		if (msgRev.getOpcode() == NCMessage.OP_MESSAGE) {
 			NCMessageChat me = (NCMessageChat) msgRev;
 			info = new InfoMensaje(me.getUser(), me.getName(),false);
-			System.out.println("NCConector linea 183 info.privado == "+info.privado);
 			return info;
 		} else 
 			if (msgRev.getOpcode() == NCMessage.OP_MESSAGE_PRIVATE) {
 			NCMessageChatPrivado me = (NCMessageChatPrivado) msgRev;
 			info = new InfoMensaje(me.getEmisor(), me.getName(),true);
-			System.out.println("NCConector linea 188 info.privado == "+info.privado);
 			return info;
 		} else 
 			if(msgRev.getOpcode() == NCMessage.OP_NO_OK){
-			System.out.println("ERROR: usuario receptor no esta en la sala");
 			return null;
 		}else{
 			System.out.println("ERROR: recibir mensaje");
