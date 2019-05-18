@@ -47,22 +47,13 @@ import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 
 public class NCMessageRoomsInfo extends NCMessage {
 
-	private String mensaje;
 	private ArrayList<NCRoomDescription> rooms;
 
 	// Constantes asociadas a las marcas específicas de este tipo de mensaje
-	private static final String RE_ROOM = "<room>\\n(.*?)</room>\\n";
 	private static final String ROOM_MARK = "room";
-
-	private static final String RE_NAME_ROOM = "<name>(.*?)</name>";
 	private static final String NAME_ROOM_MARK = "name";
-
-	private static final String RE_SIZE = "<size>(.*?)</size>";
 	private static final String SIZE_MARK = "size";
-
-	private static final String RE_NUMUSER = "<numUser>(.*?)</numUser>";
 	private static final String NUMUSER_MARK = "numUser";
-
 	private static final String TIME_MARK = "time";
 	private static final String NICK_MARK = "nick";
 

@@ -1,6 +1,4 @@
 package es.um.redes.nanoChat.messageML;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /*
  * CONTROL

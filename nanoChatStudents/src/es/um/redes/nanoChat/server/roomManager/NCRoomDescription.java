@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class NCRoomDescription {
 	//Campos de los que, al menos, se compone una descripción de una sala 
-	//--TODO mandar esta inf en un mensaje cuando pidan la inf de una sala. NPI donde.
 	public String roomName;
 	public int maxMiembros;
 	public ArrayList<String> members;

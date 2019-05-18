@@ -176,7 +176,7 @@ public class NCShell {
 		switch(this.command) {
 		//enter requiere el parámetro <room>
 		case NCCommands.COM_ENTER:
-			if (args.length <1) {
+			if (args.length == 0 || args.length > 1)  {
 				System.out
 						.println("Correct use: enter <room>");
 				return false;
@@ -202,7 +202,7 @@ public class NCShell {
 		case NCCommands.COM_SEND_PRIVATE:
 			if(args.length<2){
 				System.out
-					.println("Correct use: private <user> <message>");
+					.println("Correct use: private <receptor_user> <message>");
 				return false;
 			}
 		default:

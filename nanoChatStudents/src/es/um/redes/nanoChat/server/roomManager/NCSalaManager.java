@@ -32,7 +32,6 @@ public class NCSalaManager extends NCRoomManager {
 		// if (this.miembros.put(u, s) != null) { // ESTO SE PUEDE HACER???
 		if (!this.miembros.keySet().contains(u)) {
 			this.roomDescription.members.add(u);
-			// -------
 			this.miembros.put(u, s);
 			return true;
 		}

@@ -19,7 +19,7 @@ public class NCController {
 	private static final byte PRE_ROOM = 3;
 	private static final byte IN_ROOM = 4;
 	// Código de protocolo implementado por este cliente
-	// TODO Cambiar para cada grupo
+	// Cambiar para cada grupo
 	private static final int PROTOCOL = 98044828; // el nuestro es 48848082 +49196746
 	// Conector para enviar y recibir mensajes del directorio
 	private DirectoryConnector directoryConnector;
@@ -32,7 +32,7 @@ public class NCController {
 	// Nick del usuario
 	private String nickname;
 	// Sala de chat en la que se encuentra el usuario (si está en alguna)
-	private String room="";
+	private String room;
 	// Mensaje enviado o por enviar al chat
 	private String chatMessage;
 	// Dirección de internet del servidor de NanoChat
@@ -69,10 +69,7 @@ public class NCController {
 				nickname = args[0];
 			break;
 		case NCCommands.COM_ENTER:
-			for(int i=0;i<args.length;i++){
-				room += args[i]+" ";
-			}
-			
+			room = args[0];
 			break;
 		case NCCommands.COM_SEND:
 			chatMessage = args[0];
@@ -100,21 +97,21 @@ public class NCController {
 				System.out.println("* You have already registered a nickname (" + nickname + ")");
 			break;
 		case NCCommands.COM_ROOMLIST:
-			// TODO LLamar a getAndShowRooms() si el estado actual del autómata lo permite
+			// LLamar a getAndShowRooms() si el estado actual del autómata lo permite
 			if (clientStatus == PRE_ROOM) {
 				getAndShowRooms();
 			}
-			// TODO Si no está permitido informar al usuario
+			// Si no está permitido informar al usuario
 			else
 				System.out.println("Debes salir de la sala para solicitar la lista de salas");
 			break;
 		case NCCommands.COM_ENTER:
-			// TODO LLamar a enterChat() si el estado actual del autómata lo permite
+			// LLamar a enterChat() si el estado actual del autómata lo permite
 			if (clientStatus == PRE_ROOM) {
 				enterChat();
 			} else
 				System.out.println("Ya estas en una sala. Por favor, sal de la sala para entrar en otra.");
-			// TODO Si no está permitido informar al usuario
+			// Si no está permitido informar al usuario
 			break;
 		case NCCommands.COM_QUIT:
 			// Cuando salimos tenemos que cerrar todas las conexiones y sockets abiertos
@@ -130,10 +127,10 @@ public class NCController {
 		try {
 			// Pedimos que se registre el nick (se comprobará si está duplicado)
 			boolean registered = ncConnector.registerNickname(nickname);
-			// TODO: Cambiar la llamada anterior a registerNickname() al usar mensajes
+			// Cambiar la llamada anterior a registerNickname() al usar mensajes
 			// formateados
 			if (registered) {
-				// TODO Si el registro fue exitoso pasamos al siguiente estado del autómata
+				// Si el registro fue exitoso pasamos al siguiente estado del autómata
 				System.out.println("* Your nickname is now " + nickname);
 				clientStatus = PRE_ROOM;
 			} else
@@ -147,40 +144,32 @@ public class NCController {
 	// Método que solicita al servidor de NanoChat la lista de salas e imprime el
 	// resultado obtenido
 	private void getAndShowRooms() throws IOException {
-		// TODO Lista que contendrá las descripciones de las salas existentes
-		// ArrayList<InfoRoom> salas =new ArrayList<>();
+		// Lista que contendrá las descripciones de las salas existentes
 		ArrayList<NCRoomDescription> salas = new ArrayList<>();
-		// TODO Le pedimos al conector que obtenga la lista de salas
-		// ncConnector.getRooms()
+		// Le pedimos al conector que obtenga la lista de salas
 		salas = ncConnector.getRooms();
 
-		// System.out.println("NCController- getAndShowRooms-> salas empty:
-		// "+salas.isEmpty());
-		// TODO Una vez recibidas iteramos sobre la lista para imprimir información de
+		// Una vez recibidas iteramos sobre la lista para imprimir información de
 		// cada sala
 		for (NCRoomDescription info : salas) {
 			System.out.println(info.toPrintableString());
-			// System.out.println("Sala: "+info.+" de tamaño máximo: "+info.maxMiembros+",
-			// donde actualmente hay: "+info.miembros+" usuarios");
 		}
 	}
 
 	// Método para tramitar la solicitud de acceso del usuario a una sala concreta
 	private void enterChat() throws IOException {
-		// TODO Se solicita al servidor la entrada en la sala correspondiente
+		// Se solicita al servidor la entrada en la sala correspondiente
 		// ncConnector.enterRoom()
 		boolean acceso = ncConnector.enterRoom(room);
-		// TODO Si la respuesta es un rechazo entonces informamos al usuario y salimos
+		// Si la respuesta es un rechazo entonces informamos al usuario y salimos
 		if (!acceso) {
 			System.out.println("No se ha podido entrar en la sala");
-			// ---TODO de momento hacemos que se desconecte el usuario porque sino se mete a
-			// la sala
-
+			
 			clientStatus = PRE_ROOM;
-//			System.exit(0);
+//			
 		}
-		// TODO En caso contrario informamos que estamos dentro y seguimos
-		// TODO Cambiamos el estado del autómata para aceptar nuevos comandos
+		// En caso contrario informamos que estamos dentro y seguimos
+		// Cambiamos el estado del autómata para aceptar nuevos comandos
 		else {
 
 			System.out.println("* You are in " + room + " now");
@@ -193,8 +182,8 @@ public class NCController {
 				processRoomCommand();
 			} while (currentCommand != NCCommands.COM_EXIT);
 			System.out.println("* Your are out of the room");
-			// TODO Llegados a este punto el usuario ha querido salir de la sala, cambiamos
-			// el estado del autómata
+			// Llegados a este punto el usuario ha querido salir de la sala, cambiamos
+			// el estado del autómata -> lo hacemos en la funcion exitRoom()
 
 		}
 	}
@@ -229,11 +218,9 @@ public class NCController {
 	// Método para solicitar al servidor la información sobre una sala y para
 	// mostrarla por pantalla
 	private void getAndShowInfo() throws IOException {
-		// TODO Pedimos al servidor información sobre la sala en concreto
+		// Pedimos al servidor información sobre la sala en concreto
 		NCRoomDescription info = ncConnector.getRoomInfo(room);
-		// TODO Mostramos por pantalla la información
-		// System.out.println("Nombre de la sala:\t"+info.roomName+"\nUltimo
-		// Mensaje:\t"+info.timeLastMessage);
+		// Mostramos por pantalla la información
 		System.out.println(info.toPrintableString());
 		for (String name : info.members) {
 			System.out.println("Usuario:\t" + name);
@@ -243,9 +230,9 @@ public class NCController {
 
 	// Método para notificar al servidor que salimos de la sala
 	private void exitTheRoom() throws IOException {
-		// TODO Mandamos al servidor el mensaje de salida
+		// Mandamos al servidor el mensaje de salida
 		ncConnector.leaveRoom(room);
-		// TODO Cambiamos el estado del autómata para indicar que estamos fuera de la
+		// Cambiamos el estado del autómata para indicar que estamos fuera de la
 		// sala
 		clientStatus = PRE_ROOM;
 
@@ -253,7 +240,7 @@ public class NCController {
 
 	// Método para enviar un mensaje al chat de la sala
 	private void sendChatMessage() throws IOException {
-		// TODO Mandamos al servidor un mensaje de chat
+		// Mandamos al servidor un mensaje de chat
 		ncConnector.enviarMensaje(nickname, chatMessage);
 
 	}
@@ -265,21 +252,22 @@ public class NCController {
 	// Método para procesar los mensajes recibidos del servidor mientras que el
 	// shell estaba esperando un comando de usuario
 	private void processIncommingMessage() throws IOException {
-		// TODO Recibir el mensaje
+		// Recibir el mensaje
 		InfoMensaje info = ncConnector.recibirMensaje();
 		if(info!=null&&info.privado==false){
 			System.out.println("Recibido mensaje público:\n<" + info.usuario + ">\t" + info.texto);
 		}
+		// En función del tipo de mensaje, actuar en consecuencia
+		// (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast
+		// mostramos la información de quién envía el mensaje y el mensaje en sí
 		else if(info!=null&&info.privado==true){
-			System.out.println("Recibido mensaje privado:\n<" + info.usuario + ">\t" + info.texto);
+			System.out.println("Recibido mensaje privado de " + info.usuario + ":\n" + info.texto);
 		}
 		else{
 			System.out.println("ERROR: No se ha podido mandar el mensaje al usuario "+usReceptor);
 		}
 		
-		// TODO En función del tipo de mensaje, actuar en consecuencia
-		// TODO (Ejemplo) En el caso de que fuera un mensaje de chat de broadcast
-		// mostramos la información de quién envía el mensaje y el mensaje en sí
+		
 	}
 
 	// MNétodo para leer un comando de la sala
@@ -315,7 +303,6 @@ public class NCController {
 			
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			serverAddress = null;
 		}
 		// Si no hemos recibido la dirección entonces nos quedan menos intentos

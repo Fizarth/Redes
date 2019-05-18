@@ -12,7 +12,7 @@ import es.um.redes.nanoChat.server.roomManager.NCRoomDescription;
 public abstract class NCMessage {
 	protected byte opcode;
 
-	// TODO IMPLEMENTAR TODAS LAS CONSTANTES RELACIONADAS CON LOS CODIGOS DE OPERACION
+	// IMPLEMENTAR TODAS LAS CONSTANTES RELACIONADAS CON LOS CODIGOS DE OPERACION
 	public static final byte OP_INVALID_CODE = 0;
 	public static final byte OP_NICK = 1;
 	public static final byte OP_OK = 2;
@@ -123,7 +123,7 @@ public abstract class NCMessage {
 		if (code == OP_INVALID_CODE) return null;
 		
 		switch (code) {
-		//TODO Parsear el resto de mensajes 
+		//Parsear el resto de mensajes 
 		case OP_NICK:{
 			return NCMessageNick.readFromString(code, message);
 		}
@@ -167,7 +167,7 @@ public abstract class NCMessage {
 
 	}
 
-	//TODO Programar el resto de métodos para crear otros tipos de mensajes
+	//Programar el resto de métodos para crear otros tipos de mensajes
 	
 	
 	public static NCMessage makeControlMessage(byte code) {

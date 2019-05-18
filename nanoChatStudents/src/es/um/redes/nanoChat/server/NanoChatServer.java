@@ -36,8 +36,9 @@ public class NanoChatServer implements Runnable {
     	this.socketAddress = a;
     	//Manager del servidor (compartido entre los Thread)
     	manager = new NCServerManager();
-    	//TODO Registramos una sala de chat en el servidor (subclase de NCRoomManager)
-    	//TODO manager.registerRoomManager();
+    	//Registramos una sala de chat en el servidor (subclase de NCRoomManager)
+    	// manager.registerRoomManager(); -> Nosotras no aplicamos esta funcion ya que, 
+    			//cuando se quiere entrar a un sala que no existe, ésta se crea y se registra el NCRoomManager desde la funcion enterRoom de la clase NCServerManager
     }
 
 

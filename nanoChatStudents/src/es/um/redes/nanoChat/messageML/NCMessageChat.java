@@ -24,10 +24,7 @@ public class NCMessageChat extends NCMessage{
 	private String user;
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
-	private static final String RE_NAME = "<mensaje>(.*?)</mensaje>";
 	private static final String NAME_MARK = "mensaje";
-	
-	private static final String RE_USER = "<user>(.*?)</user>";
 	private static final String USER_MARK = "user";
 	
 	private static final String patron  = "<(\\w+?)>(.*?)</\\1>";

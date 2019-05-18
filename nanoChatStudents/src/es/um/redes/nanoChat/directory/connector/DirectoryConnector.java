@@ -149,12 +149,11 @@ public class DirectoryConnector {
 				// Procesamos la respuesta para ver si se ha podido registrar correctamente
 				ByteBuffer bb = ByteBuffer.wrap(pcktr.getData());
 				int codigo = bb.get();
-//			System.out.println(codigo);
 				if (codigo == COD_OK) {
-					System.out.println("Registrado con éxito");
+//					System.out.println("Registrado con éxito");
 					return true;
 				} else {
-					System.out.println("No se ha podido registrar");
+//					System.out.println("No se ha podido registrar");
 					return false;
 				}
 

@@ -34,7 +34,7 @@ class NCServerManager {
 	
 	//Método para registrar un RoomManager 
 	public void registerRoomManager(NCRoomManager rm) {
-		//TODO Dar soporte para que pueda haber más de una sala en el servidor
+		//Dar soporte para que pueda haber más de una sala en el servidor
 		String roomName = ROOM_PREFIX + (char) nextRoom; 
 		rooms.put(roomName, rm);
 		rm.setRoomName(roomName);
@@ -42,11 +42,11 @@ class NCServerManager {
 	
 	//Devuelve la descripción de las salas existentes
 	public synchronized ArrayList<NCRoomDescription> getRoomList() {
-		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
+		//Pregunta a cada RoomManager cuál es la descripción actual de su sala
 				ArrayList<NCRoomDescription> salas = new ArrayList<>();
 				for(NCRoomManager r: rooms.values()){
 //					System.out.println("NCServerManager getInfo "+r.getDescription().roomName+" "+r.getDescription().members.toString());
-					//TODO Añade la información al ArrayList
+					//Añade la información al ArrayList
 					salas.add(r.getDescription());
 				}
 				
@@ -55,10 +55,10 @@ class NCServerManager {
 	
 	
 	public synchronized NCRoomDescription getRoomInfo(String room) {
-		//TODO Pregunta a cada RoomManager cuál es la descripción actual de su sala
+		//Pregunta a cada RoomManager cuál es la descripción actual de su sala
 		for(NCRoomManager r: rooms.values()){
 			//System.out.println("NCServerManager getInfo "+r.getInfo().name+" "+r.getInfo().miembros);
-			//TODO Añade la información al ArrayList
+			//Añade la información al ArrayList
 			if(r.getDescription().roomName.compareTo(room)==0)
 				return r.getDescription();
 		}
@@ -69,24 +69,24 @@ class NCServerManager {
 	
 	//Intenta registrar al usuario en el servidor.
 	public synchronized boolean addUser(String user) {
-		//TODO Devuelve true si no hay otro usuario con su nombre
+		//Devuelve true si no hay otro usuario con su nombre
 		if(!users.contains(user)) {
 			users.add(user);
 			return true;
 		}
-		//TODO Devuelve false si ya hay un usuario con su nombre
+		//Devuelve false si ya hay un usuario con su nombre
 		 return false;
 	}
 	
 	//Elimina al usuario del servidor
 	public synchronized void removeUser(String user) {
-		//TODO Elimina al usuario del servidor
+		//Elimina al usuario del servidor
 		users.remove(user);
 	}
 	
 	//Un usuario solicita acceso para entrar a una sala y registrar su conexión en ella
 	public synchronized NCRoomManager enterRoom(String u, String room, Socket s) {
-		//TODO Verificamos si la sala existe
+		//Verificamos si la sala existe
 //		System.out.println("NCServerManager contiene "+ room +" : "+rooms.containsKey(room));
 		if (rooms.containsKey(room)) {
 			
@@ -96,40 +96,34 @@ class NCServerManager {
 			if(manager.getDescription().members.size() >= manager.getDescription().maxMiembros)
 				return null;
 			
-			
-			
-			//---TODO suponemos ahora mismo que entra siempre.
 			boolean registrado=manager.registerUser(u,s);
 //			if(registrado)System.out.println("NCServerManager añade usuario " + u+ " a sala "+room);
 //			else System.out.println("No se ha podido registrar usuario " + u+ " en sala "+room);
 				return manager;
 		}
 		
-		//TODO Decidimos qué hacer si la sala no existe (devolver error O crear la sala)
-		else{ //Si no existe la sala, la crea
+		//Decidimos qué hacer si la sala no existe (devolver error O crear la sala) ->Si no existe la sala, la crea
+		else{ 
 			NCSalaManager manager = new NCSalaManager(room);
 			rooms.put(room, manager);
 			manager.registerUser(u, s);
-			System.out.println("NCServerManager crea la sala "+room+" y añade al usuario "+u);
+//			System.out.println("NCServerManager crea la sala "+room+" y añade al usuario "+u);
 			return manager;
 			
-//			rooms.put(room, value);
 		}
-		//TODO Si la sala existe y si es aceptado en la sala entonces devolvemos el RoomManager de la sala
-		
 	}
 	
 	//Un usuario deja la sala en la que estaba 
 	public synchronized void leaveRoom(String u, String room) {
-		//TODO Verificamos si la sala existe
+		//Verificamos si la sala existe
 		if(rooms.containsKey(room)) {
 			NCSalaManager manager = (NCSalaManager) rooms.get(room);
+			//Si la sala existe sacamos al usuario de la sala
 			manager.removeUser(u);
+			//Decidir qué hacer si la sala se queda vacía -> la dejamos vacia.
 		}
-		//TODO Si la sala existe sacamos al usuario de la sala
-		//TODO Decidir qué hacer si la sala se queda vacía
 		
-		//la dejamos vacia.
+		
 	}
 	
 }

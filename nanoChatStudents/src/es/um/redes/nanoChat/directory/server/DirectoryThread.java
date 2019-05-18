@@ -113,7 +113,7 @@ public class DirectoryThread extends Thread {
 			}
 			else sendNO_OK(clientAddr);
 			
-			System.out.println("Registrado: "+ clientAddr.getHostName()+":" +clientAddr.getPort()+ "\tProtocolo: "+ protocolo );
+//			System.out.println("Registrado: "+ clientAddr.getHostName()+":" +clientAddr.getPort()+ "\tProtocolo: "+ protocolo );
 			
 			break;
 		
@@ -122,7 +122,7 @@ public class DirectoryThread extends Thread {
 			// 3.1) Devolver una dirección si existe un servidor (sendServerInfo)
 			if(servers.containsKey(protocolo)){
 				InetSocketAddress consultaAddr = new InetSocketAddress(servers.get(protocolo).getAddress(), servers.get(protocolo).getPort());
-				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
+//				System.out.println("Consulta: "+ consultaAddr.getHostName()+":" +consultaAddr.getPort()+ "\tProtocolo: "+ protocolo );
 
 				sendServerInfo(consultaAddr, clientAddr);
 			}

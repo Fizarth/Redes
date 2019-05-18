@@ -33,15 +33,9 @@ public class NCMessageInfoRoom extends NCMessage{
 	
 	
 	//Constantes asociadas a las marcas específicas de este tipo de mensaje
-		private static final String RE_ROOM = "<room>(.*?)</room>";
 		private static final String ROOM_MARK = "room";
-		
-		private static final String RE_NUMUSER = "<numUser>(.*?)</numUser>";
 		private static final String NUMUSER_MARK = "numUser";
-		
-		private static final String RE_NICK = "<nick>(.*?)</nick>";
 		private static final String NICK_MARK = "nick";
-		
 		private static final String TIME_MARK = "time";
 		private static final String SIZE_MARK = "size";
 		
